@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sucesiones · TSM III · Grupo 658</title>
+<style>
+:root {
+  --azul:    #1a3a5c;
+  --azul2:   #2563a8;
+  --azul3:   #4a90d9;
+  --verde:   #1e6b3e;
+  --verde2:  #27ae60;
+  --rojo:    #c0392b;
+  --amarillo:#f39c12;
+  --gris:    #f4f6f9;
+  --gris2:   #e8ecf0;
+  --blanco:  #ffffff;
+  --texto:   #1a1a2e;
+  --sombra:  0 2px 12px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--gris);
+  color: var(--texto);
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+/* ─── BARRA DE PROGRESO ─── */
+#barra-wrap {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--azul);
+  padding: 8px 16px 6px;
+  display: none;
+}
+#barra-label { color: #a8c8f0; font-size: 11px; margin-bottom: 4px; }
+#barra-track {
+  background: rgba(255,255,255,0.2);
+  border-radius: 8px; height: 8px;
+}
+#barra-fill {
+  background: linear-gradient(90deg, var(--azul3), #7ecfff);
+  height: 8px; border-radius: 8px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+#paso-label {
+  color: #fff; font-size: 12px;
+  text-align: right; margin-top: 3px;
+}
+
+/* ─── LAYOUT GENERAL ─── */
+.seccion {
+  display: none;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px 14px 32px;
+  animation: fadeIn 0.4s ease;
+}
+.seccion.activa { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ─── TARJETAS ─── */
+.card {
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 18px 16px;
+  box-shadow: var(--sombra);
+  margin-bottom: 14px;
+}
+.card-azul  { background: var(--azul);  color: #fff; }
+.card-gris  { background: var(--gris2); }
+.card-verde { background: #e8f5ee; border-left: 4px solid var(--verde2); }
+.card-rojo  { background: #fdecea; border-left: 4px solid var(--rojo); }
+.card-amarillo { background: #fef9e7; border-left: 4px solid var(--amarillo); }
+.card-azul2 { background: #eaf2fb; border-left: 4px solid var(--azul2); }
+
+/* ─── TIPOGRAFÍA ─── */
+.titulo-sec {
+  font-size: 20px; font-weight: 800;
+  color: var(--azul); margin-bottom: 4px;
+}
+.subtitulo {
+  font-size: 13px; color: #555;
+  margin-bottom: 12px;
+}
+h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--azul); }
+h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+p  { line-height: 1.6; margin-bottom: 8px; }
+.destaca {
+  font-weight: 700;
+  color: var(--azul2);
+}
+.formula {
+  background: var(--azul);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+  margin: 10px 0;
+}
+
+/* ─── INPUTS ─── */
+input[type="text"], input[type="number"], textarea {
+  width: 100%;
+  border: 2px solid var(--gris2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--gris);
+  transition: border 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--azul2);
+  background: #fff;
+}
+textarea { resize: vertical; min-height: 100px; }
+.input-pequeño { width: 80px; text-align: center; }
+
+/* ─── LISTA DE ALUMNOS ─── */
+#lista-dropdown {
+  background: #fff;
+  border: 2px solid var(--azul2);
+  border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 4px;
+  display: none;
+}
+.alumno-item {
+  padding: 12px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--gris2);
+  font-size: 14px;
+  transition: background 0.15s;
+}
+.alumno-item:last-child { border-bottom: none; }
+.alumno-item:hover, .alumno-item:active { background: #eaf2fb; }
+
+/* ─── BOTONES ─── */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primario {
+  background: var(--azul2);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37,99,168,0.3);
+}
+.btn-primario:disabled {
+  background: #b0c4d8;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-verde  { background: var(--verde2); color: #fff; }
+.btn-gris   { background: var(--gris2); color: var(--texto); }
+.btn-pequeño {
+  display: inline-block;
+  width: auto;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+/* ─── TABLA DE SUCESIÓN ─── */
+.tabla-suc {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 15px;
+}
+.tabla-suc th {
+  background: var(--azul);
+  color: #fff;
+  padding: 8px 6px;
+  font-size: 13px;
+}
+.tabla-suc td {
+  border: 1px solid var(--gris2);
+  padding: 6px;
+  text-align: center;
+}
+.tabla-suc tr:nth-child(even) td { background: var(--gris); }
+.celda-input input {
+  width: 60px;
+  margin: 0 auto;
+  padding: 6px;
+  text-align: center;
+  border: 2px solid var(--azul3);
+  border-radius: 8px;
+  font-size: 15px;
+  display: block;
+}
+.celda-ok  { background: #d5f5e3 !important; }
+.celda-mal { background: #fadbd8 !important; }
+
+/* ─── FEEDBACK ─── */
+.feedback {
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-size: 14px;
+  display: none;
+  line-height: 1.5;
+}
+.feedback.correcto {
+  display: block;
+  background: #d5f5e3;
+  border-left: 4px solid var(--verde2);
+  color: #1a5c33;
+}
+.feedback.incorrecto {
+  display: block;
+  background: #fadbd8;
+  border-left: 4px solid var(--rojo);
+  color: #922b21;
+}
+.feedback.info {
+  display: block;
+  background: #eaf2fb;
+  border-left: 4px solid var(--azul2);
+  color: #1a3a5c;
+}
+
+/* ─── PISTA ─── */
+.pista-btn {
+  background: none;
+  border: 1px dashed var(--amarillo);
+  color: #8a6d00;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 6px;
+  font-family: inherit;
+}
+.pista-box {
+  display: none;
+  background: #fef9e7;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #7d5a00;
+  line-height: 1.5;
+}
+
+/* ─── GRÁFICA ─── */
+#canvas-graf {
+  width: 100%;
+  max-width: 460px;
+  display: block;
+  margin: 10px auto;
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* ─── OPCIONES MÚLTIPLES ─── */
+.opcion-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--blanco);
+  border: 2px solid var(--gris2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border 0.15s, background 0.15s;
+  line-height: 1.4;
+}
+.opcion-btn:hover { border-color: var(--azul2); background: #eaf2fb; }
+.opcion-btn.elegida-ok  { border-color: var(--verde2); background: #d5f5e3; color: #1a5c33; pointer-events:none; }
+.opcion-btn.elegida-mal { border-color: var(--rojo); background: #fadbd8; color: #922b21; pointer-events:none; }
+.opcion-btn.desact { opacity: 0.5; pointer-events: none; }
+
+/* ─── RESUMEN FINAL ─── */
+#caja-resumen {
+  background: var(--gris);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid var(--gris2);
+  max-height: 360px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+/* ─── CHIP DE NOMBRE ─── */
+#chip-nombre {
+  display: inline-flex;
+  align-items: center;
+  background: var(--azul2);
+  color: #fff;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ─── ÍCONO ─── */
+.icono { font-size: 28px; margin-bottom: 6px; display: block; }
+.tag {
+  display: inline-block;
+  background: var(--azul);
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.separador {
+  height: 1px; background: var(--gris2);
+  margin: 14px 0;
+}
+.numero-circulo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.fila-icono { display: flex; align-items: flex-start; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- BARRA DE PROGRESO -->
+<div id="barra-wrap">
+  <div id="barra-label">Temas Selectos de Matemáticas III · Grupo 658</div>
+  <div id="barra-track"><div id="barra-fill"></div></div>
+  <div id="paso-label">Paso <span id="paso-actual">0</span> de 7</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 0 · LOGIN                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-login" class="seccion activa">
+  <div style="text-align:center;padding:24px 0 12px;">
+    <div style="font-size:48px;">📐</div>
+    <div style="font-size:20px;font-weight:800;color:var(--azul);margin-top:8px;">TSM III · Grupo 658</div>
+    <div style="font-size:13px;color:#666;margin-top:4px;">Sesión 2 · Sucesiones aritméticas y geométricas</div>
+  </div>
+
+  <div class="card">
+    <h3>Identifícate para comenzar</h3>
+    <p style="color:#555;font-size:13px;margin-bottom:12px;">Escribe tu <strong>primer apellido</strong> y selecciona tu nombre de la lista:</p>
+    <input type="text" id="inp-busqueda" placeholder="Escribe tu primer apellido…"
+           autocomplete="off" autocorrect="off" autocapitalize="characters"
+           oninput="buscarAlumno(this.value)">
+    <div id="lista-dropdown"></div>
+    <div id="nombre-confirmado" style="display:none;" class="feedback correcto"></div>
+    <button class="btn btn-primario" id="btn-entrar" disabled onclick="entrar()">
+      Entrar a la actividad →
+    </button>
+  </div>
+
+  <div class="card card-amarillo" style="font-size:13px;">
+    <strong>⚠️ Antes de empezar:</strong> Esta actividad genera ejercicios únicos para ti.
+    Las respuestas de tus compañeros serán diferentes a las tuyas. Trabaja con honestidad.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 1 · MENSAJE DEL PROF                          -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-bienvenida" class="seccion">
+  <div id="chip-nombre">👤 <span id="chip-txt"></span></div>
+
+  <div class="card card-azul">
+    <span class="icono">👨‍🏫</span>
+    <h3 style="color:#fff;">Mensaje del Prof. Cruz</h3>
+    <div style="height:1px;background:rgba(255,255,255,0.2);margin:10px 0;"></div>
+    <p id="msg-bienvenida" style="line-height:1.7;font-size:14px;"></p>
+  </div>
+
+  <div class="card">
+    <h3>¿Cómo vamos a trabajar hoy?</h3>
+    <div class="fila-icono"><span class="numero-circulo">1</span><p>Lee con calma cada bloque. No hay prisa, pero sí hay que pensar.</p></div>
+    <div class="fila-icono"><span class="numero-circulo">2</span><p>Responde cada pregunta antes de avanzar. La actividad no te deja saltarte partes.</p></div>
+    <div class="fila-icono"><span class="numero-circulo">3</span><p>Cuando termines, copia el <strong>resumen de resultados</strong> y entrégalo en <strong>Classroom</strong>.</p></div>
+    <div class="fila-icono"><span class="numero-circulo">4</span><p>La última pregunta requiere que escribas una explicación personal con tus propias palabras. Esa es la parte más importante.</p></div>
+  </div>
+
+  <button class="btn btn-primario" onclick="irA('sec-detonador', 1)">Comenzar la actividad →</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 2 · DETONADOR                                 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-detonador" class="seccion">
+  <div class="tag">BLOQUE 1 · SITUACIÓN DETONADORA</div>
+  <div class="titulo-sec">Una historia del Metro CDMX</div>
+  <div class="subtitulo">Lee con atención y responde las preguntas.</div>
+
+  <div class="card">
+    <h3>🚇 El monitoreo de usuarios</h3>
+    <p>Un ingeniero del Metro de la Ciudad de México realizó un conteo especial durante un operativo de afluencia. Registró lo siguiente en días consecutivos:</p>
+    <table class="tabla-suc" style="margin:12px 0;">
+      <thead><tr><th>Día</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+      <tbody><tr>
+        <td><strong>Miles de usuarios</strong></td>
+        <td>3</td><td>5</td><td>7</td><td>9</td><td>11</td>
+      </tr></tbody>
+    </table>
+    <p>El ingeniero necesita saber cuántos usuarios habrá el <strong>día 10</strong> para planificar los vagones.</p>
+  </div>
+
+  <div class="card">
+    <h4>🤔 Pregunta 1 · Tu predicción</h4>
+    <p>Sin usar ninguna fórmula todavía, ¿cuántos miles de usuarios <em>crees</em> que habrá el día 10? Escribe tu predicción y explica en una línea cómo llegaste a ese número.</p>
+    <input type="number" id="pred-valor" placeholder="Tu predicción (miles de usuarios)" style="margin-bottom:8px;">
+    <input type="text" id="pred-razon" placeholder="¿Cómo lo calculaste? (una oración)">
+    <button class="btn btn-primario" id="btn-pred" style="margin-top:10px;" disabled onclick="verificarPrediccion()">Verificar predicción</button>
+    <div id="fb-pred" class="feedback"></div>
+  </div>
+
+  <div id="card-det2" class="card" style="display:none;">
+    <h4>🔍 Pregunta 2 · El patrón</h4>
+    <p>Observa los datos de nuevo. ¿Qué noto entre un día y el siguiente?</p>
+    <button class="opcion-btn" onclick="respPat(this,'A')">A) Los usuarios aumentan, pero de forma irregular.</button>
+    <button class="opcion-btn" onclick="respPat(this,'B')">B) Los usuarios siempre aumentan la misma cantidad.</button>
+    <button class="opcion-btn" onclick="respPat(this,'C')">C) Los usuarios se duplican cada día.</button>
+    <button class="opcion-btn" onclick="respPat(this,'D')">D) No hay ningún patrón claro.</button>
+    <div id="fb-pat" class="feedback"></div>
+  </div>
+
+  <button class="btn btn-primario" id="btn-det-sig" disabled onclick="irA('sec-concepto', 2)">
+    Entendido, ¡seguimos! →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 3 · CONCEPTO                                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-concepto" class="seccion">
+  <div class="tag">BLOQUE 2 · ¿QUÉ ES UNA SUCESIÓN?</div>
+  <div class="titulo-sec">Del patrón al concepto</div>
+
+  <div class="card card-azul2">
+    <h3>📖 Definición emergente</h3>
+    <p>Lo que acabas de observar en el Metro tiene un nombre matemático:</p>
+    <div class="formula">Sucesión = lista ordenada de números que siguen una regla</div>
+    <p style="font-size:13px;margin-top:8px;">Cada número de la lista se llama <span class="destaca">término</span>. El lugar que ocupa se llama <span class="destaca">índice</span> (o posición): a₁, a₂, a₃…</p>
+    <p style="font-size:13px;">La <span class="destaca">regla</span> es lo que conecta un término con el siguiente.</p>
+  </div>
+
+  <div class="card">
+    <h4>🧩 Identifica los elementos</h4>
+    <p>En la sucesión del Metro: <strong>3, 5, 7, 9, 11…</strong></p>
+    <p>• El primer término es a₁ = <strong>3</strong></p>
+    <p>• El segundo término es a₂ = <strong>5</strong></p>
+    <p>• La regla es: <em>sumar 2 cada vez</em></p>
+    <div class="separador"></div>
+    <p>Ahora observa estas tres listas e identifica cuál es una sucesión con regla clara:</p>
+
+    <div style="margin:10px 0;">
+      <p><strong>Lista A:</strong> 1, 4, 9, 16, 25…</p>
+      <p><strong>Lista B:</strong> 2, 7, 1, 13, 5…</p>
+      <p><strong>Lista C:</strong> 100, 50, 25, 12.5…</p>
+    </div>
+
+    <h4 style="margin-top:10px;">¿Cuáles son sucesiones con regla identificable?</h4>
+    <button class="opcion-btn" onclick="respConc(this,'a')">Solo la Lista A</button>
+    <button class="opcion-btn" onclick="respConc(this,'b')">La Lista A y la Lista C</button>
+    <button class="opcion-btn" onclick="respConc(this,'c')">Las tres son sucesiones</button>
+    <button class="opcion-btn" onclick="respConc(this,'d')">Solo la Lista C</button>
+    <div id="fb-conc" class="feedback"></div>
+  </div>
+
+  <button class="btn btn-primario" id="btn-conc-sig" disabled onclick="irA('sec-aritmetica', 3)">
+    Ya entendí qué es una sucesión →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 4 · SUCESIÓN ARITMÉTICA                       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-aritmetica" class="seccion">
+  <div class="tag">BLOQUE 3 · SUCESIÓN ARITMÉTICA</div>
+  <div class="titulo-sec">Cuando siempre se suma lo mismo</div>
+
+  <!-- Contexto único del alumno -->
+  <div class="card card-azul2" id="ctx-arit"></div>
+
+  <!-- Tabla a completar -->
+  <div class="card">
+    <h4>📋 Completa la tabla</h4>
+    <p style="font-size:13px;color:#555;margin-bottom:8px;">Los dos primeros términos ya están. Calcula los siguientes.</p>
+    <table class="tabla-suc">
+      <thead>
+        <tr>
+          <th>n (posición)</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>aₙ (valor)</strong></td>
+          <td id="td-a1"></td>
+          <td id="td-a2"></td>
+          <td class="celda-input"><input type="number" id="ta3" oninput="checkTablaArit()"></td>
+          <td class="celda-input"><input type="number" id="ta4" oninput="checkTablaArit()"></td>
+          <td class="celda-input"><input type="number" id="ta5" oninput="checkTablaArit()"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="pista-btn" onclick="togglePista('pista-tab-arit')">💡 Necesito una pista</button>
+    <div class="pista-box" id="pista-tab-arit">
+      Para encontrar el siguiente término, suma siempre la misma cantidad que hay entre los dos primeros.
+      Por ejemplo: si la diferencia entre a₁ y a₂ es 3, entonces a₃ = a₂ + 3.
+    </div>
+    <div id="fb-tabla-arit" class="feedback"></div>
+  </div>
+
+  <!-- Descubrimiento de d -->
+  <div id="card-d" class="card" style="display:none;">
+    <h4>🔎 La diferencia común (d)</h4>
+    <p>En una sucesión aritmética, la cantidad que se <em>suma</em> de un término al siguiente siempre es la misma. Se llama <span class="destaca">diferencia común</span> y se denota con la letra <strong>d</strong>.</p>
+    <p style="margin-top:8px;">¿Cuánto es la diferencia común <strong>d</strong> de tu sucesión?</p>
+    <input type="number" id="inp-d" class="input-pequeño" placeholder="d = ?">
+    <button class="btn btn-pequeño btn-primario" style="margin-top:8px;" onclick="checkD()">Verificar</button>
+    <div id="fb-d" class="feedback"></div>
+  </div>
+
+  <!-- Necesidad de la fórmula -->
+  <div id="card-formula-arit" class="card" style="display:none;">
+    <h4>🚀 ¿Y si necesito el término 50?</h4>
+    <p>Calcular término por término funciona para los primeros 5, pero imagina que necesitas el <strong>término <span class="txt-n-arit"></span></strong> de tu sucesión.</p>
+    <p style="margin-top:8px;">¿Cuál sería la forma más inteligente de llegar a ese término?</p>
+    <button class="opcion-btn" onclick="respNec(this,'A')">A) Calcular uno por uno hasta llegar ahí.</button>
+    <button class="opcion-btn" onclick="respNec(this,'B')">B) Buscar una fórmula que use el primer término y la diferencia.</button>
+    <button class="opcion-btn" onclick="respNec(this,'C')">C) Es imposible saberlo sin la tabla completa.</button>
+    <div id="fb-nec" class="feedback"></div>
+  </div>
+
+  <!-- Fórmula y aplicación -->
+  <div id="card-app-arit" class="card" style="display:none;">
+    <h4>📐 La fórmula del término general</h4>
+    <p>Si a₁ es el primer término y d es la diferencia común, el término en la posición n es:</p>
+    <div class="formula">aₙ  =  a₁  +  (n − 1) · d</div>
+    <p style="font-size:13px;margin-top:8px;color:#555;">¿Cómo se lee? Para llegar al término n, partimos de a₁ y sumamos d exactamente (n − 1) veces.</p>
+
+    <div class="separador"></div>
+    <p id="enunc-arit" style="font-weight:600;margin-bottom:8px;"></p>
+    <p style="font-size:13px;color:#555;margin-bottom:10px;">Aplica la fórmula aₙ = a₁ + (n − 1) · d con tus valores.</p>
+    <input type="number" id="resp-arit" placeholder="Tu respuesta aquí">
+    <button class="pista-btn" onclick="togglePista('pista-arit-form')">💡 Necesito una pista</button>
+    <div class="pista-box" id="pista-arit-form" id=""></div>
+    <button class="btn btn-primario" style="margin-top:8px;" onclick="checkArit()">Verificar</button>
+    <div id="fb-arit" class="feedback"></div>
+  </div>
+
+  <button class="btn btn-primario" id="btn-arit-sig" disabled onclick="irA('sec-geometrica', 4)">
+    Listo con aritmética →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 5 · SUCESIÓN GEOMÉTRICA                       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-geometrica" class="seccion">
+  <div class="tag">BLOQUE 4 · SUCESIÓN GEOMÉTRICA</div>
+  <div class="titulo-sec">Cuando se multiplica en lugar de sumar</div>
+
+  <!-- Contraste con aritmética -->
+  <div class="card card-amarillo">
+    <h4>⚡ Atención al contraste</h4>
+    <p>En la sucesión aritmética, la diferencia entre términos consecutivos es <em>constante</em> (sumas siempre lo mismo).</p>
+    <p style="margin-top:6px;">Ahora veremos qué pasa cuando en lugar de sumar, <strong>multiplicamos</strong> por la misma cantidad. El resultado es muy diferente.</p>
+  </div>
+
+  <!-- Contexto único del alumno -->
+  <div class="card card-azul2" id="ctx-geo"></div>
+
+  <!-- Tabla a completar -->
+  <div class="card">
+    <h4>📋 Completa la tabla</h4>
+    <table class="tabla-suc">
+      <thead>
+        <tr><th>n</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>aₙ</strong></td>
+          <td id="td-b1"></td>
+          <td id="td-b2"></td>
+          <td class="celda-input"><input type="number" id="tg3" oninput="checkTablaGeo()"></td>
+          <td class="celda-input"><input type="number" id="tg4" oninput="checkTablaGeo()"></td>
+          <td class="celda-input"><input type="number" id="tg5" oninput="checkTablaGeo()"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="pista-btn" onclick="togglePista('pista-tab-geo')">💡 Necesito una pista</button>
+    <div class="pista-box" id="pista-tab-geo">
+      Para encontrar el siguiente término, multiplica el término anterior por la misma cantidad que hay entre a₁ y a₂.
+      Por ejemplo: si a₂ ÷ a₁ = 3, entonces cada término es 3 veces el anterior.
+    </div>
+    <div id="fb-tabla-geo" class="feedback"></div>
+  </div>
+
+  <!-- Razón común r -->
+  <div id="card-r" class="card" style="display:none;">
+    <h4>🔎 La razón común (r)</h4>
+    <p>En una sucesión geométrica, la cantidad por la que se <em>multiplica</em> siempre es la misma. Se llama <span class="destaca">razón común</span> y se denota con <strong>r</strong>.</p>
+    <p style="margin-top:8px;">¿Cuánto es la razón común <strong>r</strong> de tu sucesión?</p>
+    <input type="number" id="inp-r" class="input-pequeño" placeholder="r = ?">
+    <button class="btn btn-pequeño btn-primario" style="margin-top:8px;" onclick="checkR()">Verificar</button>
+    <div id="fb-r" class="feedback"></div>
+  </div>
+
+  <!-- Fórmula geométrica -->
+  <div id="card-formula-geo" class="card" style="display:none;">
+    <h4>📐 La fórmula del término general (geométrica)</h4>
+    <p>Si b₁ es el primer término y r es la razón común:</p>
+    <div class="formula">aₙ  =  a₁  ·  r ⁽ⁿ⁻¹⁾</div>
+    <p style="font-size:13px;margin-top:8px;color:#555;">Se multiplica por r exactamente (n − 1) veces, igual que con la aritmética pero multiplicando en lugar de sumar.</p>
+
+    <div class="separador"></div>
+    <p id="enunc-geo" style="font-weight:600;margin-bottom:8px;"></p>
+    <input type="number" id="resp-geo" placeholder="Tu respuesta aquí">
+    <button class="pista-btn" onclick="togglePista('pista-geo-form')">💡 Necesito una pista</button>
+    <div class="pista-box" id="pista-geo-form"></div>
+    <button class="btn btn-primario" style="margin-top:8px;" onclick="checkGeo()">Verificar</button>
+    <div id="fb-geo" class="feedback"></div>
+  </div>
+
+  <!-- Gráfica comparativa -->
+  <div id="card-graf" class="card" style="display:none;">
+    <h4>📊 Comparación visual</h4>
+    <p style="font-size:13px;color:#555;margin-bottom:8px;">Los puntos <span style="color:var(--azul2);font-weight:700;">■ azules</span> son tu sucesión aritmética. Los <span style="color:var(--rojo);font-weight:700;">■ rojos</span> son tu sucesión geométrica.</p>
+    <canvas id="canvas-graf" height="220"></canvas>
+    <p style="font-size:12px;color:#777;margin-top:6px;text-align:center;">¿Qué diferencia notas entre ambas curvas?</p>
+  </div>
+
+  <button class="btn btn-primario" id="btn-geo-sig" disabled onclick="irA('sec-practica', 5)">
+    Listo con geométrica →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 6 · PRÁCTICA                                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-practica" class="seccion">
+  <div class="tag">BLOQUE 5 · PRÁCTICA INDIVIDUAL</div>
+  <div class="titulo-sec">Tus ejercicios únicos</div>
+  <div class="subtitulo">Recuerda: tus valores son diferentes a los de tus compañeros.</div>
+
+  <!-- Ejercicio P1 -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px;">
+      <span class="numero-circulo">1</span>
+      <h4 style="margin:0;">Sucesión aritmética · Término general</h4>
+    </div>
+    <p id="p1-enunc"></p>
+    <button class="pista-btn" onclick="togglePista('pista-p1')">💡 Pista</button>
+    <div class="pista-box" id="pista-p1">Usa la fórmula: aₙ = a₁ + (n − 1) · d. Sustituye los valores que te dan.</div>
+    <input type="number" id="p1-resp" placeholder="Respuesta">
+    <button class="btn btn-pequeño btn-primario" style="margin-top:8px;" onclick="checkP1()">Verificar</button>
+    <div id="fb-p1" class="feedback"></div>
+  </div>
+
+  <!-- Ejercicio P2 -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px;">
+      <span class="numero-circulo">2</span>
+      <h4 style="margin:0;">Sucesión aritmética · Problema CDMX</h4>
+    </div>
+    <p id="p2-enunc"></p>
+    <button class="pista-btn" onclick="togglePista('pista-p2')">💡 Pista</button>
+    <div class="pista-box" id="pista-p2">Identifica a₁, d y n antes de usar la fórmula. Lee bien el problema.</div>
+    <input type="number" id="p2-resp" placeholder="Respuesta">
+    <button class="btn btn-pequeño btn-primario" style="margin-top:8px;" onclick="checkP2()">Verificar</button>
+    <div id="fb-p2" class="feedback"></div>
+  </div>
+
+  <!-- Ejercicio P3 -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px;">
+      <span class="numero-circulo">3</span>
+      <h4 style="margin:0;">Sucesión geométrica · Término general</h4>
+    </div>
+    <p id="p3-enunc"></p>
+    <button class="pista-btn" onclick="togglePista('pista-p3')">💡 Pista</button>
+    <div class="pista-box" id="pista-p3">Usa la fórmula: aₙ = a₁ · r^(n−1). Recuerda que r^(n−1) significa multiplicar r por sí mismo (n−1) veces.</div>
+    <input type="number" id="p3-resp" placeholder="Respuesta">
+    <button class="btn btn-pequeño btn-primario" style="margin-top:8px;" onclick="checkP3()">Verificar</button>
+    <div id="fb-p3" class="feedback"></div>
+  </div>
+
+  <!-- Ejercicio P4 -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px;">
+      <span class="numero-circulo">4</span>
+      <h4 style="margin:0;">Sucesión geométrica · Problema CDMX</h4>
+    </div>
+    <p id="p4-enunc"></p>
+    <button class="pista-btn" onclick="togglePista('pista-p4')">💡 Pista</button>
+    <div class="pista-box" id="pista-p4">Identifica b₁ (valor inicial), r (por cuánto se multiplica) y n (¿cuál término buscas?). Luego aplica la fórmula.</div>
+    <input type="number" id="p4-resp" placeholder="Respuesta">
+    <button class="btn btn-pequeño btn-primario" style="margin-top:8px;" onclick="checkP4()">Verificar</button>
+    <div id="fb-p4" class="feedback"></div>
+  </div>
+
+  <div id="aviso-practica" class="card card-amarillo" style="display:none;font-size:13px;">
+    ✅ Completaste todos los ejercicios. Ahora viene la parte más importante: la reflexión.
+  </div>
+
+  <button class="btn btn-primario" id="btn-prac-sig" disabled onclick="irA('sec-conjetura', 6)">
+    Ir a la reflexión final →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 7 · CONJETURA                                 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-conjetura" class="seccion">
+  <div class="tag">BLOQUE 6 · REFLEXIÓN PERSONAL</div>
+  <div class="titulo-sec">Tu conjetura de cierre</div>
+
+  <div class="card card-azul">
+    <span class="icono">✍️</span>
+    <p style="font-size:14px;line-height:1.7;">Esta es la pregunta que el Prof. Cruz va a leer personalmente cuando regrese. No hay respuesta "correcta" o "incorrecta" automática. Lo que importa es que <strong>pienses y escribas con tus propias palabras</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h3>🤔 La pregunta</h3>
+    <p style="font-size:15px;line-height:1.7;background:#f4f6f9;border-radius:10px;padding:12px;margin-bottom:12px;">
+      <strong>Comparando la sucesión aritmética y la geométrica que trabajaste hoy:</strong><br><br>
+      ¿Cuál de las dos crece más rápido? ¿Por qué crees eso?<br>
+      Da un ejemplo de tu vida cotidiana en la CDMX donde cada tipo de sucesión podría aparecer.
+    </p>
+    <p style="font-size:12px;color:#888;margin-bottom:8px;">Escribe al menos 3 oraciones. Esta respuesta no tiene validación automática.</p>
+    <textarea id="txt-conjetura" placeholder="Escribe aquí tu reflexión…" oninput="checkConjetura()"></textarea>
+    <div id="cuenta-chars" style="font-size:12px;color:#aaa;text-align:right;margin-top:4px;">0 caracteres (mínimo 80)</div>
+    <div id="fb-conj" class="feedback"></div>
+  </div>
+
+  <button class="btn btn-primario" id="btn-conj-sig" disabled onclick="irA('sec-resumen', 7)">
+    Generar resumen para Classroom →
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 8 · RESUMEN FINAL                             -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="sec-resumen" class="seccion">
+  <div class="tag">ENTREGA</div>
+  <div class="titulo-sec">Resumen para Classroom</div>
+
+  <div class="card card-verde">
+    <h4>✅ ¡Actividad completada!</h4>
+    <p style="font-size:13px;">Copia todo el texto de abajo y pégalo en la tarea de Classroom. El Prof. Cruz lo leerá cuando regrese.</p>
+  </div>
+
+  <div class="card">
+    <div id="caja-resumen"></div>
+    <button class="btn btn-primario" onclick="copiarResumen()" style="margin-top:12px;" id="btn-copiar">
+      📋 Copiar texto para pegar en Classroom
+    </button>
+    <div id="fb-copiado" class="feedback" style="margin-top:8px;"></div>
+  </div>
+
+  <div class="card card-amarillo">
+    <h4>⚠️ Instrucción final</h4>
+    <p style="font-size:13px;">1. Abre <strong>Google Classroom</strong> del grupo 658.<br>
+    2. Busca la tarea "Sesión 2 — Sucesiones".<br>
+    3. Pega el texto copiado en el campo de entrega.<br>
+    4. Haz clic en <strong>Entregar</strong>.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════ JAVASCRIPT ══════════════════════════ -->
+<script>
+'use strict';
+
+// ── DATOS DEL GRUPO ────────────────────────────────────────────────
+const ALUMNOS = [
+  {n:1,  nombre:"AGUILAR TOLEDO PEDRO",               pila:"Pedro"},
+  {n:2,  nombre:"ANTUNEZ CASTRO REYNA IVETTE",        pila:"Reyna Ivette"},
+  {n:3,  nombre:"AVILES MARTINEZ VICTOR MANUEL",      pila:"Víctor Manuel"},
+  {n:4,  nombre:"BELMONT GONZALEZ JARED",             pila:"Jared"},
+  {n:5,  nombre:"BONILLA GURROLA ADRIANA AMELI",      pila:"Adriana"},
+  {n:6,  nombre:"BUSTOS MENDOZA ALAN YAHIR",          pila:"Alan"},
+  {n:7,  nombre:"CELESTINO CASTILLO ZYANYA ABIGAIL",  pila:"Zyanya"},
+  {n:8,  nombre:"CRUZ ARANGO ESTRELLA DANIELA",       pila:"Estrella"},
+  {n:9,  nombre:"CRUZ GARCIA MELBA JULIETA",          pila:"Melba"},
+  {n:10, nombre:"DELGADO VIDALS LUIS ANTONIO",        pila:"Luis Antonio"},
+  {n:11, nombre:"DOMINGUEZ DOMINGUEZ DANNA PAOLA",    pila:"Danna"},
+  {n:12, nombre:"ESTRADA MUÑOZ ALAN YAHIR",           pila:"Alan"},
+  {n:13, nombre:"GOMEZ ROJAS BRYAN AARON",            pila:"Bryan"},
+  {n:14, nombre:"HERNANDEZ SANCHEZ AXEL",             pila:"Axel"},
+  {n:15, nombre:"IBARRA GALVAN ANDREA",               pila:"Andrea"},
+  {n:16, nombre:"JIMENEZ MERINO ASTRO ADOLFO",        pila:"Astro"},
+  {n:17, nombre:"LOPEZ GERVACIO KATIA AIME",          pila:"Katia"},
+  {n:18, nombre:"LOPEZ MALDONADO AZUL",               pila:"Azul"},
+  {n:19, nombre:"LOPEZ PEREZ VICTORIA ITZEL",         pila:"Victoria"},
+  {n:20, nombre:"MACHORRO TELLEZ LEONEL AXEL",        pila:"Leonel"},
+  {n:21, nombre:"MARTINEZ LUMBRERAS DANA CAMILA",     pila:"Dana"},
+  {n:22, nombre:"MARTINEZ PEREZ BRAYAN YAHIR",        pila:"Brayan"},
+  {n:23, nombre:"MENDOZA GUILLEN RENE NEFTALI",       pila:"René"},
+  {n:24, nombre:"MORA MIRANDA XIMENA",                pila:"Ximena"},
+  {n:25, nombre:"ORTEGA DOLORES LINDA GISELA",        pila:"Linda"},
+  {n:26, nombre:"PERALTA MONTESINOS ITZEL VALERIA",   pila:"Itzel"},
+  {n:27, nombre:"PEREZ REYES AMERICA DAYANA",         pila:"América"},
+  {n:28, nombre:"PINEDA HOYOS CLAUDIA MELANI",        pila:"Claudia"},
+  {n:29, nombre:"RAMIREZ BARRANCO BRAYAN",            pila:"Brayan"},
+  {n:30, nombre:"RAMIREZ VELAZQUEZ VALERIA",          pila:"Valeria"},
+  {n:31, nombre:"RANGEL RODRIGUEZ ZOE",               pila:"Zoe"},
+  {n:32, nombre:"RODRIGUEZ NAVA JESUS DANIEL",        pila:"Jesús Daniel"},
+  {n:33, nombre:"ROJAS CASTRO PAULINA DENISSE",       pila:"Paulina"},
+  {n:34, nombre:"RUIZ SANTILLAN ANGEL SANTIAGO",      pila:"Ángel"},
+  {n:35, nombre:"SALAZAR SANDOVAL RODRIGO",           pila:"Rodrigo"},
+  {n:36, nombre:"SALGADO ALCARAZ YAEL TONATIUH",      pila:"Yael"},
+  {n:37, nombre:"TELLEZ FLORES BARUCH TONATIUH",      pila:"Baruch"},
+  {n:38, nombre:"VALENCIA NIEVES RICARDO LEONEL",     pila:"Ricardo"},
+  {n:39, nombre:"VARELA ROMERO IAN JESUS",            pila:"Ian"},
+  {n:40, nombre:"VILLANUEVA PEÑA RUBEN JAIR",         pila:"Rubén"},
+  {n:41, nombre:"VIVEROS MONTES DE OCA MOISES",       pila:"Moisés"}
+];
+
+// ── ESTADO GLOBAL ──────────────────────────────────────────────────
+let alumno = null;
+let vals   = {};       // valores únicos del alumno
+const log  = {};       // registro de respuestas para el resumen
+
+// ── PRNG BASADO EN SEMILLA ─────────────────────────────────────────
+function sr(seed) {
+  const x = Math.sin(seed + 1.7183) * 99991;
+  return x - Math.floor(x);
+}
+function pick(seed, arr) { return arr[Math.floor(sr(seed) * arr.length)]; }
+
+function generarValores(n) {
+  const a1s = [2,3,4,5,6,7,8];
+  const ds  = [2,3,4,5,6];
+  const ns  = [8,9,10,11,12,13,14];
+  const b1s = [2,3,4,5];
+  const rs  = [2,3];
+  const ngs = [4,5,6];
+  // Contextos CDMX para P2
+  const ctx2 = [
+    {txt:"días de afluencia en el Tren Suburbano", unidad:"mil pasajeros"},
+    {txt:"semanas de registro en el ECOBICI", unidad:"viajes"},
+    {txt:"meses de monitoreo de calidad del aire en Xochimilco", unidad:"puntos IMECA"},
+    {txt:"años de crecimiento de una fila de puestos en La Merced", unidad:"puestos"},
+    {txt:"semanas de aumento de clientes en una tienda de Tepito", unidad:"clientes"},
+  ];
+  const ctx4 = [
+    {txt:"horas de viralización de un video sobre el sismo del 85 que alguien publicó", unidad:"vistas"},
+    {txt:"días de reproducción de un meme del Metro", unidad:"compartidos"},
+    {txt:"semanas de crecimiento de una cadena de negocios en Iztapalapa", unidad:"locales"},
+    {txt:"días de contagio de un rumor en el plantel", unidad:"personas"},
+  ];
+
+  return {
+    a1:   pick(n*7+1,  a1s),
+    d:    pick(n*13+2, ds),
+    n:    pick(n*19+3, ns),
+    b1:   pick(n*23+4, b1s),
+    r:    pick(n*29+5, rs),
+    ng:   pick(n*31+6, ngs),
+    ctx2: pick(n*37+7, ctx2),
+    ctx4: pick(n*41+8, ctx4),
+  };
+}
+
+// ── BÚSQUEDA DE ALUMNO ─────────────────────────────────────────────
+function buscarAlumno(q) {
+  const dd = document.getElementById('lista-dropdown');
+  const conf = document.getElementById('nombre-confirmado');
+  alumno = null;
+  document.getElementById('btn-entrar').disabled = true;
+  conf.style.display = 'none';
+  conf.className = 'feedback';
+  if (q.trim().length < 2) { dd.style.display='none'; dd.innerHTML=''; return; }
+  const qn = q.trim().toUpperCase();
+  const matches = ALUMNOS.filter(a => a.nombre.split(' ')[0].startsWith(qn) || a.nombre.startsWith(qn));
+  if (matches.length === 0) { dd.innerHTML='<div class="alumno-item" style="color:#999;">Sin coincidencias</div>'; dd.style.display='block'; return; }
+  dd.innerHTML = matches.map(a =>
+    `<div class="alumno-item" onclick="seleccionarAlumno(${a.n})">${a.nombre}</div>`
+  ).join('');
+  dd.style.display = 'block';
+}
+
+function seleccionarAlumno(n) {
+  alumno = ALUMNOS.find(a => a.n === n);
+  document.getElementById('lista-dropdown').style.display = 'none';
+  document.getElementById('inp-busqueda').value = alumno.nombre;
+  const conf = document.getElementById('nombre-confirmado');
+  conf.textContent = `✓ Identificado como: ${alumno.nombre} (Lista ${alumno.n})`;
+  conf.className = 'feedback correcto';
+  conf.style.display = 'block';
+  document.getElementById('btn-entrar').disabled = false;
+}
+
+function entrar() {
+  if (!alumno) return;
+  vals = generarValores(alumno.n);
+  // Llenar mensaje bienvenida
+  document.getElementById('chip-txt').textContent = alumno.pila;
+  document.getElementById('msg-bienvenida').innerHTML =
+    `Hola, <strong>${alumno.pila}</strong>. Hoy no pude estar en clase porque tengo una capacitación docente. ` +
+    `Pero no quiero que pierdas esta sesión, así que preparé esta actividad para que puedas avanzar por tu cuenta.<br><br>` +
+    `Vamos a empezar con <strong>sucesiones aritméticas y geométricas</strong>. Son uno de los temas más útiles y visibles ` +
+    `de las matemáticas: los encuentras en tarifas del Metro, en contagios, en pagos a plazos, en redes sociales.<br><br>` +
+    `Trabaja con calma. Lee todo. No saltes ninguna parte. Al final genera el resumen y súbelo a <strong>Classroom</strong>. ` +
+    `Cuando regrese voy a leer tu reflexión personal.<br><br>` +
+    `<em>— Prof. Adrián Cruz</em>`;
+  // Mostrar barra
+  document.getElementById('barra-wrap').style.display = 'block';
+  irA('sec-bienvenida', 0);
+}
+
+// ── NAVEGACIÓN ─────────────────────────────────────────────────────
+function irA(id, paso) {
+  document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+  document.getElementById(id).classList.add('activa');
+  window.scrollTo({top:0, behavior:'smooth'});
+  actualizarBarra(paso);
+  if (id === 'sec-aritmetica') cargarAritmetica();
+  if (id === 'sec-geometrica') cargarGeometrica();
+  if (id === 'sec-practica')   cargarPractica();
+  if (id === 'sec-resumen')    generarResumen();
+}
+
+function actualizarBarra(paso) {
+  const total = 7;
+  document.getElementById('barra-fill').style.width = (paso/total*100)+'%';
+  document.getElementById('paso-actual').textContent = paso;
+}
+
+// ── PISTAS ─────────────────────────────────────────────────────────
+function togglePista(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+// ── SECCIÓN 2 · DETONADOR ──────────────────────────────────────────
+// watch both inputs
+;['pred-valor','pred-razon'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    const v = document.getElementById('pred-valor').value.trim();
+    const r = document.getElementById('pred-razon').value.trim();
+    document.getElementById('btn-pred').disabled = !(v && r.length > 3);
+  });
+});
+
+function verificarPrediccion() {
+  const v = parseInt(document.getElementById('pred-valor').value);
+  const fb = document.getElementById('fb-pred');
+  const correcto = 21; // a₁=3, d=2, n=10 → 3+9×2=21
+  fb.style.display = 'block';
+  if (v === correcto) {
+    fb.className = 'feedback correcto';
+    fb.textContent = `¡Exacto! El día 10 hay ${correcto} miles de usuarios. Pudiste encontrarlo porque cada día aumentan 2 mil. Muy bien.`;
+  } else {
+    fb.className = 'feedback incorrecto';
+    fb.textContent = `Tu predicción fue ${v}. El valor correcto es ${correcto} miles. ¿Notaste que de un día al siguiente siempre aumenta la misma cantidad? Eso es clave.`;
+  }
+  log.pred = `Predicción día 10: ${v} (correcto: ${correcto}) — ${v===correcto?'✓':'✗'}`;
+  document.getElementById('card-det2').style.display = 'block';
+  document.getElementById('btn-pred').disabled = true;
+}
+
+function respPat(btn, op) {
+  document.querySelectorAll('#card-det2 .opcion-btn').forEach(b => b.classList.add('desact'));
+  const fb = document.getElementById('fb-pat');
+  if (op === 'B') {
+    btn.classList.add('elegida-ok');
+    fb.className = 'feedback correcto';
+    fb.textContent = '✓ Correcto. La diferencia entre cada par de términos consecutivos es siempre 2 (5−3=2, 7−5=2, 9−7=2…). Eso es lo que hace especial a las sucesiones aritméticas.';
+    log.patron = 'Patrón correcto ✓';
+    document.getElementById('btn-det-sig').disabled = false;
+  } else {
+    btn.classList.add('elegida-mal');
+    fb.className = 'feedback incorrecto';
+    fb.textContent = 'Revisa de nuevo: calcula 5−3, 7−5, 9−7. ¿Qué notas? Toca "B" para ver la explicación.';
+    document.querySelectorAll('#card-det2 .opcion-btn').forEach(b => b.classList.remove('desact'));
+    btn.style.pointerEvents = 'none';
+  }
+}
+
+// ── SECCIÓN 3 · CONCEPTO ──────────────────────────────────────────
+function respConc(btn, op) {
+  document.querySelectorAll('#sec-concepto .opcion-btn').forEach(b => b.classList.add('desact'));
+  const fb = document.getElementById('fb-conc');
+  if (op === 'b') {
+    btn.classList.add('elegida-ok');
+    fb.className = 'feedback correcto';
+    fb.innerHTML = `✓ Correcto.<br>
+      <strong>Lista A (1, 4, 9, 16, 25…)</strong>: son los cuadrados perfectos (1², 2², 3²…). Tiene regla clara.<br>
+      <strong>Lista B (2, 7, 1, 13, 5…)</strong>: no sigue ningún patrón identificable.<br>
+      <strong>Lista C (100, 50, 25, 12.5…)</strong>: cada término se divide entre 2. También tiene regla clara.`;
+    log.concepto = 'Clasificación de sucesiones correcta ✓';
+    document.getElementById('btn-conc-sig').disabled = false;
+  } else {
+    btn.classList.add('elegida-mal');
+    fb.className = 'feedback incorrecto';
+    fb.textContent = 'No es esa. Analiza cada lista: ¿La B realmente sigue una regla? ¿La A y la C sí? Vuelve a intentar.';
+    document.querySelectorAll('#sec-concepto .opcion-btn').forEach(b => b.classList.remove('desact'));
+    btn.style.pointerEvents = 'none';
+  }
+}
+
+// ── SECCIÓN 4 · ARITMÉTICA ────────────────────────────────────────
+function cargarAritmetica() {
+  const {a1,d,n} = vals;
+  const a2 = a1+d, a3=a1+2*d, a4=a1+3*d, a5=a1+4*d;
+  document.getElementById('td-a1').textContent = a1;
+  document.getElementById('td-a2').textContent = a2;
+  // contexto
+  const ctxs = [
+    `El registro de usuarios de una línea del Metro mostró <strong>${a1} mil</strong> personas el primer día de operativo y <strong>${a2} mil</strong> el segundo día.`,
+    `Un comerciante de La Merced vendió <strong>${a1} cajas</strong> el lunes y <strong>${a2} cajas</strong> el martes, con el mismo incremento diario.`,
+    `El nivel del agua en un depósito fue de <strong>${a1} litros</strong> el día 1 y <strong>${a2} litros</strong> el día 2, con el mismo crecimiento diario.`,
+  ];
+  document.getElementById('ctx-arit').innerHTML =
+    `<h3>🚇 Tu situación</h3><p>${pick(alumno.n*53+11, ctxs)} El patrón sigue igual cada día.</p>`;
+  document.querySelector('.txt-n-arit').textContent = n;
+  // pista fórmula
+  document.getElementById('pista-arit-form').textContent =
+    `Tu a₁ = ${a1}, tu d = ${d}, y buscas el término ${n}. Sustituye: a${n} = ${a1} + (${n} − 1) · ${d}`;
+  // enunciado
+  const ans = a1 + (n-1)*d;
+  document.getElementById('enunc-arit').textContent =
+    `Usando tu sucesión (a₁ = ${a1}, d = ${d}), calcula el término a${n}.`;
+  vals.ans_arit = ans;
+  vals.a3=a3; vals.a4=a4; vals.a5=a5;
+}
+
+function checkTablaArit() {
+  const {a1,d} = vals;
+  const exp = [a1+2*d, a1+3*d, a1+4*d];
+  const ids = ['ta3','ta4','ta5'];
+  const tds = ['td-a1','td-a2']; // ya filled
+  let ok = 0;
+  ids.forEach((id,i) => {
+    const inp = document.getElementById(id);
+    const td  = inp.closest('td');
+    if (inp.value === '') { td.className='celda-input'; return; }
+    if (parseInt(inp.value) === exp[i]) { td.className='celda-input celda-ok'; ok++; }
+    else { td.className='celda-input celda-mal'; }
+  });
+  if (ok === 3) {
+    const fb = document.getElementById('fb-tabla-arit');
+    fb.className = 'feedback correcto';
+    fb.textContent = '✓ ¡Correcto! Los tres términos son exactos. Ahora identifica cuánto sumas cada vez.';
+    document.getElementById('card-d').style.display = 'block';
+  }
+}
+
+function checkD() {
+  const v = parseInt(document.getElementById('inp-d').value);
+  const fb = document.getElementById('fb-d');
+  if (v === vals.d) {
+    fb.className='feedback correcto';
+    fb.textContent=`✓ Exacto. Esa es la diferencia común de tu sucesión.`;
+    log.d = `d = ${vals.d} ✓`;
+    document.getElementById('card-formula-arit').style.display='block';
+  } else {
+    fb.className='feedback incorrecto';
+    fb.textContent=`Observa los dos primeros términos de tu tabla. ¿Cuánto hay que sumarle al primero para obtener el segundo? Esa operación (a₂ − a₁) te da d.`;
+  }
+}
+
+function respNec(btn, op) {
+  document.querySelectorAll('#card-formula-arit .opcion-btn').forEach(b=>b.classList.add('desact'));
+  const fb=document.getElementById('fb-nec');
+  if(op==='B'){
+    btn.classList.add('elegida-ok');
+    fb.className='feedback correcto';
+    fb.textContent='✓ Correcto. Esa es exactamente la idea detrás del término general: una fórmula que te lleva directo al término que necesitas.';
+    document.getElementById('card-app-arit').style.display='block';
+  } else {
+    btn.classList.add('elegida-mal');
+    fb.className='feedback incorrecto';
+    fb.textContent='Piénsalo de nuevo. Si tuvieras que calcular uno por uno hasta el término 100, ¿no habría una forma más eficiente?';
+    document.querySelectorAll('#card-formula-arit .opcion-btn').forEach(b=>b.classList.remove('desact'));
+    btn.style.pointerEvents='none';
+  }
+}
+
+function checkArit() {
+  const v = parseInt(document.getElementById('resp-arit').value);
+  const fb = document.getElementById('fb-arit');
+  const {a1,d,n,ans_arit} = vals;
+  if (v === ans_arit) {
+    fb.className='feedback correcto';
+    fb.textContent=`✓ ¡Perfecto! Aplicaste correctamente la fórmula aₙ = a₁ + (n−1)·d.`;
+    log.arit=`a${n}: ${v} ✓`;
+    document.getElementById('btn-arit-sig').disabled=false;
+  } else {
+    fb.className='feedback incorrecto';
+    fb.textContent=`Revisa cada parte de la fórmula por separado. Primero calcula (n−1), luego multiplica ese resultado por d, y finalmente súmalo a a₁. ¿En cuál de esos pasos crees que está el error?`;
+    log.arit=`a${n}: ${v} ✗`;
+    document.getElementById('btn-arit-sig').disabled=false;
+  }
+}
+
+// ── SECCIÓN 5 · GEOMÉTRICA ────────────────────────────────────────
+function cargarGeometrica() {
+  const {b1,r,ng} = vals;
+  const b2=b1*r, b3=b1*r*r, b4=b1*r*r*r, b5=b1*r*r*r*r;
+  document.getElementById('td-b1').textContent = b1;
+  document.getElementById('td-b2').textContent = b2;
+  vals.b3=b3; vals.b4=b4; vals.b5=b5;
+  // contexto
+  const rword = r===2?'duplicaron':'triplicaron';
+  document.getElementById('ctx-geo').innerHTML =
+    `<h3>📱 Tu situación</h3><p>Un video corto sobre el Metro publicado en redes tuvo <strong>${b1} reproducciones</strong> en la primera hora y <strong>${b2}</strong> en la segunda. ` +
+    `Las vistas se <strong>${rword}</strong> cada hora.</p>`;
+  // fórmula
+  const ans = b1 * Math.pow(r, ng-1);
+  vals.ans_geo = ans;
+  document.getElementById('enunc-geo').textContent =
+    `Con a₁ = ${b1} y r = ${r}, calcula el término a${ng} (la ${ng}.ª hora).`;
+  document.getElementById('pista-geo-form').textContent =
+    `a${ng} = ${b1} · ${r}^(${ng}−1) = ${b1} · ${r}^${ng-1} = ${ans}`;
+}
+
+function checkTablaGeo() {
+  const {b1,r} = vals;
+  const exp = [b1*r*r, b1*r*r*r, b1*r*r*r*r];
+  const ids = ['tg3','tg4','tg5'];
+  let ok=0;
+  ids.forEach((id,i) => {
+    const inp=document.getElementById(id);
+    const td=inp.closest('td');
+    if(inp.value===''){td.className='celda-input';return;}
+    if(parseInt(inp.value)===exp[i]){td.className='celda-input celda-ok';ok++;}
+    else{td.className='celda-input celda-mal';}
+  });
+  if(ok===3){
+    const fb=document.getElementById('fb-tabla-geo');
+    fb.className='feedback correcto';
+    fb.textContent='✓ Perfecto. Ahora identifica por qué número multiplicas cada vez.';
+    document.getElementById('card-r').style.display='block';
+  }
+}
+
+function checkR() {
+  const v=parseInt(document.getElementById('inp-r').value);
+  const fb=document.getElementById('fb-r');
+  if(v===vals.r){
+    fb.className='feedback correcto';
+    fb.textContent=`✓ Correcto. Esa es la razón común de tu sucesión.`;
+    log.r=`r = ${vals.r} ✓`;
+    document.getElementById('card-formula-geo').style.display='block';
+  } else {
+    fb.className='feedback incorrecto';
+    fb.textContent=`Observa tus dos primeros términos. En una sucesión geométrica no se resta, se divide: a₂ ÷ a₁. ¿Qué te da esa división?`;
+  }
+}
+
+function checkGeo() {
+  const v=parseInt(document.getElementById('resp-geo').value);
+  const fb=document.getElementById('fb-geo');
+  const {b1,r,ng,ans_geo}=vals;
+  if(v===ans_geo){
+    fb.className='feedback correcto';
+    fb.textContent=`✓ ¡Correcto! Aplicaste bien la fórmula aₙ = a₁ · r^(n−1).`;
+    log.geo=`a${ng}: ${v} ✓`;
+  } else {
+    fb.className='feedback incorrecto';
+    fb.textContent=`Revisa el exponente: r^(n−1) significa multiplicar r por sí mismo (n−1) veces, no multiplicarlo por (n−1). Prueba calculando paso a paso: r¹, r², r³…`;
+    log.geo=`a${ng}: ${v} ✗`;
+  }
+  document.getElementById('card-graf').style.display='block';
+  setTimeout(dibujarGrafica, 100);
+  document.getElementById('btn-geo-sig').disabled=false;
+}
+
+// ── GRÁFICA ───────────────────────────────────────────────────────
+function dibujarGrafica() {
+  const canvas=document.getElementById('canvas-graf');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.offsetWidth; const H=220;
+  canvas.width=W; canvas.height=H;
+  const {a1,d,b1,r}=vals;
+  const N=7; const pad=36;
+  // calcular series
+  const sa=[], sg=[];
+  for(let i=1;i<=N;i++){sa.push(a1+(i-1)*d); sg.push(b1*Math.pow(r,i-1));}
+  const maxY=Math.max(...sa,...sg)*1.15;
+  function px(i){return pad+(i-1)*(W-2*pad)/(N-1);}
+  function py(v){return H-pad-(v/maxY)*(H-2*pad);}
+  ctx.clearRect(0,0,W,H);
+  // ejes
+  ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad,pad/2); ctx.lineTo(pad,H-pad); ctx.lineTo(W-pad/2,H-pad); ctx.stroke();
+  // etiquetas eje x
+  ctx.fillStyle='#888'; ctx.font='11px Arial'; ctx.textAlign='center';
+  for(let i=1;i<=N;i++){ctx.fillText(i,px(i),H-pad+14);}
+  ctx.fillText('n',W-pad/2+8,H-pad+4);
+  // serie aritmética
+  ctx.strokeStyle='#2563a8'; ctx.lineWidth=2.5; ctx.beginPath();
+  sa.forEach((v,i)=>{i===0?ctx.moveTo(px(i+1),py(v)):ctx.lineTo(px(i+1),py(v));});
+  ctx.stroke();
+  sa.forEach((v,i)=>{ctx.fillStyle='#2563a8';ctx.beginPath();ctx.arc(px(i+1),py(v),5,0,Math.PI*2);ctx.fill();});
+  // serie geométrica
+  ctx.strokeStyle='#c0392b'; ctx.lineWidth=2.5; ctx.beginPath();
+  sg.forEach((v,i)=>{i===0?ctx.moveTo(px(i+1),py(v)):ctx.lineTo(px(i+1),py(v));});
+  ctx.stroke();
+  sg.forEach((v,i)=>{ctx.fillStyle='#c0392b';ctx.beginPath();ctx.arc(px(i+1),py(v),5,0,Math.PI*2);ctx.fill();});
+  // leyenda
+  ctx.font='12px Arial'; ctx.textAlign='left';
+  ctx.fillStyle='#2563a8'; ctx.fillRect(pad,12,12,12); ctx.fillStyle='#333'; ctx.fillText('Aritmética',pad+16,23);
+  ctx.fillStyle='#c0392b'; ctx.fillRect(pad+100,12,12,12); ctx.fillStyle='#333'; ctx.fillText('Geométrica',pad+116,23);
+}
+
+// ── SECCIÓN 6 · PRÁCTICA ──────────────────────────────────────────
+function cargarPractica() {
+  const {a1,d,n,b1,r,ng,ctx2,ctx4}=vals;
+  // P1
+  const p1_a=a1+2, p1_d=d+1, p1_n=n+1;
+  const p1_ans=p1_a+(p1_n-1)*p1_d;
+  vals.p1={a:p1_a,d:p1_d,n:p1_n,ans:p1_ans};
+  document.getElementById('p1-enunc').textContent=
+    `Dada la sucesión aritmética con a₁ = ${p1_a} y d = ${p1_d}, calcula el término a${p1_n}.`;
+  // P2
+  const p2_a=a1+1, p2_d=d, p2_n=n;
+  const p2_ans=p2_a+(p2_n-1)*p2_d;
+  vals.p2={a:p2_a,d:p2_d,n:p2_n,ans:p2_ans};
+  document.getElementById('p2-enunc').innerHTML=
+    `En el registro de ${ctx2.txt}, el primer día se contaron <strong>${p2_a} ${ctx2.unidad}</strong>. ` +
+    `Cada día aumentaron <strong>${p2_d} ${ctx2.unidad}</strong>. ` +
+    `¿Cuántos ${ctx2.unidad} habrá el día <strong>${p2_n}</strong>?`;
+  // P3
+  const p3_b=b1+1, p3_r=r, p3_ng=ng;
+  const p3_ans=p3_b*Math.pow(p3_r,p3_ng-1);
+  vals.p3={b:p3_b,r:p3_r,ng:p3_ng,ans:p3_ans};
+  document.getElementById('p3-enunc').textContent=
+    `Dada la sucesión geométrica con a₁ = ${p3_b} y r = ${p3_r}, calcula el término a${p3_ng}.`;
+  // P4
+  const p4_b=b1, p4_r=r, p4_ng=ng+1;
+  const p4_ans=p4_b*Math.pow(p4_r,p4_ng-1);
+  vals.p4={b:p4_b,r:p4_r,ng:p4_ng,ans:p4_ans};
+  const rdesc=r===2?'duplicaron':'triplicaron';
+  document.getElementById('p4-enunc').innerHTML=
+    `Empezando por ${ctx4.txt}, en la primera unidad de tiempo hubo <strong>${p4_b} ${ctx4.unidad}</strong>. ` +
+    `Cada unidad de tiempo se <strong>${rdesc}</strong>. ` +
+    `¿Cuántos ${ctx4.unidad} habrá en el momento <strong>${p4_ng}</strong>?`;
+}
+
+let prac={p1:null,p2:null,p3:null,p4:null};
+
+// Pistas formativas por ejercicio (sin revelar la respuesta)
+const PISTAS_PRACTICA = {
+  p1: [
+    "Identifica primero los tres datos que necesitas: a₁, d y n. ¿Los tienes anotados?",
+    "Sustituye en la fórmula paso a paso: primero calcula (n−1), luego multiplica por d, luego suma a₁."
+  ],
+  p2: [
+    "Lee el problema de nuevo y subraya: ¿cuál es el valor inicial? ¿cuánto aumenta cada vez? ¿qué día te piden?",
+    "Esos tres datos son a₁, d y n. Una vez identificados, aplica aₙ = a₁ + (n−1)·d."
+  ],
+  p3: [
+    "Identifica a₁, r y n. Recuerda: en la geométrica se multiplica, no se suma.",
+    "Calcula r^(n−1) primero, multiplicando r por sí mismo (n−1) veces. Después multiplica ese resultado por a₁."
+  ],
+  p4: [
+    "Lee el problema e identifica: ¿cuál es el valor en el momento 1? ¿por qué número se multiplica cada vez? ¿qué momento te piden?",
+    "Esos son a₁, r y n. Aplica aₙ = a₁ · r^(n−1) calculando primero la potencia."
+  ]
+};
+
+// Contadores de intentos por ejercicio (solo válidos en la sesión actual)
+const intentos = {p1:0, p2:0, p3:0, p4:0};
+
+function mkCheckP(num) {
+  return function() {
+    const key = `p${num}`;
+    const v = parseInt(document.getElementById(`${key}-resp`).value);
+    if (isNaN(v)) return;
+    const {ans} = vals[key];
+    const fb = document.getElementById(`fb-${key}`);
+    intentos[key]++;
+
+    if (v === ans) {
+      const conAyuda = intentos[key] > 2;
+      fb.className = 'feedback correcto';
+      fb.textContent = conAyuda
+        ? `✓ Correcto. Llegaste con ayuda de las pistas.`
+        : `✓ Correcto.`;
+      prac[key] = {v, ok: true, ayuda: conAyuda, intentos: intentos[key]};
+      // bloquear input y botón
+      document.getElementById(`${key}-resp`).disabled = true;
+      document.querySelector(`[onclick="check${key.toUpperCase()}()"], [onclick="${'check'+key.charAt(0).toUpperCase()+key.slice(1)}()"]`);
+    } else {
+      prac[key] = {v, ok: false, ayuda: false, intentos: intentos[key]};
+      if (intentos[key] === 1) {
+        fb.className = 'feedback incorrecto';
+        fb.textContent = `Incorrecto. ${PISTAS_PRACTICA[key][0]}`;
+      } else if (intentos[key] === 2) {
+        fb.className = 'feedback incorrecto';
+        fb.textContent = `Sigue sin ser correcto. ${PISTAS_PRACTICA[key][1]}`;
+      } else {
+        // 3+ intentos: permitir avanzar pero registrar como no resuelto
+        fb.className = 'feedback incorrecto';
+        fb.innerHTML = `No se logró en esta sesión. Anota el ejercicio en tu libreta para revisarlo con el prof. cuando regrese.<br><small style="color:#888;">El ejercicio quedará registrado como pendiente en tu resumen.</small>`;
+        prac[key] = {v, ok: false, ayuda: false, intentos: intentos[key], pendiente: true};
+        document.getElementById(`${key}-resp`).disabled = true;
+      }
+    }
+    verificarPracticaCompleta();
+  };
+}
+
+// Re-generar funciones con la nueva lógica
+function checkP1(){mkCheckP(1)();}
+function checkP2(){mkCheckP(2)();}
+function checkP3(){mkCheckP(3)();}
+function checkP4(){mkCheckP(4)();}
+
+function verificarPracticaCompleta() {
+  // Un ejercicio cuenta como "terminado" si fue respondido (ok, con ayuda, o pendiente tras 3 intentos)
+  const done = Object.values(prac).filter(x => x !== null && (x.ok || x.pendiente)).length;
+  // También habilitar si lleva 4 ejercicios respondidos aunque sean incorrectos (para no bloquear)
+  const respondidos = Object.values(prac).filter(x => x !== null).length;
+  if (done >= 4 || respondidos >= 4) {
+    document.getElementById('aviso-practica').style.display='block';
+    document.getElementById('btn-prac-sig').disabled=false;
+  }
+}
+
+// ── SECCIÓN 7 · CONJETURA ─────────────────────────────────────────
+function checkConjetura() {
+  const txt=document.getElementById('txt-conjetura').value;
+  const n=txt.trim().length;
+  document.getElementById('cuenta-chars').textContent=`${n} caracteres (mínimo 80)`;
+  const fb=document.getElementById('fb-conj');
+  if(n>=80){
+    fb.className='feedback info'; fb.textContent='Respuesta registrada. Puedes seguir ampliando si quieres.';
+    document.getElementById('btn-conj-sig').disabled=false;
+  } else {
+    fb.className=''; fb.textContent='';
+    document.getElementById('btn-conj-sig').disabled=true;
+  }
+}
+
+// ── SECCIÓN 8 · RESUMEN ───────────────────────────────────────────
+function generarResumen() {
+  const {a1,d,n,b1,r,ng,ans_arit,ans_geo}=vals;
+  const {p1,p2,p3,p4}=prac;
+  const fecha=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+  const hora=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const conj=document.getElementById('txt-conjetura').value.trim();
+
+  function etiq(x, ans) {
+    if (!x) return `— (sin respuesta)  [correcto: ${ans}]`;
+    const marca = x.ok ? '✓' : '✗';
+    const ayuda = x.ok && x.ayuda ? ' (con ayuda)' : '';
+    const pend  = x.pendiente ? ' ⚠ pendiente' : '';
+    const wrong = !x.ok ? `  (escribió ${x.v})` : '';
+    return `${marca}${ayuda}${pend}${wrong}  [correcto: ${ans}]  intentos: ${x.intentos||1}`;
+  }
+
+  const correctos = [p1,p2,p3,p4].filter(x=>x&&x.ok).length;
+  const conAyuda  = [p1,p2,p3,p4].filter(x=>x&&x.ok&&x.ayuda).length;
+  const pendientes= [p1,p2,p3,p4].filter(x=>x&&x.pendiente).length;
+
+  const txt=
+`══════════════════════════════════════
+ACTIVIDAD: SUCESIONES ARITMÉTICAS Y GEOMÉTRICAS
+Materia: Temas Selectos de Matemáticas III
+Grupo: 658  |  Sesión 2
+══════════════════════════════════════
+Alumno : ${alumno.nombre}
+Lista  : ${alumno.n}
+Fecha  : ${fecha}  ${hora}
+══════════════════════════════════════
+
+— EXPLORACIÓN —
+Aritmética: a₁=${a1}, d=${d} → a${n} = ${ans_arit}   ${log.arit||'—'}
+Geométrica: a₁=${b1}, r=${r} → a${ng} = ${ans_geo}   ${log.geo||'—'}
+
+══════════════════════════════════════
+— EJERCICIOS DE PRÁCTICA —
+══════════════════════════════════════
+
+Ej.1 (aritmética): a₁=${vals.p1.a}, d=${vals.p1.d} → a${vals.p1.n} = ${vals.p1.ans}
+     ${etiq(p1, vals.p1.ans)}
+
+Ej.2 (aritmética · contexto CDMX): a₁=${vals.p2.a}, d=${vals.p2.d} → día ${vals.p2.n} = ${vals.p2.ans}
+     ${etiq(p2, vals.p2.ans)}
+
+Ej.3 (geométrica): a₁=${vals.p3.b}, r=${vals.p3.r} → a${vals.p3.ng} = ${vals.p3.ans}
+     ${etiq(p3, vals.p3.ans)}
+
+Ej.4 (geométrica · contexto CDMX): a₁=${vals.p4.b}, r=${vals.p4.r} → momento ${vals.p4.ng} = ${vals.p4.ans}
+     ${etiq(p4, vals.p4.ans)}
+
+Puntaje: ${correctos}/4  |  Con ayuda: ${conAyuda}  |  Pendientes: ${pendientes}
+
+══════════════════════════════════════
+— REFLEXIÓN PERSONAL (Conjetura de cierre) —
+══════════════════════════════════════
+${conj}
+
+══════════════════════════════════════
+Código verificador: G658-L${alumno.n}-S2-${correctos}OK
+══════════════════════════════════════`;
+
+  document.getElementById('caja-resumen').textContent=txt;
+  window._resumenTxt=txt;
+}
+
+function copiarResumen() {
+  const txt=window._resumenTxt||document.getElementById('caja-resumen').textContent;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(()=>{
+      const fb=document.getElementById('fb-copiado');
+      fb.className='feedback correcto'; fb.textContent='✓ Texto copiado. Ahora ve a Classroom y pégalo en tu entrega.';
+      document.getElementById('btn-copiar').textContent='✓ Copiado';
+    });
+  } else {
+    // fallback para navegadores sin clipboard API
+    const ta=document.createElement('textarea');
+    ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy');
+      document.getElementById('fb-copiado').className='feedback correcto';
+      document.getElementById('fb-copiado').textContent='✓ Texto copiado. Pégalo en Classroom.';
+      document.getElementById('btn-copiar').textContent='✓ Copiado';
+    } catch(e) {
+      document.getElementById('fb-copiado').className='feedback incorrecto';
+      document.getElementById('fb-copiado').textContent='No se pudo copiar automáticamente. Mantén presionado el texto de arriba y selecciona "Copiar todo".';
+    }
+    document.body.removeChild(ta);
+  }
+}
+
+// Listeners para campos de predicción
+document.getElementById('pred-valor').addEventListener('input', function(){
+  const v=this.value.trim();
+  const r=document.getElementById('pred-razon').value.trim();
+  document.getElementById('btn-pred').disabled=!(v&&r.length>3);
+});
+document.getElementById('pred-razon').addEventListener('input', function(){
+  const v=document.getElementById('pred-valor').value.trim();
+  const r=this.value.trim();
+  document.getElementById('btn-pred').disabled=!(v&&r.length>3);
+});
+</script>
+</body>
+</html>
