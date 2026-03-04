@@ -1,0 +1,64 @@
+html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMSIII | Portafolio Académico</title>
+    <style>
+        :root {
+            --color-cdmx: #00b140; /* Verde estilo CDMX */
+            --color-acento: #e91e63; /* Rosa vibrante */
+            --fondo: #f9f9f9;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fondo); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        header { border-bottom: 3px solid var(--color-cdmx); margin-bottom: 20px; padding-bottom: 10px; }
+        h1 { color: var(--color-cdmx); margin: 0; font-size: 1.8rem; }
+        .badge { background: var(--color-acento); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .presentacion { font-style: italic; color: #666; margin: 20px 0; border-left: 4px solid #ccc; padding-left: 15px; }
+        
+        .grid-enlaces { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card-link { display: block; background: #fff; border: 2px solid #eee; padding: 15px; border-radius: 10px; text-decoration: none; color: #333; transition: 0.3s; }
+        .card-link:hover { border-color: var(--color-acento); transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        .card-link b { display: block; color: var(--color-cdmx); margin-bottom: 5px; }
+        
+        footer { text-align: center; margin-top: 40px; font-size: 0.8rem; color: #aaa; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Material de Estudio TMSIII <span class="badge">Bachillerato CDMX</span></h1>
+    </header>
+
+    <div class="presentacion">
+        Bienvenido al repositorio de <b>cruzhad</b>. Aquí comparto actividades interactivas y recursos digitales para apoyar nuestro aprendizaje en clase.
+    </div>
+
+    <h3>🚀 Mis Actividades</h3>
+    
+    <div class="grid-enlaces">
+        <!-- Tarjeta de Sucesiones -->
+        <a href="sucesiones_658" class="card-link">
+            <b>01. Sucesiones Numéricas</b>
+            <span>Práctica #658: Introducción y fórmulas generales.</span>
+        </a>
+
+        <!-- Cuando tengas más, solo copia y pega el bloque de abajo -->
+        <!-- 
+        <a href="NOMBRE_ARCHIVO" class="card-link">
+            <b>02. Título de la Tarea</b>
+            <span>Breve descripción de lo que trata.</span>
+        </a> 
+        -->
+    </div>
+
+    <footer>
+        Hecho con fines educativos • CDMX • 2024
+    </footer>
+</div>
+
+</body>
+</html>
