@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Series · TSM III · Sesión 3</title>
+<style>
+:root{
+  --mo:#6c3483;--mo2:#9b59b6;--mo3:#f3e8fc;
+  --az:#1a3a5c;--az2:#2563a8;--az3:#eaf2fb;
+  --ve:#27ae60;--ve3:#e8f5ee;
+  --ro:#c0392b;--ro3:#fdecea;
+  --am:#e67e22;--am3:#fef5e7;
+  --gr:#f4f6f9;--gr2:#e8ecf0;
+  --bl:#fff;--tx:#1a1a2e;
+  --sh:0 2px 12px rgba(0,0,0,.12)
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gr);color:var(--tx);font-size:15px;min-height:100vh}
+#bw{position:sticky;top:0;z-index:100;background:var(--mo);padding:8px 16px 6px;display:none}
+#bwl{color:#d7b4f5;font-size:11px;margin-bottom:3px}
+#bwt{background:rgba(255,255,255,.2);border-radius:8px;height:7px}
+#bwf{background:linear-gradient(90deg,var(--mo2),#d7b4f5);height:7px;border-radius:8px;transition:width .45s;width:0%}
+#bwn{color:#fff;font-size:12px;text-align:right;margin-top:3px}
+.sec{display:none;max-width:600px;margin:0 auto;padding:14px 13px 36px;animation:fi .4s ease}
+.sec.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--bl);border-radius:14px;padding:17px 15px;box-shadow:var(--sh);margin-bottom:13px}
+.cmo{background:var(--mo);color:#fff}
+.cmo2{background:var(--mo3);border-left:4px solid var(--mo2)}
+.caz{background:var(--az3);border-left:4px solid var(--az2)}
+.cve{background:var(--ve3);border-left:4px solid var(--ve)}
+.cam{background:var(--am3);border-left:4px solid var(--am)}
+.cgr{background:var(--gr2)}
+h3{font-size:16px;font-weight:700;margin-bottom:7px;color:var(--az)}
+h4{font-size:14px;font-weight:700;margin-bottom:5px}
+p{line-height:1.6;margin-bottom:7px}
+.tit{font-size:20px;font-weight:800;color:var(--mo);margin-bottom:3px}
+.tag{display:inline-block;background:var(--mo);color:#fff;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-bottom:7px;letter-spacing:.5px}
+.sep{height:1px;background:var(--gr2);margin:12px 0}
+.nc{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:50%;background:var(--mo);color:#fff;font-weight:800;font-size:13px;margin-right:7px;flex-shrink:0}
+.fi{display:flex;align-items:flex-start;margin-bottom:9px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--mo);color:#fff;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700;margin-bottom:10px}
+
+/* FRACCIONES */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;margin:0 2px;font-size:.9em}
+.frac .num{border-bottom:2px solid currentColor;padding:1px 4px;text-align:center;min-width:14px}
+.frac .den{padding:1px 4px;text-align:center}
+
+/* FÓRMULAS */
+.frm{background:var(--mo);color:#fff;border-radius:10px;padding:12px 14px;font-size:16px;font-weight:700;text-align:center;margin:9px 0;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;line-height:2}
+.frm .frac .num,.frm .frac .den{color:#fff}
+.frm .frac .num{border-color:#fff}
+.frm-az{background:var(--az2)}
+.proc-frm{background:var(--gr2);border-radius:8px;padding:7px 11px;margin:5px 0;font-size:14px;display:flex;align-items:center;flex-wrap:wrap;gap:3px;line-height:2}
+.proc-frm .frac .num{border-color:var(--tx)}
+
+/* TABLA GAUSS */
+.tsuma{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+.tsuma td{border:1px solid #d7b4f5;padding:6px 4px;text-align:center}
+.rn{background:#f9f3ff}.ri{background:var(--am3)}.rs{background:var(--mo);color:#fff;font-weight:700}
+
+/* INPUTS */
+input[type=text],input[type=number],textarea{width:100%;border:2px solid var(--gr2);border-radius:10px;padding:10px 12px;font-size:15px;font-family:inherit;background:var(--gr);transition:border .2s;-webkit-appearance:none}
+input:focus,textarea:focus{outline:none;border-color:var(--mo2);background:#fff}
+input:disabled{background:var(--gr2);color:#888;cursor:not-allowed}
+textarea{resize:vertical;min-height:90px}
+
+/* BOTONES */
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:9px;transition:transform .15s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--mo);color:#fff;box-shadow:0 4px 14px rgba(108,52,131,.3)}
+.bp:disabled{background:#c5a8d8;box-shadow:none;cursor:not-allowed;transform:none}
+.baz{background:var(--az2);color:#fff}
+.bve{background:var(--ve);color:#fff}
+.bsm{display:inline-block;width:auto;padding:8px 14px;font-size:13px}
+
+/* FEEDBACK */
+.fb{border-radius:10px;padding:11px 13px;margin-top:7px;font-size:14px;display:none;line-height:1.5}
+.fb.ok{display:block;background:var(--ve3);border-left:4px solid var(--ve);color:#1a5c33}
+.fb.er{display:block;background:var(--ro3);border-left:4px solid var(--ro);color:#922b21}
+.fb.in{display:block;background:var(--mo3);border-left:4px solid var(--mo2);color:#4a1f6a}
+
+/* PISTAS */
+.pb{background:none;border:1px dashed var(--am);color:#7d4e00;border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;margin-top:5px;font-family:inherit}
+.pbox{display:none;background:var(--am3);border-radius:8px;padding:9px 12px;margin-top:5px;font-size:13px;color:#7d4e00;line-height:1.6}
+
+/* OPCIONES */
+.ob{display:block;width:100%;text-align:left;background:var(--bl);border:2px solid var(--gr2);border-radius:10px;padding:11px 13px;margin-bottom:7px;cursor:pointer;font-size:14px;font-family:inherit;transition:border .15s;line-height:1.4}
+.ob:hover{border-color:var(--mo2);background:var(--mo3)}
+.ob.eok{border-color:var(--ve);background:var(--ve3);color:#1a5c33;pointer-events:none}
+.ob.eml{border-color:var(--ro);background:var(--ro3);color:#922b21;pointer-events:none}
+.ob.dx{opacity:.5;pointer-events:none}
+
+/* PRÁCTICA */
+.prac-ind{background:var(--gr2);border-radius:10px;padding:8px 14px;font-size:13px;color:#555;text-align:center;margin-bottom:10px}
+
+/* RESUMEN RESULTADOS */
+.q-item{border-radius:12px;border:2px solid var(--gr2);margin-bottom:11px;overflow:hidden}
+.q-head{padding:9px 13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.q-head-ok{background:var(--ve3);border-bottom:2px solid var(--ve)}
+.q-head-er{background:var(--ro3);border-bottom:2px solid var(--ro)}
+.q-body{padding:11px 13px}
+.q-tipo{font-size:10px;background:var(--mo);color:#fff;border-radius:5px;padding:2px 7px;font-weight:700}
+.q-tipo-geo{background:var(--az2)}
+.chip-resp{display:inline-flex;align-items:center;gap:5px;border-radius:18px;padding:4px 12px;font-size:13px;font-weight:700;margin-top:6px;margin-right:5px}
+.chip-ok{background:var(--ve3);color:#1a5c33;border:2px solid var(--ve)}
+.chip-er{background:var(--ro3);color:var(--ro);border:2px solid var(--ro)}
+.chip-esp{background:var(--gr2);color:var(--tx);border:2px solid var(--gr2)}
+.proc-box{background:var(--gr);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;line-height:1.9}
+.proc-box h4{font-size:12px;color:var(--mo);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.ans-ok{color:var(--ve);font-weight:800}
+
+/* TIRA DOCENTE */
+.prof-strip{background:var(--az);color:#fff;border-radius:12px;padding:14px 16px;margin-top:10px}
+.prof-strip .mini-title{font-size:10px;letter-spacing:2px;opacity:.65;margin-bottom:5px}
+.prof-q-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.pq{display:inline-flex;align-items:center;justify-content:center;width:32px;height:26px;border-radius:7px;font-size:11px;font-weight:700}
+.pq-ok{background:var(--ve);color:#fff}
+.pq-er{background:var(--ro);color:#fff}
+
+/* SECCIÓN CUADERNO */
+.cua-card{background:var(--bl);border-radius:14px;padding:17px 15px;box-shadow:var(--sh);margin-bottom:13px;border:2px dashed var(--mo2)}
+.cua-formula{background:linear-gradient(135deg,var(--mo3),#fff);border:2px solid var(--mo2);border-radius:12px;padding:14px;margin-bottom:10px}
+.cua-formula h4{color:var(--mo);font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cua-prob{background:var(--az3);border-left:4px solid var(--az2);border-radius:0 10px 10px 0;padding:12px 14px;margin:8px 0;font-size:14px;line-height:1.7}
+.cua-respbox{background:var(--gr2);border-radius:8px;padding:8px 12px;margin-top:6px;font-size:13px;color:#888;font-style:italic}
+.cua-titulo{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.cua-badge{background:var(--mo);color:#fff;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700}
+
+/* PANEL PROFESOR */
+#pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:8000;align-items:center;justify-content:center}
+#pin-modal.show{display:flex}
+#pin-box{background:#fff;border-radius:16px;padding:26px 22px;max-width:300px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+#pin-inp{border:2px solid var(--gr2);border-radius:10px;padding:10px;font-size:24px;text-align:center;letter-spacing:10px;width:100%;margin:10px 0;font-family:inherit;-webkit-appearance:none}
+#pin-inp:focus{outline:none;border-color:var(--az2)}
+#prof-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,30,.94);z-index:9000;overflow-y:auto}
+#prof-panel{max-width:640px;margin:20px auto;padding:14px}
+.pcrd{background:#fff;border-radius:14px;padding:15px 14px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.prof-head{background:linear-gradient(135deg,var(--az),var(--az2));color:#fff;border-radius:14px;padding:18px;margin-bottom:12px;text-align:center}
+#btn-xp{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);color:#fff;font-size:20px;cursor:pointer;border-radius:50%;width:40px;height:40px;z-index:9001;font-family:inherit;display:none;line-height:1}
+
+/* MISC */
+#sym{cursor:default;user-select:none;-webkit-user-select:none}
+.copy-area{background:var(--gr);border-radius:10px;padding:11px;font-size:12px;font-family:'Courier New',monospace;white-space:pre-wrap;word-break:break-word;border:1px solid var(--gr2);max-height:180px;overflow-y:auto;line-height:1.5;display:none;margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- BARRA PROGRESO -->
+<div id="bw">
+  <div id="bwl">TSM III · Grupo 658 · Sesión 3 — Series</div>
+  <div id="bwt"><div id="bwf"></div></div>
+  <div id="bwn">Paso <span id="bwc">0</span> de 7</div>
+</div>
+
+<!-- PIN MODAL -->
+<div id="pin-modal">
+  <div id="pin-box">
+    <div style="font-size:32px">🔑</div>
+    <h3 style="color:var(--az);margin:8px 0 4px">Acceso docente</h3>
+    <p style="font-size:13px;color:#666">Código del grupo</p>
+    <input type="password" id="pin-inp" maxlength="6" placeholder="••••" oninput="chkPin(this.value)" autocomplete="off">
+    <div id="pin-fb" style="font-size:13px;color:var(--ro);min-height:16px;margin-top:3px"></div>
+    <button class="btn" style="background:var(--gr2);color:var(--tx);padding:10px;margin-top:7px" onclick="cerrarPin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- PANEL PROFESOR -->
+<div id="prof-overlay">
+  <button id="btn-xp" onclick="cerrarProf()">✕</button>
+  <div id="prof-panel">
+    <div class="prof-head">
+      <div style="font-size:36px">👨‍🏫</div>
+      <h2 style="margin:7px 0 3px">Panel del Profesor</h2>
+      <div style="font-size:13px;opacity:.85">TSM III · Sesión 3 — Series</div>
+    </div>
+    <div class="pcrd">
+      <h3>Acciones</h3>
+      <div style="display:grid;gap:9px;grid-template-columns:1fr 1fr;margin-top:9px">
+        <button class="btn baz" style="margin:0;font-size:14px" onclick="profSimular()">🧑‍🎓 Simular recorrido</button>
+        <button class="btn bp" style="margin:0;font-size:14px" onclick="profVerRef()">📐 Fórmulas y banco</button>
+      </div>
+      <div id="prof-sim-wrap" style="display:none;margin-top:11px">
+        <p style="font-size:13px;color:#555;margin-bottom:6px">Nombre con el que entrarás:</p>
+        <input type="text" id="prof-sim-nom" placeholder="DOCENTE / INVITADO" autocomplete="off">
+        <button class="btn bve" style="margin-top:7px;font-size:14px" onclick="profEntrar()">Entrar como alumno →</button>
+      </div>
+    </div>
+    <div class="pcrd" id="prof-ref-card" style="display:none">
+      <h3>📐 Fórmulas clave — Sesiones 2 y 3</h3>
+      <div style="font-size:13px;color:#555;line-height:2">
+        <strong>Sesión 2 — Sucesiones:</strong><br>
+        Aritmética: aₙ = a₁ + (n−1)·d<br>
+        Geométrica: aₙ = a₁·r<sup style="font-size:.7em">(n−1)</sup><br><br>
+        <strong>Sesión 3 — Series:</strong><br>
+        Aritmética: Sₙ = (n/2)·(a₁+aₙ)<br>
+        Geométrica: Sₙ = a₁·(1−rⁿ)/(1−r)<br>
+      </div>
+      <div style="background:var(--gr);border-radius:8px;padding:9px;font-size:12px;color:#555;margin-top:8px">
+        <strong>Código verificador:</strong> S3-[X]/4-INT[Y]<br>
+        X = correctas · Y = intento
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ S0: LOGIN ════════ -->
+<div id="s0" class="sec on">
+  <div style="text-align:center;padding:22px 0 10px">
+    <div id="sym" style="font-size:50px;color:var(--mo)" onclick="tapSym()">∑</div>
+    <div style="font-size:20px;font-weight:800;color:var(--mo);margin-top:7px">TSM III · Grupo 658</div>
+    <div style="font-size:13px;color:#666;margin-top:3px">Sesión 3 · Series aritméticas y geométricas</div>
+  </div>
+  <div class="card">
+    <h3>¿Cómo te llamas?</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:9px">Escribe tu nombre completo comenzando por <strong>apellidos</strong>:</p>
+    <input type="text" id="inp-nombre" placeholder="Ej: GARCÍA LÓPEZ JUAN PABLO" autocomplete="off" autocorrect="off" autocapitalize="characters" onkeydown="if(event.key==='Enter')iniciar()">
+    <div id="fb-login" style="font-size:13px;color:var(--ro);margin-top:5px;min-height:15px"></div>
+    <button class="btn bp" onclick="iniciar()">Comenzar actividad →</button>
+  </div>
+  <div class="card cam" style="font-size:13px">
+    <strong>ℹ️</strong> Puedes repetir la actividad hasta obtener la calificación esperada. Cada vez recibirás ejercicios de práctica diferentes.
+  </div>
+</div>
+
+<!-- ════════ S1: BIENVENIDA ════════ -->
+<div id="s1" class="sec">
+  <div class="chip">👤 <span id="chip-txt"></span></div>
+  <div class="card cmo">
+    <span style="font-size:26px;display:block;margin-bottom:5px">👨‍🏫</span>
+    <h3 style="color:#fff">Mensaje del Prof. Cruz</h3>
+    <div style="height:1px;background:rgba(255,255,255,.2);margin:8px 0"></div>
+    <p id="msg-bienvenida" style="font-size:14px;line-height:1.7"></p>
+  </div>
+  <div class="card">
+    <h3>¿Qué harás hoy?</h3>
+    <div class="fi"><span class="nc">1</span><p>Descubrirás cómo sumar los primeros n términos de una sucesión — eso se llama <strong>serie</strong>.</p></div>
+    <div class="fi"><span class="nc">2</span><p>Aprenderás las fórmulas paso a paso, con ejemplos guiados.</p></div>
+    <div class="fi"><span class="nc">3</span><p>Resolverás 4 ejercicios de práctica. <strong>No verás si están bien hasta el final.</strong></p></div>
+    <div class="fi"><span class="nc">4</span><p>Al terminar recibirás tus resultados y <strong>material para copiar en tu cuaderno</strong> de cara al examen.</p></div>
+  </div>
+  <button class="btn bp" onclick="ir('s2',1)">Empezar →</button>
+</div>
+
+<!-- ════════ S2: DETONADOR ════════ -->
+<div id="s2" class="sec">
+  <div class="tag">BLOQUE 1 · DETONADOR</div>
+  <div class="tit">El Metro necesita más datos</div>
+  <div class="card">
+    <h3>🚇 El mismo ingeniero, una pregunta nueva</h3>
+    <p>En la sesión anterior el ingeniero del Metro quería saber cuántos usuarios habría el <strong>día 10</strong>. Hoy su jefe le pide algo diferente: cuántos usuarios pasaron en <strong>total</strong> del día 1 al día 10, para calcular el gasto de energía acumulado.</p>
+    <div class="card cgr" style="margin-top:6px;font-size:13px">Afluencia diaria: <strong>3, 5, 7, 9, 11, 13, 15, 17, 19, 21</strong> (miles de usuarios).</div>
+  </div>
+  <div class="card">
+    <h4>🤔 Intento 1 — Suma todos los términos</h4>
+    <p style="font-size:13px;color:#555">Calcula: 3 + 5 + 7 + 9 + 11 + 13 + 15 + 17 + 19 + 21</p>
+    <input type="number" id="sm" placeholder="Tu resultado" style="max-width:160px">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkSM()">Verificar</button>
+    <div id="fb-sm" class="fb"></div>
+  </div>
+  <div id="card-200" class="card" style="display:none">
+    <h4>💭 Ahora imagina esto</h4>
+    <p>¿Qué pasaría si el ingeniero necesitara la suma de los primeros <strong>200 días</strong>?</p>
+    <button class="ob" onclick="rL(this,'A')">A) Sumaría uno por uno. No hay otra forma.</button>
+    <button class="ob" onclick="rL(this,'B')">B) Debería existir una fórmula más rápida.</button>
+    <button class="ob" onclick="rL(this,'C')">C) Usaría una calculadora. Da igual.</button>
+    <div id="fb-200" class="fb"></div>
+  </div>
+  <button class="btn bp" id="btn-det" disabled onclick="ir('s3',2)">Descubrir la fórmula →</button>
+</div>
+
+<!-- ════════ S3: SERIE ARITMÉTICA ════════ -->
+<div id="s3" class="sec">
+  <div class="tag">BLOQUE 2 · SERIE ARITMÉTICA</div>
+  <div class="tit">El truco de los pares</div>
+
+  <div class="card cmo2">
+    <h3>🧠 Una observación genial</h3>
+    <p>Escribe la sucesión en orden normal y debajo en orden invertido. Suma cada par vertical:</p>
+    <div style="overflow-x:auto">
+      <table class="tsuma">
+        <tr class="rn"><td><strong>Normal →</strong></td><td>3</td><td>5</td><td>7</td><td>9</td><td>11</td><td>13</td><td>15</td><td>17</td><td>19</td><td>21</td></tr>
+        <tr class="ri"><td><strong>← Invertida</strong></td><td>21</td><td>19</td><td>17</td><td>15</td><td>13</td><td>11</td><td>9</td><td>7</td><td>5</td><td>3</td></tr>
+        <tr class="rs"><td><strong>Suma de par</strong></td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td><td>24</td></tr>
+      </table>
+    </div>
+    <p style="font-size:13px;margin-top:8px">Cada par suma <strong>24</strong> = a₁ + a₁₀ = 3 + 21. Hay <strong>10</strong> pares. Como escribimos la sucesión dos veces, dividimos entre 2.</p>
+  </div>
+
+  <div class="card">
+    <h4>🔢 Entonces: 24 × 10 ÷ 2 = ?</h4>
+    <input type="number" id="gc" placeholder="Resultado" style="max-width:140px">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkGauss()">Verificar</button>
+    <div id="fb-gauss" class="fb"></div>
+  </div>
+
+  <div id="card-fsa" class="card" style="display:none">
+    <h4>📐 La fórmula de la serie aritmética</h4>
+    <p>Lo que hiciste se generaliza así:</p>
+    <div class="frm">
+      Sₙ &nbsp;=&nbsp;
+      <span class="frac"><span class="num">n</span><span class="den">2</span></span>
+      &nbsp;·&nbsp;(a₁ &nbsp;+&nbsp; aₙ)
+    </div>
+    <p style="font-size:12px;color:#888;margin-top:2px">aₙ = último término. Primero calcúlalo con aₙ = a₁ + (n−1)·d.</p>
+    <div class="sep"></div>
+    <h4>📝 Aplícala con tu sucesión</h4>
+    <div id="ctx-sa" class="card caz" style="margin:7px 0"></div>
+    <button class="pb" onclick="tp('p-sa')">💡 Pista paso a paso</button>
+    <div class="pbox" id="p-sa"></div>
+    <input type="number" id="resp-sa" placeholder="Tu respuesta (Sₙ)" style="margin-top:8px">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkSA()">Verificar</button>
+    <div id="fb-sa" class="fb"></div>
+  </div>
+
+  <button class="btn bp" id="btn-sa" disabled onclick="ir('s4',3)">Continuar con series geométricas →</button>
+</div>
+
+<!-- ════════ S4: SERIE GEOMÉTRICA ════════ -->
+<div id="s4" class="sec">
+  <div class="tag">BLOQUE 3 · SERIE GEOMÉTRICA</div>
+  <div class="tit">El truco de los pares no funciona aquí</div>
+
+  <div class="card cam">
+    <h4>⚡ Prueba con 2, 4, 8, 16, 32</h4>
+    <p>Normal: &nbsp;2 &nbsp;&nbsp;4 &nbsp;&nbsp;8 &nbsp;16 &nbsp;32<br>Invertida: 32 &nbsp;16 &nbsp;&nbsp;8 &nbsp;&nbsp;4 &nbsp;&nbsp;2</p>
+    <p style="margin-top:5px">Pares: <strong>34, 20, 16, 20, 34</strong> — ¡No son iguales! El truco no sirve con geométricas.</p>
+  </div>
+
+  <div class="card cmo2">
+    <h4>📐 La fórmula de la serie geométrica</h4>
+    <div class="frm frm-az">
+      Sₙ &nbsp;=&nbsp; a₁ &nbsp;·&nbsp;
+      <span class="frac"><span class="num">1 &minus; r<sup style="font-size:.65em">n</sup></span><span class="den">1 &minus; r</span></span>
+    </div>
+    <div class="sep"></div>
+    <h4 style="color:var(--az)">Verificación: 2, 4, 8, 16, 32 → a₁=2, r=2, n=5</h4>
+    <div class="proc-frm">
+      S₅ = 2 ·
+      <span class="frac"><span class="num">1 − 2<sup style="font-size:.65em">5</sup></span><span class="den">1 − 2</span></span>
+      = 2 ·
+      <span class="frac"><span class="num">1 − 32</span><span class="den">−1</span></span>
+      = 2 ·
+      <span class="frac"><span class="num">−31</span><span class="den">−1</span></span>
+      = 2 · 31 = <strong>62</strong>
+    </div>
+    <p style="font-size:13px;margin-top:5px">Comprueba: 2+4+8+16+32 = <strong>62 ✓</strong></p>
+  </div>
+
+  <div class="card">
+    <h4>📝 Aplícala con tu sucesión</h4>
+    <div id="ctx-sg" class="card caz" style="margin:7px 0"></div>
+    <button class="pb" onclick="tp('p-sg')">💡 Pista paso a paso</button>
+    <div class="pbox" id="p-sg"></div>
+    <input type="number" id="resp-sg" placeholder="Tu respuesta (Sₙ)" style="margin-top:8px">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkSG()">Verificar</button>
+    <div id="fb-sg" class="fb"></div>
+  </div>
+
+  <div id="card-graf" class="card" style="display:none">
+    <h4>📊 Suma acumulada: aritmética vs. geométrica</h4>
+    <p style="font-size:12px;color:#666;margin-bottom:6px">
+      <span style="color:var(--az2);font-weight:700">■ Aritmética</span> &nbsp;
+      <span style="color:var(--ro);font-weight:700">■ Geométrica</span>
+    </p>
+    <canvas id="cg" height="210" style="width:100%;max-width:460px;display:block;margin:0 auto;background:#fff;border-radius:8px"></canvas>
+  </div>
+
+  <button class="btn bp" id="btn-sg" disabled onclick="ir('s5',4)">Continuar a la práctica →</button>
+</div>
+
+<!-- ════════ S5: PRÁCTICA ════════ -->
+<div id="s5" class="sec">
+  <div class="tag">BLOQUE 4 · PRÁCTICA INDIVIDUAL</div>
+  <div class="tit">4 ejercicios sin retroalimentación</div>
+  <div class="card cmo" style="padding:14px 15px">
+    <span style="font-size:20px;display:block;margin-bottom:5px">⚠️</span>
+    <p style="margin:0;font-size:14px;line-height:1.7">Responde cada ejercicio y guárdalo. <strong>No sabrás si está bien o mal hasta que termines todos.</strong> Al final verás resultados con procedimientos.</p>
+  </div>
+  <div class="prac-ind"><span id="prac-cnt">0</span> de 4 guardados</div>
+
+  <div class="card" id="card-p1">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">1</span><h4 style="margin:0">Serie aritmética — suma directa</h4></div>
+    <p id="enunc-p1"></p>
+    <button class="pb" onclick="tp('h1')">💡 Recordatorio de fórmula</button>
+    <div class="pbox" id="h1">Sₙ = <span class="frac" style="font-size:.9em"><span class="num">n</span><span class="den">2</span></span>·(a₁+aₙ). Paso 1: calcula aₙ = a₁+(n−1)·d. Paso 2: aplica Sₙ.</div>
+    <input type="number" id="resp-p1" placeholder="Tu respuesta">
+    <button class="btn bsm bp" id="btn-p1" style="margin-top:7px" onclick="guardarP(1)">Guardar →</button>
+    <div id="conf-p1" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <div class="card" id="card-p2">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">2</span><h4 style="margin:0">Serie aritmética — contexto CDMX</h4></div>
+    <p id="enunc-p2"></p>
+    <button class="pb" onclick="tp('h2')">💡 Recordatorio de fórmula</button>
+    <div class="pbox" id="h2">Identifica a₁, d y n del problema. Luego: aₙ = a₁+(n−1)·d → Sₙ = <span class="frac" style="font-size:.9em"><span class="num">n</span><span class="den">2</span></span>·(a₁+aₙ).</div>
+    <input type="number" id="resp-p2" placeholder="Tu respuesta">
+    <button class="btn bsm bp" id="btn-p2" style="margin-top:7px" onclick="guardarP(2)">Guardar →</button>
+    <div id="conf-p2" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <div class="card" id="card-p3">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">3</span><h4 style="margin:0">Serie geométrica — suma directa</h4></div>
+    <p id="enunc-p3"></p>
+    <button class="pb" onclick="tp('h3')">💡 Recordatorio de fórmula</button>
+    <div class="pbox" id="h3">Sₙ = a₁·<span class="frac" style="font-size:.9em"><span class="num">1−rⁿ</span><span class="den">1−r</span></span>. Paso 1: calcula rⁿ. Paso 2: sustituye todo.</div>
+    <input type="number" id="resp-p3" placeholder="Tu respuesta">
+    <button class="btn bsm bp" id="btn-p3" style="margin-top:7px" onclick="guardarP(3)">Guardar →</button>
+    <div id="conf-p3" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <div class="card" id="card-p4">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">4</span><h4 style="margin:0">Serie geométrica — contexto CDMX</h4></div>
+    <p id="enunc-p4"></p>
+    <button class="pb" onclick="tp('h4')">💡 Recordatorio de fórmula</button>
+    <div class="pbox" id="h4">Identifica a₁ (inicial), r (factor) y n (períodos). Aplica Sₙ = a₁·<span class="frac" style="font-size:.9em"><span class="num">1−rⁿ</span><span class="den">1−r</span></span>.</div>
+    <input type="number" id="resp-p4" placeholder="Tu respuesta">
+    <button class="btn bsm bp" id="btn-p4" style="margin-top:7px" onclick="guardarP(4)">Guardar →</button>
+    <div id="conf-p4" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <button class="btn bp" id="btn-prac" disabled onclick="ir('s6',5)">Ver mis resultados →</button>
+</div>
+
+<!-- ════════ S6: CONJETURA ════════ -->
+<div id="s6" class="sec">
+  <div class="tag">BLOQUE 5 · REFLEXIÓN</div>
+  <div class="tit">Conecta lo que aprendiste</div>
+  <div class="card cmo">
+    <span style="font-size:22px;display:block;margin-bottom:5px">✍️</span>
+    <p style="font-size:14px;line-height:1.7;margin:0">El Prof. Cruz leerá esto personalmente. Escribe con tus propias palabras usando los números de tu actividad.</p>
+  </div>
+  <div class="card">
+    <h3>Pregunta de cierre</h3>
+    <p style="background:var(--gr);border-radius:10px;padding:11px;line-height:1.7;margin-bottom:10px">
+      <strong>¿Qué diferencia hay entre encontrar el término n de una sucesión y calcular la suma de los primeros n términos?</strong><br><br>
+      Escribe un ejemplo con los valores de tu serie aritmética de hoy donde se vea esa diferencia.
+    </p>
+    <p style="font-size:12px;color:#999;margin-bottom:7px">Mínimo 80 caracteres.</p>
+    <textarea id="txt-conj" placeholder="Escribe aquí…" oninput="chkConj()"></textarea>
+    <div id="cnt-conj" style="font-size:12px;color:#aaa;text-align:right;margin-top:4px">0 / 80</div>
+    <div id="fb-conj" class="fb"></div>
+  </div>
+  <button class="btn bp" id="btn-conj" disabled onclick="ir('s7',6)">Ver resultados finales →</button>
+</div>
+
+<!-- ════════ S7: RESULTADOS ════════ -->
+<div id="s7" class="sec">
+
+  <!-- Marcador -->
+  <div class="card cmo" id="marc-card" style="text-align:center;padding:20px">
+    <div id="marc-ico" style="font-size:44px;margin-bottom:5px"></div>
+    <div id="marc-pts" style="font-size:30px;font-weight:800;margin-bottom:3px"></div>
+    <div id="marc-sub" style="font-size:14px;line-height:1.5;opacity:.9"></div>
+  </div>
+
+  <!-- Detalle alumno -->
+  <div class="tag" style="margin-bottom:7px">📖 TUS RESULTADOS DETALLADOS</div>
+  <div id="detalle"></div>
+
+  <!-- Reflexión -->
+  <div class="card cmo2"><h4>✍️ Tu reflexión</h4><p id="res-conj" style="font-size:13px;font-style:italic;color:#555;margin-top:5px"></p></div>
+
+  <!-- Tira docente -->
+  <div class="tag" style="margin-top:8px;margin-bottom:7px;background:var(--az)">👨‍🏫 REGISTRO DOCENTE — muestra esta pantalla al Prof. Cruz</div>
+  <div class="prof-strip" id="prof-strip"></div>
+
+  <!-- Copiar -->
+  <button class="btn bve" id="btn-copiar" style="margin-top:10px" onclick="copiarRes()">📋 Copiar resumen para Classroom</button>
+  <div id="fb-copia" style="font-size:13px;color:var(--ve);margin-top:5px;text-align:center;min-height:16px"></div>
+  <div class="copy-area" id="copy-area"></div>
+
+  <div class="card cam" style="margin-top:10px;font-size:13px">
+    <strong>Siguiente paso:</strong> Muestra esta pantalla al Prof. Cruz para registrar tu calificación.
+  </div>
+
+  <div id="wrap-reintento" style="display:none;margin-top:4px">
+    <button class="btn bp" onclick="reiniciar()">🔄 Reintentar con ejercicios nuevos</button>
+  </div>
+
+  <!-- ── SECCIÓN CUADERNO ── -->
+  <div style="margin-top:20px">
+    <div class="tag" style="background:var(--az2);font-size:12px;margin-bottom:10px">📓 PARA TU CUADERNO — copia esto para el examen</div>
+    <div class="card cmo" style="padding:14px 15px">
+      <span style="font-size:20px;display:block;margin-bottom:5px">✏️</span>
+      <p style="font-size:14px;line-height:1.6;margin:0">El Prof. Cruz te pide que copies las fórmulas y resuelvas los cuatro problemas en tu cuaderno. Tendrás ese material disponible para repasar antes del examen.</p>
+    </div>
+
+    <!-- Fórmulas para copiar -->
+    <div class="cua-card">
+      <div class="cua-titulo">
+        <span style="font-size:22px">📐</span>
+        <h3 style="margin:0">Fórmulas — Sesiones 2 y 3</h3>
+        <span class="cua-badge">COPIAR</span>
+      </div>
+
+      <div class="cua-formula">
+        <h4>SESIÓN 2 — SUCESIONES (término n)</h4>
+        <p style="font-size:13px;margin-bottom:8px">¿Cuánto vale el término n de una sucesión?</p>
+        <div class="frm" style="font-size:14px;margin-bottom:8px">
+          Aritmética: &nbsp; aₙ = a₁ + (n − 1) · d
+        </div>
+        <p style="font-size:12px;color:#555;margin-bottom:8px">
+          a₁ = primer término &nbsp;·&nbsp; d = diferencia común &nbsp;·&nbsp; n = número del término
+        </p>
+        <div class="frm frm-az" style="font-size:14px">
+          Geométrica: &nbsp; aₙ = a₁ · r<sup style="font-size:.7em">(n−1)</sup>
+        </div>
+        <p style="font-size:12px;color:#555;margin-top:6px">
+          a₁ = primer término &nbsp;·&nbsp; r = razón (factor de multiplicación) &nbsp;·&nbsp; n = número del término
+        </p>
+      </div>
+
+      <div class="cua-formula">
+        <h4>SESIÓN 3 — SERIES (suma de n términos)</h4>
+        <p style="font-size:13px;margin-bottom:8px">¿Cuánto suman los primeros n términos?</p>
+        <div class="frm" style="font-size:14px;margin-bottom:6px">
+          Aritmética: &nbsp; Sₙ =
+          <span class="frac"><span class="num">n</span><span class="den">2</span></span>
+          · (a₁ + aₙ)
+        </div>
+        <p style="font-size:12px;color:#555;margin-bottom:8px">
+          Primero calcula aₙ con la fórmula de arriba, luego aplica Sₙ.
+        </p>
+        <div class="frm frm-az" style="font-size:14px">
+          Geométrica: &nbsp; Sₙ = a₁ ·
+          <span class="frac"><span class="num">1 − r<sup style="font-size:.65em">n</sup></span><span class="den">1 − r</span></span>
+        </div>
+        <p style="font-size:12px;color:#555;margin-top:6px">
+          Calcula rⁿ primero, luego sustituye en la fórmula. Ojo con los signos.
+        </p>
+      </div>
+
+      <!-- Tabla resumen -->
+      <div style="overflow-x:auto;margin-top:4px">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:var(--mo);color:#fff">
+              <th style="padding:7px 6px">Tipo</th>
+              <th style="padding:7px 6px">Término n (aₙ)</th>
+              <th style="padding:7px 6px">Suma Sₙ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:var(--mo3)">
+              <td style="padding:7px 6px;font-weight:700;border:1px solid #d7b4f5">Aritmética</td>
+              <td style="padding:7px 6px;border:1px solid #d7b4f5">a₁ + (n−1)·d</td>
+              <td style="padding:7px 6px;border:1px solid #d7b4f5;display:flex;align-items:center;gap:3px"><span class="frac" style="font-size:.85em"><span class="num">n</span><span class="den">2</span></span>·(a₁+aₙ)</td>
+            </tr>
+            <tr style="background:var(--az3)">
+              <td style="padding:7px 6px;font-weight:700;border:1px solid #b3cef5">Geométrica</td>
+              <td style="padding:7px 6px;border:1px solid #b3cef5">a₁·r<sup style="font-size:.65em">(n−1)</sup></td>
+              <td style="padding:7px 6px;border:1px solid #b3cef5">a₁·<span class="frac" style="font-size:.85em"><span class="num">1−rⁿ</span><span class="den">1−r</span></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Problemas para cuaderno -->
+    <div class="cua-card">
+      <div class="cua-titulo">
+        <span style="font-size:22px">🖊️</span>
+        <h3 style="margin:0">Problemas para resolver en tu cuaderno</h3>
+        <span class="cua-badge">RESOLVER</span>
+      </div>
+      <p style="font-size:13px;color:#555;margin-bottom:12px">Resuelve cada problema mostrando el procedimiento completo. Usa las fórmulas de arriba.</p>
+
+      <!-- P Sesión 2 Aritmética -->
+      <div class="cua-prob" id="cua-p1">
+        <strong>Problema 1 — Sucesión aritmética (Sesión 2)</strong><br>
+        <span id="cua-e1"></span>
+      </div>
+      <div class="cua-respbox">Escribe: datos → fórmula → sustitución → respuesta</div>
+
+      <!-- P Sesión 2 Geométrica -->
+      <div class="cua-prob" style="border-left-color:var(--mo2);background:var(--mo3)" id="cua-p2">
+        <strong>Problema 2 — Sucesión geométrica (Sesión 2)</strong><br>
+        <span id="cua-e2"></span>
+      </div>
+      <div class="cua-respbox">Escribe: datos → fórmula → sustitución → respuesta</div>
+
+      <!-- P Sesión 3 Aritmética -->
+      <div class="cua-prob" id="cua-p3" style="margin-top:8px">
+        <strong>Problema 3 — Serie aritmética (Sesión 3)</strong><br>
+        <span id="cua-e3"></span>
+      </div>
+      <div class="cua-respbox">Paso 1: calcula aₙ. Paso 2: calcula Sₙ. Muestra ambos pasos.</div>
+
+      <!-- P Sesión 3 Geométrica -->
+      <div class="cua-prob" style="border-left-color:var(--mo2);background:var(--mo3)" id="cua-p4">
+        <strong>Problema 4 — Serie geométrica (Sesión 3)</strong><br>
+        <span id="cua-e4"></span>
+      </div>
+      <div class="cua-respbox">Paso 1: calcula rⁿ. Paso 2: sustituye en Sₙ. Muestra ambos pasos.</div>
+
+      <div class="card cam" style="margin-top:12px;font-size:13px">
+        <strong>⚠️ Instrucción del Prof. Cruz:</strong> Muestra el cuaderno con estos ejercicios resueltos en la próxima clase. Serán parte de tu evaluación continua.
+      </div>
+    </div>
+  </div><!-- /cuaderno -->
+
+</div><!-- /s7 -->
+
+<!-- ════════ SCRIPT ════════ -->
+<script>
+'use strict';
+
+let nombre='', intento=1;
+let V={};
+let PV={};
+let PR=[null,null,null,null];
+let pracGuardadas=0;
+
+const rnd  = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const pick = arr   => arr[Math.floor(Math.random()*arr.length)];
+const frac = (n,d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const sub  = n     => `<sub style="font-size:.75em">${n}</sub>`;
+const sup  = n     => `<sup style="font-size:.7em">${n}</sup>`;
+
+// ── LOGIN ──────────────────────────────────────────────────────────
+function iniciar(){
+  nombre = document.getElementById('inp-nombre').value.trim().toUpperCase();
+  const fb = document.getElementById('fb-login');
+  if(nombre.length < 4){ fb.textContent='Escribe tu nombre completo.'; return; }
+  fb.textContent = '';
+
+  // Valores de exploración (bloques guiados)
+  V.a1 = rnd(3,8); V.d  = rnd(2,5); V.n  = rnd(6,10);
+  V.an = V.a1 + (V.n-1)*V.d;
+  V.sn = Math.round(V.n/2*(V.a1+V.an));
+  V.b1 = rnd(2,4); V.r  = pick([2,3]); V.ng = rnd(4,6);
+  V.sg = Math.round(V.b1*(1-Math.pow(V.r,V.ng))/(1-V.r));
+
+  document.getElementById('chip-txt').textContent = nombre;
+  document.getElementById('msg-bienvenida').innerHTML =
+    `Hola, <strong>${nombre.split(' ')[0]}</strong>. Hoy aprenderás a sumar los términos de una sucesión — a eso le llamamos <strong>serie</strong>. `+
+    `Empezaremos con el mismo Metro de la sesión pasada y construiremos la fórmula desde cero.<br><br>`+
+    `Cuando termines, pasa conmigo para registrar tu calificación. Si algo no quedó claro, lo revisamos juntos.<br><br>`+
+    `<em>— Prof. Adrián Cruz</em>`;
+
+  document.getElementById('bw').style.display = 'block';
+  ir('s1', 0);
+}
+
+// ── NAVEGACIÓN ─────────────────────────────────────────────────────
+function ir(id, paso){
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(paso !== undefined){
+    document.getElementById('bwf').style.width = (paso/7*100)+'%';
+    document.getElementById('bwc').textContent = paso;
+  }
+  if(id==='s3') cargSA();
+  if(id==='s4') cargSG();
+  if(id==='s5') cargPrac();
+  if(id==='s7') mostrarRes();
+}
+function tp(id){ const e=document.getElementById(id); e.style.display=e.style.display==='block'?'none':'block'; }
+
+// ── DETONADOR ──────────────────────────────────────────────────────
+function chkSM(){
+  const v=parseInt(document.getElementById('sm').value);
+  const fb=document.getElementById('fb-sm');
+  if(v===120){
+    fb.className='fb ok';
+    fb.textContent='✓ Correcto: 120 miles. Funciona, pero tardaste con solo 10 términos. ¿Imaginas con 200?';
+    document.getElementById('card-200').style.display='block';
+  } else {
+    fb.className='fb er';
+    fb.textContent='Revisa la suma. Incluye los 10 términos: 3+5+7+9+11+13+15+17+19+21.';
+  }
+}
+function rL(btn, op){
+  document.querySelectorAll('#card-200 .ob').forEach(b=>b.classList.add('dx'));
+  const fb=document.getElementById('fb-200');
+  if(op==='B'){
+    btn.classList.add('eok');
+    fb.className='fb ok'; fb.textContent='✓ Exacto. Esa necesidad de eficiencia es lo que descubriremos ahora.';
+    document.getElementById('btn-det').disabled=false;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er'; fb.textContent='Piénsalo: 200 sumas tomaría demasiado tiempo. Debe existir un método más rápido.';
+    document.querySelectorAll('#card-200 .ob').forEach(b=>b.classList.remove('dx'));
+    btn.style.pointerEvents='none';
+  }
+}
+
+// ── SERIE ARITMÉTICA GUIADA ────────────────────────────────────────
+function chkGauss(){
+  const v=parseInt(document.getElementById('gc').value);
+  const fb=document.getElementById('fb-gauss');
+  if(v===120){
+    fb.className='fb ok';
+    fb.textContent='✓ Perfecto: 24×10÷2 = 120. Coincide con tu suma manual. Esa operación tiene una fórmula general.';
+    document.getElementById('card-fsa').style.display='block';
+  } else {
+    fb.className='fb er';
+    fb.textContent='Recuerda: 24×10 = 240, entre 2 = 120. Dividimos entre 2 porque usamos la sucesión dos veces.';
+  }
+}
+
+function cargSA(){
+  const{a1,d,n,an,sn}=V;
+  document.getElementById('ctx-sa').innerHTML =
+    `<strong>Tu sucesión aritmética:</strong> a₁ = ${a1}, d = ${d}<br>`+
+    `Calcula la suma de los primeros <strong>${n} términos</strong> — S${sub(n)}.`;
+  document.getElementById('p-sa').innerHTML =
+    `<strong>Paso 1:</strong> aₙ = ${a1} + (${n}−1)·${d} = ${a1} + ${(n-1)*d} = <strong>${an}</strong><br>`+
+    `<strong>Paso 2:</strong> S${sub(n)} = ${frac(n,2)} · (${a1}+${an}) = ${frac(n,2)} · ${a1+an}`;
+}
+function chkSA(){
+  const v=parseInt(document.getElementById('resp-sa').value);
+  const fb=document.getElementById('fb-sa');
+  if(v===V.sn){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto. S${V.n} = ${V.sn}.`;
+  } else {
+    fb.className='fb er'; fb.textContent='Revisa los dos pasos: primero calcula aₙ, luego aplica la fórmula de la suma.';
+  }
+  document.getElementById('btn-sa').disabled=false;
+}
+
+// ── SERIE GEOMÉTRICA GUIADA ────────────────────────────────────────
+function cargSG(){
+  const{b1,r,ng,sg}=V, rn=Math.pow(r,ng);
+  document.getElementById('ctx-sg').innerHTML =
+    `<strong>Tu sucesión geométrica:</strong> a₁ = ${b1}, r = ${r}<br>`+
+    `Calcula la suma de los primeros <strong>${ng} términos</strong> — S${sub(ng)}.`;
+  document.getElementById('p-sg').innerHTML =
+    `<strong>Paso 1:</strong> r${sup(ng)} = ${r}${sup(ng)} = <strong>${rn}</strong><br>`+
+    `<strong>Paso 2:</strong> S${sub(ng)} = ${b1} · ${frac(`1 − ${rn}`, 1-r)} = ${b1} · ${(1-rn)/(1-r)} = <strong>${sg}</strong>`;
+}
+function chkSG(){
+  const v=parseInt(document.getElementById('resp-sg').value);
+  const fb=document.getElementById('fb-sg');
+  if(v===V.sg){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto. S${V.ng} = ${V.sg}.`;
+  } else {
+    fb.className='fb er'; fb.textContent=`Revisa: ${V.r}${sup(V.ng)} = ${Math.pow(V.r,V.ng)}, luego aplica la fórmula completa.`;
+  }
+  document.getElementById('card-graf').style.display='block';
+  setTimeout(dibGraf, 80);
+  document.getElementById('btn-sg').disabled=false;
+}
+function dibGraf(){
+  const c=document.getElementById('cg'), ctx=c.getContext('2d');
+  const W=c.offsetWidth, H=210; c.width=W; c.height=H;
+  const{a1,d,b1,r}=V, N=6, pd=38;
+  let sa=[],sg=[],sa_=0,sg_=0;
+  for(let i=1;i<=N;i++){ sa_+=a1+(i-1)*d; sg_+=b1*Math.pow(r,i-1); sa.push(sa_); sg.push(sg_); }
+  const my=Math.max(...sa,...sg)*1.18, bw=(W-2*pd)/(N*2+2);
+  const py=v=>H-pd-(v/my)*(H-2*pd);
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pd,pd/2); ctx.lineTo(pd,H-pd); ctx.lineTo(W-pd/2,H-pd); ctx.stroke();
+  ctx.fillStyle='#888'; ctx.font='11px Arial'; ctx.textAlign='center';
+  for(let i=0;i<N;i++){
+    const x=pd+i*(bw*2+3)+bw/2+4;
+    ctx.fillText(i+1, x+bw/2, H-pd+12);
+    ctx.fillStyle='rgba(37,99,168,.8)';
+    ctx.fillRect(x, py(sa[i]), bw, H-pd-py(sa[i]));
+    ctx.fillStyle='rgba(192,57,43,.8)';
+    ctx.fillRect(x+bw+2, py(sg[i]), bw, H-pd-py(sg[i]));
+  }
+  ctx.font='12px Arial'; ctx.textAlign='left';
+  ctx.fillStyle='rgba(37,99,168,.8)'; ctx.fillRect(pd,9,11,11);
+  ctx.fillStyle='#333'; ctx.fillText('Aritmética (acum.)', pd+15,20);
+  ctx.fillStyle='rgba(192,57,43,.8)'; ctx.fillRect(pd+130,9,11,11);
+  ctx.fillStyle='#333'; ctx.fillText('Geométrica (acum.)', pd+145,20);
+}
+
+// ── PRÁCTICA ───────────────────────────────────────────────────────
+const CTX_SA=[
+  (a,d,n)=>`La estación <em>Balderas</em> tuvo <strong>${a} mil entradas</strong> el primer día. Cada día aumentan <strong>${d} mil</strong>. ¿Cuántos miles en total en los <strong>${n} primeros días</strong>?`,
+  (a,d,n)=>`Un recolector en <em>Cuauhtémoc</em> recoge <strong>${a} toneladas</strong> el lunes. Cada día <strong>${d} toneladas</strong> más. ¿Total en <strong>${n} días</strong>?`,
+  (a,d,n)=>`<em>Ecobici</em> registró <strong>${a} mil viajes</strong> el primer día. Cada día aumentan <strong>${d} mil</strong>. ¿Total en los <strong>${n} días</strong>?`,
+  (a,d,n)=>`Un mercado en <em>Tepito</em> abrió con <strong>${a} puestos</strong>. Cada semana se instalan <strong>${d} más</strong>. ¿Total en <strong>${n} semanas</strong>?`,
+  (a,d,n)=>`Un médico del <em>IMSS</em> atiende <strong>${a} pacientes</strong> el primer día. Cada día <strong>${d} más</strong>. ¿Total en <strong>${n} días</strong>?`,
+];
+const CTX_SG=[
+  (b,r,ng)=>`Un video del <em>Metro CDMX</em> tuvo <strong>${b} mil vistas</strong> la primera hora. Se <strong>${r===2?'duplicaron':'triplicaron'}</strong> cada hora. ¿Total en <strong>${ng} horas</strong>?`,
+  (b,r,ng)=>`Una alerta sísmical fue compartida <strong>${b} veces</strong> en la primera hora. Los compartidos se <strong>${r===2?'duplican':'triplican'}</strong> cada hora. ¿Total en <strong>${ng} horas</strong>?`,
+  (b,r,ng)=>`Un programa en <em>Milpa Alta</em> sembró <strong>${b} árboles</strong> la primera semana. Cada semana <strong>${r} veces</strong> más. ¿Total en <strong>${ng} semanas</strong>?`,
+  (b,r,ng)=>`Un comercio en <em>Zona Rosa</em> tuvo <strong>${b} clientes</strong> el primer día. Se <strong>${r===2?'duplican':'triplican'}</strong> cada día. ¿Total en <strong>${ng} días</strong>?`,
+  (b,r,ng)=>`Un programa social llegó a <strong>${b} colonias</strong> de <em>GAM</em>. Cada etapa <strong>${r} veces</strong> más colonias. ¿Total en <strong>${ng} etapas</strong>?`,
+];
+
+function cargPrac(){
+  const p1a=rnd(3,8),p1d=rnd(2,5),p1n=rnd(5,9);
+  const p1an=p1a+(p1n-1)*p1d, p1s=Math.round(p1n/2*(p1a+p1an));
+  PV.p1={a1:p1a,d:p1d,n:p1n,an:p1an,ans:p1s,tipo:'arit',proc:pSA(p1a,p1d,p1n,p1an,p1s)};
+  document.getElementById('enunc-p1').textContent=
+    `Calcula la suma de los primeros ${p1n} términos de la sucesión aritmética con a₁ = ${p1a} y d = ${p1d}.`;
+
+  const p2a=rnd(3,8),p2d=rnd(2,5),p2n=rnd(5,9);
+  const p2an=p2a+(p2n-1)*p2d, p2s=Math.round(p2n/2*(p2a+p2an));
+  PV.p2={a1:p2a,d:p2d,n:p2n,an:p2an,ans:p2s,tipo:'arit',proc:pSA(p2a,p2d,p2n,p2an,p2s)};
+  document.getElementById('enunc-p2').innerHTML=pick(CTX_SA)(p2a,p2d,p2n);
+
+  const p3b=rnd(2,4),p3r=pick([2,3]),p3ng=rnd(4,6);
+  const p3rn=Math.pow(p3r,p3ng),p3s=Math.round(p3b*(1-p3rn)/(1-p3r));
+  PV.p3={b1:p3b,r:p3r,ng:p3ng,rn:p3rn,ans:p3s,tipo:'geo',proc:pSG(p3b,p3r,p3ng,p3rn,p3s)};
+  document.getElementById('enunc-p3').textContent=
+    `Calcula la suma de los primeros ${p3ng} términos de la sucesión geométrica con a₁ = ${p3b} y r = ${p3r}.`;
+
+  const p4b=rnd(2,4),p4r=pick([2,3]),p4ng=rnd(4,6);
+  const p4rn=Math.pow(p4r,p4ng),p4s=Math.round(p4b*(1-p4rn)/(1-p4r));
+  PV.p4={b1:p4b,r:p4r,ng:p4ng,rn:p4rn,ans:p4s,tipo:'geo',proc:pSG(p4b,p4r,p4ng,p4rn,p4s)};
+  document.getElementById('enunc-p4').innerHTML=pick(CTX_SG)(p4b,p4r,p4ng);
+
+  // Generar problemas de cuaderno con valores distintos
+  genCuaderno();
+}
+
+function pSA(a1,d,n,an,ans){
+  return `<h4>Procedimiento</h4>
+<p>Datos: a₁ = ${a1}, d = ${d}, n = ${n}</p>
+<p><strong>Paso 1 — término final:</strong></p>
+<div class="proc-frm">a${sub(n)} = ${a1} + (${n}−1)·${d} = ${a1} + ${(n-1)*d} = <strong>${an}</strong></div>
+<p><strong>Paso 2 — suma:</strong></p>
+<div class="proc-frm">S${sub(n)} = ${frac('n','2')}·(a₁+a${sub(n)}) = ${frac(n,2)}·(${a1}+${an}) = ${frac(n,2)}·${a1+an} = <span class="ans-ok">${ans}</span></div>`;
+}
+function pSG(b1,r,ng,rn,ans){
+  return `<h4>Procedimiento</h4>
+<p>Datos: a₁ = ${b1}, r = ${r}, n = ${ng}</p>
+<p><strong>Paso 1 — calcular r${sup('n')}:</strong></p>
+<div class="proc-frm">${r}${sup(ng)} = ${Array.from({length:ng},()=>r).join('·')} = <strong>${rn}</strong></div>
+<p><strong>Paso 2 — suma:</strong></p>
+<div class="proc-frm">S${sub(ng)} = ${b1}·${frac(`1−${rn}`,1-r)} = ${b1}·${(1-rn)/(1-r)} = <span class="ans-ok">${ans}</span></div>`;
+}
+
+function guardarP(n){
+  const inp=document.getElementById(`resp-p${n}`);
+  if(!inp.value.trim()){ inp.style.borderColor='var(--ro)'; return; }
+  inp.style.borderColor='';
+  const num=parseFloat(inp.value);
+  PR[n-1]=isNaN(num)?inp.value:num;
+  inp.disabled=true;
+  document.getElementById(`btn-p${n}`).disabled=true;
+  document.getElementById(`conf-p${n}`).style.display='block';
+  pracGuardadas++;
+  document.getElementById('prac-cnt').textContent=pracGuardadas;
+  if(pracGuardadas>=4) document.getElementById('btn-prac').disabled=false;
+}
+
+// ── CONJETURA ──────────────────────────────────────────────────────
+function chkConj(){
+  const t=document.getElementById('txt-conj').value, n=t.trim().length;
+  document.getElementById('cnt-conj').textContent=`${n} / 80`;
+  if(n>=80){
+    document.getElementById('fb-conj').className='fb in';
+    document.getElementById('fb-conj').textContent='Respuesta registrada.';
+    document.getElementById('btn-conj').disabled=false;
+  } else {
+    document.getElementById('fb-conj').className='';
+    document.getElementById('btn-conj').disabled=true;
+  }
+}
+
+// ── RESULTADOS ─────────────────────────────────────────────────────
+function mostrarRes(){
+  let correctas=0; const marcas=[];
+  const ks=['p1','p2','p3','p4'];
+  let html='';
+
+  ks.forEach((k,i)=>{
+    const pv=PV[k], resp=PR[i];
+    const ok=resp!==null && Math.round(Number(resp))===pv.ans;
+    if(ok) correctas++;
+    marcas.push(ok);
+    const tipoCls=pv.tipo==='geo'?'q-tipo-geo':'';
+    const tipoLbl=pv.tipo==='arit'?'Serie Aritmética':'Serie Geométrica';
+    html+=`
+    <div class="q-item">
+      <div class="q-head ${ok?'q-head-ok':'q-head-er'}">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:18px;font-weight:800">${ok?'✅':'❌'} Ej. ${i+1}</span>
+          <span class="q-tipo ${tipoCls}">${tipoLbl}</span>
+        </div>
+        <span style="font-weight:700">${ok?'Correcto':'Incorrecto'}</span>
+      </div>
+      <div class="q-body">
+        <p id="eres-${k}" style="font-size:13px;line-height:1.65;margin-bottom:8px"></p>
+        <div>
+          <span class="chip-resp ${ok?'chip-ok':'chip-er'}">Tu respuesta: <strong>${resp!==null?resp:'—'}</strong></span>
+          <span class="chip-resp chip-esp">Esperado: <strong>${pv.ans}</strong></span>
+        </div>
+        <div class="proc-box">${pv.proc}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('detalle').innerHTML=html;
+  ks.forEach(k=>{
+    const el=document.getElementById(`eres-${k}`);
+    const src=document.getElementById(`enunc-${k}`);
+    if(el && src) el.innerHTML=src.innerHTML;
+  });
+
+  document.getElementById('res-conj').textContent=document.getElementById('txt-conj').value.trim();
+
+  const meta=correctas>=3;
+  const mc=document.getElementById('marc-card');
+  mc.style.background=meta?'#1e6b3e':'var(--mo)';
+  document.getElementById('marc-ico').textContent=meta?'🏆':'📊';
+  document.getElementById('marc-pts').textContent=`${correctas} / 4`;
+  document.getElementById('marc-sub').innerHTML=meta
+    ?'✓ Buen trabajo. Muestra esta pantalla al Prof. Cruz.'
+    :`Faltan ${3-correctas} más para la meta. Puedes reintentar con ejercicios nuevos.`;
+  document.getElementById('wrap-reintento').style.display=meta?'none':'block';
+
+  const fe=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  const ho=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const chips=marcas.map((ok,i)=>`<div class="pq ${ok?'pq-ok':'pq-er'}">${i+1}${ok?'✓':'✗'}</div>`).join('');
+  const cod=`S3-${correctas}/4-INT${intento}`;
+  document.getElementById('prof-strip').innerHTML=`
+    <div class="mini-title">── REGISTRO DOCENTE ──</div>
+    <div style="font-size:15px;font-weight:700">${nombre}</div>
+    <div style="font-size:13px;opacity:.8">${fe} ${ho} · Intento ${intento}</div>
+    <div style="font-size:20px;font-weight:800;margin:5px 0">${correctas}/4 &nbsp;${meta?'✓ META':'✗ sin meta'}</div>
+    <div class="prof-q-row">${chips}</div>
+    <div style="font-size:12px;opacity:.65;margin-top:7px;font-family:'Courier New',monospace">${cod}</div>`;
+
+  const marcasTxt=marcas.map((ok,i)=>`E${i+1}${ok?'✓':'✗'}`).join(' ');
+  const detTxt=ks.map((k,i)=>{
+    const pv=PV[k]; const ok=PR[i]!==null&&Math.round(Number(PR[i]))===pv.ans;
+    return `\nEj.${i+1} [${pv.tipo==='arit'?'SA':'SG'}] resp: ${PR[i]} | correcto: ${pv.ans} ${ok?'✓':'✗'}`;
+  }).join('');
+  const txt=`════════════════════════════\nSERIES · TSM III · GRUPO 658\n════════════════════════════\nAlumno : ${nombre}\nFecha  : ${fe} ${ho}\nIntento: ${intento}\n════════════════════════════\n${correctas}/4 ${meta?'✓ META':'✗ sin meta'} | ${marcasTxt}\n${detTxt}\n\nReflexión:\n${document.getElementById('txt-conj').value.trim()}\n════════════════════════════\n${cod}\n════════════════════════════`;
+  document.getElementById('copy-area').textContent=txt;
+  window._rt=txt;
+}
+
+// ── PROBLEMAS CUADERNO ─────────────────────────────────────────────
+function genCuaderno(){
+  // Sesión 2 — sucesión aritmética (término n)
+  const c1a=rnd(2,6), c1d=rnd(3,6), c1n=rnd(6,10);
+  const c1ans=c1a+(c1n-1)*c1d;
+  document.getElementById('cua-e1').innerHTML=
+    `Un grupo de estudiantes recaudó <strong>${c1a} pesos</strong> el primer día de una kermés en su plantel de la CDMX. `+
+    `Cada día recaudan <strong>${c1d} pesos más</strong> que el día anterior. ¿Cuántos pesos recaudarán el <strong>día ${c1n}</strong>? `+
+    `<em>(Respuesta: ${c1ans} pesos)</em>`;
+
+  // Sesión 2 — sucesión geométrica (término n)
+  const c2b=rnd(2,4), c2r=pick([2,3]), c2n=rnd(4,7);
+  const c2ans=c2b*Math.pow(c2r,c2n-1);
+  document.getElementById('cua-e2').innerHTML=
+    `En la primera semana de un programa de reforestación en <em>Xochimilco</em> se sembraron `+
+    `<strong>${c2b} árboles</strong>. Cada semana se siembra <strong>${c2r} veces</strong> lo de la semana anterior. `+
+    `¿Cuántos árboles se sembrarán en la <strong>semana ${c2n}</strong>? `+
+    `<em>(Respuesta: ${c2ans} árboles)</em>`;
+
+  // Sesión 3 — serie aritmética (suma)
+  const c3a=rnd(3,7), c3d=rnd(2,5), c3n=rnd(5,8);
+  const c3an=c3a+(c3n-1)*c3d, c3ans=Math.round(c3n/2*(c3a+c3an));
+  document.getElementById('cua-e3').innerHTML=
+    `Un puesto de <em>La Merced</em> vendió <strong>${c3a} kg de jitomate</strong> el lunes. `+
+    `Cada día vende <strong>${c3d} kg más</strong>. ¿Cuántos kilogramos vendió en <strong>total durante los ${c3n} días</strong>? `+
+    `<em>(Respuesta: ${c3ans} kg)</em>`;
+
+  // Sesión 3 — serie geométrica (suma)
+  const c4b=rnd(2,3), c4r=pick([2,3]), c4ng=rnd(4,5);
+  const c4rn=Math.pow(c4r,c4ng), c4ans=Math.round(c4b*(1-c4rn)/(1-c4r));
+  document.getElementById('cua-e4').innerHTML=
+    `Una publicación sobre el <em>transporte en CDMX</em> fue compartida <strong>${c4b} veces</strong> en la primera hora. `+
+    `Cada hora los compartidos se <strong>${c4r===2?'duplican':'triplican'}</strong>. `+
+    `¿Cuántas veces fue compartida en <strong>total en las ${c4ng} horas</strong>? `+
+    `<em>(Respuesta: ${c4ans} veces)</em>`;
+}
+
+function copiarRes(){
+  const t=window._rt||'';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(t).then(()=>{
+      document.getElementById('fb-copia').textContent='✓ Copiado — pégalo en la tarea de Classroom';
+      document.getElementById('btn-copiar').textContent='✓ Copiado';
+    });
+  } else {
+    const ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); document.getElementById('fb-copia').textContent='✓ Copiado'; }
+    catch(e){ document.getElementById('copy-area').style.display='block'; document.getElementById('fb-copia').textContent='Copia el texto de abajo manualmente.'; }
+    document.body.removeChild(ta);
+  }
+}
+
+function reiniciar(){
+  intento++;
+  PR=[null,null,null,null]; pracGuardadas=0;
+  for(let i=1;i<=4;i++){
+    const inp=document.getElementById(`resp-p${i}`);
+    const btn=document.getElementById(`btn-p${i}`);
+    const conf=document.getElementById(`conf-p${i}`);
+    if(inp){inp.value='';inp.disabled=false;inp.style.borderColor='';}
+    if(btn) btn.disabled=false;
+    if(conf) conf.style.display='none';
+  }
+  document.getElementById('prac-cnt').textContent='0';
+  document.getElementById('btn-prac').disabled=true;
+  ir('s5',4);
+}
+
+// ── ACCESO DOCENTE (5 toques en ∑ en 3 s) ─────────────────────────
+let _t=0, _tt=0;
+function tapSym(){
+  const now=Date.now();
+  if(now-_tt>3000) _t=0;
+  _tt=now; _t++;
+  if(_t>=5){ _t=0; abrirPin(); }
+}
+function abrirPin(){
+  document.getElementById('pin-modal').classList.add('show');
+  document.getElementById('pin-inp').value='';
+  document.getElementById('pin-fb').textContent='';
+  setTimeout(()=>document.getElementById('pin-inp').focus(), 100);
+}
+function cerrarPin(){ document.getElementById('pin-modal').classList.remove('show'); }
+function chkPin(v){
+  if(v==='890'){ cerrarPin(); abrirProf(); }
+  else if(v.length>=3) document.getElementById('pin-fb').textContent='Código incorrecto.';
+  else document.getElementById('pin-fb').textContent='';
+}
+function abrirProf(){
+  document.getElementById('prof-overlay').style.display='block';
+  document.getElementById('btn-xp').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function cerrarProf(){
+  document.getElementById('prof-overlay').style.display='none';
+  document.getElementById('btn-xp').style.display='none';
+  document.body.style.overflow='';
+}
+function profSimular(){
+  document.getElementById('prof-sim-wrap').style.display='block';
+}
+function profEntrar(){
+  const nm=document.getElementById('prof-sim-nom').value.trim().toUpperCase()||'DOCENTE';
+  cerrarProf();
+  document.getElementById('inp-nombre').value=nm;
+  iniciar();
+}
+function profVerRef(){
+  const c=document.getElementById('prof-ref-card');
+  c.style.display=c.style.display==='none'?'block':'none';
+}
+</script>
+</body>
+</html>
