@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>S04 · Números Reales · TSM III · G658</title>
+<style>
+:root{
+  --mo:#5c1a8e;--mo2:#8b3fc8;--mo3:#f0e6fa;
+  --az:#1a3a6b;--az2:#2563a8;--az3:#e6f0fb;
+  --ve:#1b6b35;--ve2:#27a74f;--ve3:#e6f7ed;
+  --ro:#b82020;--ro3:#fce8e8;
+  --am:#c06000;--am2:#e07800;--am3:#fff2e0;
+  --gr:#f0f2f8;--gr2:#dde2ee;--bl:#fff;
+  --tx:#131828;--sh:0 2px 14px rgba(0,0,0,.11);--r:12px
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gr);color:var(--tx);font-size:15px;min-height:100vh;
+  -webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+
+/* ANTI-COPY GLOBAL */
+/* ver JS */
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:200;background:var(--mo);padding:8px 15px 6px;display:none}
+#hdr-tag{color:rgba(255,255,255,.55);font-size:11px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+#hdr-tit{color:#fff;font-size:14px;font-weight:800}
+#hdr-chip{background:rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;float:right;margin-top:-18px}
+#bwt{background:rgba(255,255,255,.15);height:5px}
+#bwf{background:linear-gradient(90deg,#d4a8ff,#fff);height:5px;width:0%;transition:width .5s}
+#bwn{color:rgba(255,255,255,.6);font-size:11px;text-align:right;margin-top:2px}
+
+/* SECCIONES */
+.sec{display:none;max-width:600px;margin:0 auto;padding:14px 12px 40px;animation:fi .35s ease}
+.sec.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* TARJETAS */
+.card{background:var(--bl);border-radius:var(--r);padding:17px 15px;box-shadow:var(--sh);margin-bottom:12px}
+.cmo{background:var(--mo);color:#fff}
+.cmo2{background:var(--mo3);border-left:4px solid var(--mo2)}
+.caz{background:var(--az3);border-left:4px solid var(--az2)}
+.cve{background:var(--ve3);border-left:4px solid var(--ve2)}
+.cam{background:var(--am3);border-left:4px solid var(--am)}
+.cgr{background:var(--gr2)}
+.crojo{background:var(--ro3);border-left:4px solid var(--ro)}
+
+/* TIPOGRAFÍA */
+h3{font-size:16px;font-weight:800;margin-bottom:7px;color:var(--mo)}
+h4{font-size:14px;font-weight:700;margin-bottom:5px}
+p{line-height:1.65;margin-bottom:7px}
+.tit{font-size:20px;font-weight:800;color:var(--mo);margin-bottom:3px}
+.tag{display:inline-block;background:var(--mo);color:#fff;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700;margin-bottom:7px;letter-spacing:.5px}
+.sep{height:1px;background:var(--gr2);margin:12px 0}
+.nc{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--mo);color:#fff;font-weight:800;font-size:12px;margin-right:6px;flex-shrink:0}
+
+/* FRACCIONES */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;margin:0 2px;font-size:.88em}
+.frac .num{border-bottom:2px solid currentColor;padding:1px 4px;text-align:center;min-width:12px}
+.frac .den{padding:1px 4px;text-align:center}
+.frm{background:var(--mo);color:#fff;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:700;text-align:center;margin:8px 0;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;line-height:2.1}
+.frm .frac .num,.frm .frac .den{color:#fff}
+.frm .frac .num{border-color:#fff}
+.frm-az{background:var(--az2)}
+.frm-ve{background:var(--ve2)}
+.frm-am{background:var(--am2)}
+
+/* EXPRESIONES */
+.expr{background:var(--gr);border:1.5px solid var(--gr2);border-radius:9px;padding:10px 14px;font-size:16px;font-weight:700;font-family:'Courier New',monospace;text-align:center;margin:8px 0;letter-spacing:.3px;line-height:2}
+.expr-big{background:var(--mo);color:#fff;border-radius:10px;padding:13px 16px;font-size:22px;font-weight:900;font-family:'Courier New',monospace;text-align:center;margin:10px 0;letter-spacing:1px}
+.paso-box{background:var(--gr);border-radius:8px;padding:8px 12px;margin:5px 0;font-size:13px;line-height:1.9}
+.paso-box strong{color:var(--mo)}
+
+/* INPUTS */
+input[type=text],input[type=number],textarea{width:100%;border:2px solid var(--gr2);border-radius:10px;padding:10px 12px;font-size:15px;font-family:inherit;background:var(--gr);transition:border .2s;-webkit-appearance:none;-webkit-user-select:text!important;user-select:text!important}
+input:focus,textarea:focus{outline:none;border-color:var(--mo2);background:#fff}
+input:disabled,textarea:disabled{background:var(--gr2);color:#777;cursor:not-allowed}
+textarea{resize:vertical;min-height:85px}
+
+/* BOTONES */
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:9px;transition:transform .15s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--mo);color:#fff;box-shadow:0 4px 14px rgba(92,26,142,.3)}
+.bp:disabled{background:#c4a0e0;box-shadow:none;cursor:not-allowed;transform:none}
+.baz{background:var(--az2);color:#fff}
+.bve{background:var(--ve2);color:#fff}
+.bsm{display:inline-block;width:auto;padding:7px 13px;font-size:13px}
+.skip-btn{display:none;background:transparent;border:2px dashed #999;color:#777;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;width:100%;margin-top:6px}
+.teacher-mode .skip-btn{display:block}
+
+/* OPCIONES MC */
+.ob{display:block;width:100%;text-align:left;background:var(--bl);border:2px solid var(--gr2);border-radius:10px;padding:11px 13px;margin-bottom:7px;cursor:pointer;font-size:14px;font-family:inherit;transition:border .15s;line-height:1.5}
+.ob:hover{border-color:var(--mo2);background:var(--mo3)}
+.ob.eok{border-color:var(--ve2);background:var(--ve3);color:var(--ve);pointer-events:none;font-weight:700}
+.ob.eml{border-color:var(--ro);background:var(--ro3);color:var(--ro);pointer-events:none}
+.ob.dx{opacity:.45;pointer-events:none}
+
+/* FEEDBACK */
+.fb{border-radius:10px;padding:11px 13px;margin-top:7px;font-size:14px;display:none;line-height:1.55}
+.fb.ok{display:block;background:var(--ve3);border-left:4px solid var(--ve2);color:#1a5c30}
+.fb.er{display:block;background:var(--ro3);border-left:4px solid var(--ro);color:#8a1515}
+.fb.in{display:block;background:var(--mo3);border-left:4px solid var(--mo2);color:#4a1a7a}
+
+/* PISTAS */
+.pb{background:none;border:1px dashed var(--am);color:#7a4000;border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;margin-top:5px;font-family:inherit}
+.pbox{display:none;background:var(--am3);border-radius:8px;padding:9px 12px;margin-top:5px;font-size:13px;color:#7a4000;line-height:1.7}
+
+/* CONJUNTOS VISUALES */
+.conj-wrap{position:relative;width:100%;max-width:340px;margin:12px auto}
+.conj-wrap svg{width:100%;height:auto}
+.num-chip{display:inline-flex;align-items:center;justify-content:center;border-radius:20px;padding:5px 12px;font-size:14px;font-weight:700;margin:4px;cursor:default;border:2px solid transparent}
+.cn{background:#e8f5e9;color:#1b6b35;border-color:#27a74f}
+.cz{background:#e3f2fd;color:#1a3a6b;border-color:#2563a8}
+.cq{background:#fff8e1;color:#7a4000;border-color:#c06000}
+.cr{background:var(--mo3);color:var(--mo);border-color:var(--mo2)}
+.ci{background:#fce4ec;color:#880e4f;border-color:#c2185b}
+.num-row{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0}
+.conj-leyenda{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ley-chip{border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700}
+
+/* PROPIEDADES */
+.prop-card{border-radius:10px;padding:11px 13px;margin-bottom:7px;border:2px solid var(--gr2)}
+.prop-nm{font-weight:800;font-size:13px;color:var(--mo);margin-bottom:4px}
+.prop-ej{font-family:'Courier New',monospace;font-size:14px;color:var(--az2)}
+
+/* CLASIFICACIÓN DRAG-LIKE */
+.clas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.clas-slot{background:var(--gr);border:2px dashed var(--gr2);border-radius:10px;padding:10px 8px;text-align:center;min-height:54px}
+.clas-slot h5{font-size:11px;color:#777;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.clas-ok{border-color:var(--ve2);background:var(--ve3)}
+.clas-er{border-color:var(--ro);background:var(--ro3)}
+
+/* CANVAS √2 */
+#cvs-raiz{display:block;margin:10px auto;border-radius:10px;background:#fff;border:1.5px solid var(--gr2)}
+
+/* QUIZ */
+.prac-ind{background:var(--gr2);border-radius:10px;padding:7px 14px;font-size:13px;color:#555;text-align:center;margin-bottom:10px}
+.q-item{border-radius:12px;border:2px solid var(--gr2);margin-bottom:11px;overflow:hidden}
+.q-head{padding:9px 13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px}
+.q-head-ok{background:var(--ve3);border-bottom:2px solid var(--ve2)}
+.q-head-er{background:var(--ro3);border-bottom:2px solid var(--ro)}
+.q-body{padding:11px 13px}
+.chip-resp{display:inline-flex;align-items:center;gap:5px;border-radius:18px;padding:4px 12px;font-size:13px;font-weight:700;margin:4px 4px 0 0}
+.chip-ok{background:var(--ve3);color:var(--ve);border:2px solid var(--ve2)}
+.chip-er{background:var(--ro3);color:var(--ro);border:2px solid var(--ro)}
+.chip-eu{background:var(--gr2);color:#555;border:2px solid var(--gr2)}
+.proc-box{background:var(--gr);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;line-height:1.9}
+.proc-box h4{font-size:11px;color:var(--mo);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.ans-ok{color:var(--ve);font-weight:800}
+.txt-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:6px}
+.txt-full{background:var(--ve3);color:var(--ve)}
+.txt-ok{background:var(--az3);color:var(--az2)}
+.txt-low{background:var(--am3);color:var(--am)}
+.txt-zero{background:var(--ro3);color:var(--ro)}
+
+/* FICHA */
+.cua-card{background:var(--bl);border-radius:var(--r);padding:17px 15px;box-shadow:var(--sh);margin-bottom:12px;border:2px dashed var(--mo2)}
+.prop-tabla{width:100%;border-collapse:collapse;margin:6px 0;font-size:13px}
+.prop-tabla th{background:var(--mo);color:#fff;padding:7px 9px;text-align:left}
+.prop-tabla td{padding:7px 9px;border-bottom:1px solid var(--gr2);line-height:1.5}
+.prop-tabla tr:nth-child(even) td{background:var(--gr)}
+
+/* TIRA DOCENTE */
+.prof-strip{background:var(--az);color:#fff;border-radius:12px;padding:14px 16px;margin-top:10px}
+.mini-title{font-size:10px;letter-spacing:2px;opacity:.6;margin-bottom:4px}
+.pq{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:24px;border-radius:6px;font-size:11px;font-weight:700;padding:0 5px}
+.pq-ok{background:var(--ve2);color:#fff}
+.pq-er{background:var(--ro);color:#fff}
+.pq-eu{background:rgba(255,255,255,.2);color:rgba(255,255,255,.7)}
+.grade-box{text-align:center;padding:22px 16px;border-radius:12px;margin-bottom:12px}
+.grade-num{font-size:46px;font-weight:900;line-height:1}
+.grade-lbl{font-size:14px;font-weight:700;margin-top:5px;opacity:.85}
+.cnt-txt{font-size:12px;color:#aaa;text-align:right;margin-top:3px;font-weight:700}
+.copy-area{background:var(--gr);border-radius:10px;padding:11px;font-size:12px;font-family:'Courier New',monospace;white-space:pre-wrap;word-break:break-word;border:1px solid var(--gr2);max-height:170px;overflow-y:auto;line-height:1.5;display:none;margin-top:8px}
+
+/* PIN MODAL */
+#pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:8000;align-items:center;justify-content:center}
+#pin-modal.show{display:flex}
+#pin-box{background:#fff;border-radius:16px;padding:26px 22px;max-width:290px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+#pin-inp{border:2px solid var(--gr2);border-radius:10px;padding:10px;font-size:22px;text-align:center;letter-spacing:10px;width:100%;margin:10px 0;font-family:inherit;-webkit-appearance:none}
+#pin-inp:focus{outline:none;border-color:var(--az2)}
+
+/* PANEL DOCENTE */
+#prof-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,30,.94);z-index:9000;overflow-y:auto}
+#prof-panel{max-width:620px;margin:18px auto;padding:14px}
+.pcrd{background:#fff;border-radius:14px;padding:15px 14px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.prof-head{background:linear-gradient(135deg,var(--az),var(--mo));color:#fff;border-radius:14px;padding:18px;margin-bottom:12px;text-align:center}
+#btn-xp{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);color:#fff;font-size:20px;cursor:pointer;border-radius:50%;width:40px;height:40px;z-index:9001;font-family:inherit;display:none;line-height:1}
+
+/* MISC */
+#sym{cursor:default;user-select:none;-webkit-user-select:none}
+.min-badge{background:var(--mo);color:#fff;border-radius:7px;padding:4px 11px;font-size:12px;font-weight:700;margin-bottom:7px;display:inline-block}
+</style>
+</head>
+<body>
+
+<!-- ANTI-COPY -->
+<script>
+document.addEventListener('copy',function(e){
+  const t=document.activeElement?document.activeElement.tagName:'';
+  if(t==='INPUT'||t==='TEXTAREA')return;
+  e.preventDefault();
+  if(e.clipboardData)e.clipboardData.setData('text/plain','[Actividad protegida — TSM III S04 · Prof. Adrián Cruz]');
+});
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('selectstart',function(e){
+  const t=e.target.tagName;
+  if(t!=='INPUT'&&t!=='TEXTAREA')e.preventDefault();
+});
+</script>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div id="hdr-chip"></div>
+  <div id="hdr-tag">TSM III · G658 · Sesión 4</div>
+  <div id="hdr-tit">Números Reales</div>
+  <div id="bwt"><div id="bwf"></div></div>
+  <div id="bwn">Bloque <span id="bwc">0</span> de 9</div>
+</div>
+
+<!-- PIN MODAL -->
+<div id="pin-modal">
+  <div id="pin-box">
+    <div style="font-size:30px">🔑</div>
+    <h3 style="color:var(--az);margin:8px 0 3px">Panel docente</h3>
+    <p style="font-size:13px;color:#666">Código de acceso</p>
+    <input type="password" id="pin-inp" maxlength="6" placeholder="••••" oninput="chkPin(this.value)" autocomplete="off">
+    <div id="pin-fb" style="font-size:13px;color:var(--ro);min-height:15px;margin-top:2px"></div>
+    <button class="btn" style="background:var(--gr2);color:var(--tx);padding:10px;margin-top:7px" onclick="cerrarPin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- PANEL DOCENTE -->
+<div id="prof-overlay">
+  <button id="btn-xp" onclick="cerrarProf()">✕</button>
+  <div id="prof-panel">
+    <div class="prof-head">
+      <div style="font-size:34px">👨‍🏫</div>
+      <h2 style="margin:7px 0 3px">Panel del Profesor</h2>
+      <div style="font-size:13px;opacity:.8">TSM III · S04 · Números Reales · G658</div>
+    </div>
+    <div class="pcrd">
+      <h3>Acciones rápidas</h3>
+      <div style="display:grid;gap:9px;grid-template-columns:1fr 1fr;margin-top:9px">
+        <button class="btn baz" style="margin:0;font-size:13px" onclick="profSimular()">🧑‍🎓 Simular alumno</button>
+        <button class="btn bp" style="margin:0;font-size:13px" onclick="profVerMuestra()">📊 Ver muestra resultados</button>
+      </div>
+      <div id="prof-sim-wrap" style="display:none;margin-top:10px">
+        <input type="text" id="prof-sim-nom" placeholder="NOMBRE PARA SIMULAR" autocomplete="off" style="margin-bottom:7px">
+        <button class="btn bve" style="margin:0;font-size:13px" onclick="profEntrar()">Entrar como alumno →</button>
+      </div>
+    </div>
+    <div class="pcrd">
+      <h3>📐 Contenidos S04</h3>
+      <div style="font-size:13px;color:#555;line-height:1.9;margin-top:6px">
+        <strong>B0 (Detonador):</strong> Clasificación intuitiva de 8 números + predicción √2<br>
+        <strong>B1 (Subconjuntos):</strong> N⊂Z⊂Q⊂R, diagrama SVG, clasificación MC (banco 6)<br>
+        <strong>B2 (Propiedades):</strong> 6 propiedades, banco de 6 ejemplos por propiedad<br>
+        <strong>B3 (Pot. y rad.):</strong> Leyes de exponentes, banco numérico, relación aⁿ↔ⁿ√a<br>
+        <strong>B4 (√2 irracional):</strong> Canvas cuadrado lado 1, argumento visual, texto<br>
+        <strong>B5 (CDMX):</strong> 6 contextos con ℝ aplicados<br>
+        <strong>Ficha:</strong> Tabla subconjuntos + propiedades + leyes<br>
+        <strong>Quiz:</strong> Q1 MC clasificación · Q2 potencia · Q3 raíz/combinado · Q4 texto<br>
+        <strong>PIN: 890 · Código: S4-[X]/4-INT[Y]</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S0: LOGIN -->
+<div id="s0" class="sec on">
+  <div style="text-align:center;padding:30px 0 16px">
+    <div id="sym" style="font-size:52px;color:var(--mo)" onclick="tapSym()">ℝ</div>
+    <div style="font-size:21px;font-weight:800;color:var(--mo);margin-top:8px">TSM III · Grupo 658</div>
+    <div style="font-size:13px;color:#666;margin-top:3px">Sesión 4 · Números Reales</div>
+  </div>
+  <div class="card">
+    <h3>¿Cómo te llamas?</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:9px">Escribe comenzando por tus <strong>apellidos</strong>:</p>
+    <input type="text" id="inp-nombre" placeholder="GARCÍA LÓPEZ JUAN PABLO" autocorrect="off" autocapitalize="characters" onkeydown="if(event.key==='Enter')iniciar()">
+    <div id="fb-login" style="font-size:13px;color:var(--ro);margin-top:5px;min-height:15px"></div>
+    <button class="btn bp" onclick="iniciar()">Comenzar actividad →</button>
+  </div>
+  <div class="card cam" style="font-size:13px">
+    <strong>ℹ️</strong> Cada intento genera ejercicios diferentes. Puedes reintentar las veces que necesites.
+  </div>
+</div>
+
+<!-- S1: BIENVENIDA -->
+<div id="s1" class="sec">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:var(--mo);color:#fff;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700;margin-bottom:10px">
+    👤 <span id="chip-txt"></span>
+  </div>
+  <div class="card cmo">
+    <span style="font-size:26px;display:block;margin-bottom:5px">👨‍🏫</span>
+    <h3 style="color:#fff">Prof. Cruz</h3>
+    <div style="height:1px;background:rgba(255,255,255,.2);margin:7px 0"></div>
+    <p id="msg-bienvenida" style="font-size:14px;line-height:1.7"></p>
+  </div>
+  <div class="card">
+    <h3>Lo que trabajarás hoy</h3>
+    <div style="display:flex;align-items:flex-start;margin-bottom:8px"><span class="nc">1</span><p>Clasificarás números dentro de los conjuntos <strong>ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ</strong>.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:8px"><span class="nc">2</span><p>Identificarás las 6 propiedades de las operaciones con ejemplos reales.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:8px"><span class="nc">3</span><p>Operarás con potencias y raíces usando las leyes de los exponentes.</p></div>
+    <div style="display:flex;align-items:flex-start"><span class="nc">4</span><p>Descubrirás por qué <strong>√2 no puede escribirse como fracción</strong> con una demostración visual.</p></div>
+  </div>
+  <button class="btn bp" onclick="ir('s2',1)">Empezar →</button>
+  <button class="skip-btn" onclick="ir('s2',1)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S2: B0 DETONADOR -->
+<div id="s2" class="sec">
+  <div class="tag">BLOQUE 0 · DETONADOR</div>
+  <div class="tit">¿Todos los números son iguales?</div>
+
+  <div class="card">
+    <h3>🔍 Antes de las reglas — observa estos números</h3>
+    <p style="font-size:13px;color:#555">Tenemos este grupo de números. Sin usar ninguna definición formal, intenta agruparlos como tú creas conveniente y explica qué tienen en común los de cada grupo.</p>
+    <div class="num-row" style="justify-content:center">
+      <span class="num-chip cn">7</span>
+      <span class="num-chip cz">−5</span>
+      <span class="num-chip cq" id="chip-frac">3/4</span>
+      <span class="num-chip ci">√2</span>
+      <span class="num-chip cq">0.333…</span>
+      <span class="num-chip cn">0</span>
+      <span class="num-chip ci">π</span>
+      <span class="num-chip cz">−12</span>
+    </div>
+    <div class="min-badge">Mínimo <strong>8 palabras</strong> para continuar</div>
+    <textarea id="r-b0-txt" onpaste="return false" oncopy="return false" placeholder="Yo los separaría en grupos porque… El que más me llama la atención es…" oninput="chkB0Txt()"></textarea>
+    <div class="cnt-txt" id="cnt-b0">0 / 8 palabras</div>
+  </div>
+
+  <div class="card" id="b0-mc-card">
+    <h4>💭 ¿Cuál de estos números crees que NO se puede escribir como fracción exacta?</h4>
+    <p style="font-size:13px;color:#555">Elige el que creas y después veremos por qué.</p>
+    <div id="b0-mc-opts"></div>
+    <div class="fb" id="fb-b0mc"></div>
+  </div>
+
+  <button class="btn bp" id="btn-b0" disabled onclick="ir('s3',2)">Descubrir los conjuntos →</button>
+  <button class="skip-btn" onclick="ir('s3',2)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S3: B1 SUBCONJUNTOS -->
+<div id="s3" class="sec">
+  <div class="tag">BLOQUE 1 · SUBCONJUNTOS DE ℝ</div>
+  <div class="tit">ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ — la gran familia</div>
+
+  <div class="card cmo2">
+    <h3>🗺️ El mapa de los números</h3>
+    <p style="font-size:13px">Los números reales son una familia con subconjuntos anidados. Cada conjunto <em>contiene</em> al anterior:</p>
+    <!-- SVG diagrama de conjuntos -->
+    <div class="conj-wrap">
+      <svg viewBox="0 0 390 250" xmlns="http://www.w3.org/2000/svg">
+        <!-- ℝ — zona exterior visible a la derecha -->
+        <rect x="3" y="3" width="384" height="244" rx="18" fill="#f0e6fa" stroke="#8b3fc8" stroke-width="2.5"/>
+        <!-- ℚ -->
+        <rect x="16" y="18" width="272" height="210" rx="14" fill="#e6f0fb" stroke="#2563a8" stroke-width="2"/>
+        <!-- ℤ -->
+        <rect x="29" y="34" width="192" height="178" rx="12" fill="#fff2e0" stroke="#c06000" stroke-width="2"/>
+        <!-- ℕ -->
+        <rect x="43" y="50" width="112" height="144" rx="10" fill="#e6f7ed" stroke="#27a74f" stroke-width="2"/>
+
+        <!-- ──── ETIQUETAS DE CONJUNTO (esquina sup-izq de cada rectángulo) ──── -->
+        <text x="50"  y="67"  font-size="11" font-weight="bold" fill="#1b6b35">ℕ</text>
+        <text x="162" y="52"  font-size="11" font-weight="bold" fill="#7a4000">ℤ</text>
+        <text x="243" y="36"  font-size="11" font-weight="bold" fill="#1a3a6b">ℚ</text>
+        <text x="302" y="18"  font-size="11" font-weight="bold" fill="#5c1a8e">𝕀 ⊂ ℝ</text>
+
+        <!-- ──── ℕ: centro de la caja verde (x:43→155, y:50→194) → cx=99, cy=122 ──── -->
+        <rect x="60" y="82" width="76" height="62" rx="7" fill="rgba(39,167,79,.15)"/>
+        <text x="99" y="103" font-size="13" font-weight="bold" fill="#1b6b35" text-anchor="middle">0, 1, 2</text>
+        <text x="99" y="120" font-size="12" fill="#1b6b35" text-anchor="middle">3, 10…</text>
+        <text x="99" y="136" font-size="11" fill="#1b6b35" text-anchor="middle">100, 999</text>
+
+        <!-- ──── ℤ\ℕ: zona entre x=155 y x=221 → cx=188, cy≈123 ──── -->
+        <rect x="162" y="82" width="52" height="62" rx="7" fill="rgba(192,96,0,.12)"/>
+        <text x="188" y="103" font-size="12" font-weight="bold" fill="#7a4000" text-anchor="middle">−1</text>
+        <text x="188" y="119" font-size="12" fill="#7a4000" text-anchor="middle">−5</text>
+        <text x="188" y="135" font-size="11" fill="#7a4000" text-anchor="middle">−200</text>
+
+        <!-- ──── ℚ\ℤ: zona entre borde ℤ (x=221) y borde ℚ (x=288) → cx=254 ──── -->
+        <rect x="226" y="80" width="54" height="110" rx="7" fill="rgba(37,99,168,.12)"/>
+        <!-- fracción 1/2 vertical -->
+        <text x="253" y="99"  font-size="12" font-weight="bold" fill="#1a3a6b" text-anchor="middle">1</text>
+        <line x1="241" y1="102" x2="265" y2="102" stroke="#1a3a6b" stroke-width="1.2"/>
+        <text x="253" y="114" font-size="12" font-weight="bold" fill="#1a3a6b" text-anchor="middle">2</text>
+        <!-- fracción −3/4 vertical -->
+        <text x="253" y="130" font-size="11" fill="#1a3a6b" text-anchor="middle">−3</text>
+        <line x1="241" y1="133" x2="265" y2="133" stroke="#1a3a6b" stroke-width="1"/>
+        <text x="253" y="145" font-size="11" fill="#1a3a6b" text-anchor="middle">4</text>
+        <text x="253" y="182" font-size="10" fill="#1a3a6b" text-anchor="middle" font-style="italic">0.333…</text>
+
+        <!-- ──── 𝕀: zona entre borde ℚ (x=288) y borde ℝ (x=387) → cx=337 ──── -->
+        <rect x="293" y="75" width="85" height="106" rx="7" fill="rgba(92,26,142,.1)"/>
+        <text x="335" y="97"  font-size="15" font-weight="bold" fill="#5c1a8e" text-anchor="middle">√2</text>
+        <text x="335" y="116" font-size="13" fill="#5c1a8e" text-anchor="middle">π = 3.14…</text>
+        <text x="335" y="133" font-size="12" fill="#5c1a8e" text-anchor="middle">√3 , e</text>
+        <text x="335" y="171" font-size="9"  fill="#8b3fc8" text-anchor="middle" font-style="italic">decimales ∞ no periódicos</text>
+
+        <!-- Subtítulo ℕ: solo ≥ 0 -->
+        <text x="99"  y="187" font-size="9" fill="#27a74f" text-anchor="middle" font-style="italic">solo 0 y positivos</text>
+        <!-- Subtítulo ℤ\ℕ: enteros negativos -->
+        <text x="188" y="158" font-size="9" fill="#c06000" text-anchor="middle" font-style="italic">enteros neg.</text>
+
+        <!-- Barra inferior: cadena completa -->
+        <rect x="50" y="213" width="286" height="22" rx="6" fill="rgba(92,26,142,.08)"/>
+        <text x="193" y="228" font-size="10" fill="#5c1a8e" text-anchor="middle" font-weight="bold">ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ  ·  𝕀 ⊂ ℝ  ·  ℝ = ℚ ∪ 𝕀</text>
+      </svg>
+    </div>
+    <div class="conj-leyenda">
+      <span class="ley-chip cn">ℕ Naturales: 0,1,2,3…</span>
+      <span class="ley-chip cz">ℤ Enteros: …−2,−1,0,1,2…</span>
+      <span class="ley-chip cq">ℚ Racionales: a/b, b≠0</span>
+      <span class="ley-chip ci" style="background:#fce4ec;color:#880e4f;border:1.5px solid #c2185b">𝕀 Irracionales: √2, π, e…</span>
+      <span class="ley-chip cr">ℝ = ℚ ∪ 𝕀</span>
+    </div>
+  </div>
+
+  <!-- B1a: clasificación MC -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">A</span><h4 style="margin:0">Clasifica este número</h4></div>
+    <p style="font-size:13px;color:#555">¿En cuál es el conjunto más pequeño (específico) donde cabe este número?</p>
+    <div class="expr" id="b1a-num"></div>
+    <div id="b1a-opts"></div>
+    <div class="fb" id="fb-b1a"></div>
+  </div>
+
+  <!-- B1b: segundo número -->
+  <div class="card" id="b1b-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">B</span><h4 style="margin:0">Clasifica este número</h4></div>
+    <div class="expr" id="b1b-num"></div>
+    <div id="b1b-opts"></div>
+    <div class="fb" id="fb-b1b"></div>
+  </div>
+
+  <!-- B1c: ℤ tiene positivos Y negativos, ℕ solo tiene positivos -->
+  <div class="card" id="b1c-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">C</span><h4 style="margin:0">ℤ no es solo "los naturales con signo" — es más amplio</h4></div>
+    <div class="card crojo" style="font-size:13px;margin-bottom:9px;line-height:1.7">
+      <strong>Observa:</strong><br>
+      ℕ = {0, 1, 2, 3, 4, …} → <em>solo cero y positivos</em><br>
+      ℤ = {… −4, −3, −2, −1, 0, 1, 2, 3, 4, …} → <em>positivos, cero <strong>y negativos</strong></em>
+    </div>
+    <p style="font-size:13px;color:#555;margin-bottom:8px">Responde las dos partes en tu cuaderno y luego escribe el resumen aquí:</p>
+    <div class="paso-box" style="margin-bottom:8px">
+      <strong>Parte 1 — Ejemplos concretos:</strong> Escribe <em>tres números</em> que estén en ℤ pero que sea <strong>imposible</strong> encontrar en ℕ. (Pista: ℕ nunca tiene números con ese tipo de signo.)
+    </div>
+    <div class="paso-box">
+      <strong>Parte 2 — Tu argumento:</strong> Un compañero dice <em>"ℤ y ℕ son lo mismo, solo que ℤ tiene el símbolo de menos"</em>. ¿Está en lo correcto? Escribe una oración que lo corrija usando los tres números que encontraste.
+    </div>
+    <div class="min-badge">Mínimo <strong>10 palabras</strong></div>
+    <textarea id="r-b1c" onpaste="return false" oncopy="return false" placeholder="Los tres números son: ___, ___, ___. ℤ no es lo mismo que ℕ porque ℤ incluye…" oninput="chkB1cTxt()"></textarea>
+    <div class="cnt-txt" id="cnt-b1c">0 / 10 palabras</div>
+  </div>
+
+  <button class="btn bp" id="btn-b1" disabled onclick="ir('s4',3)">Continuar a propiedades →</button>
+  <button class="skip-btn" onclick="ir('s4',3)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S4: B2 PROPIEDADES -->
+<div id="s4" class="sec">
+  <div class="tag">BLOQUE 2 · PROPIEDADES DE LAS OPERACIONES</div>
+  <div class="tit">Las 6 reglas que gobiernan los números reales</div>
+
+  <div class="card cmo2">
+    <h3>📋 Resumen rápido</h3>
+    <table class="prop-tabla">
+      <tr><th>Propiedad</th><th>Forma general</th></tr>
+      <tr><td><strong>Cerradura</strong></td><td>a+b ∈ ℝ &nbsp;·&nbsp; a·b ∈ ℝ</td></tr>
+      <tr><td><strong>Conmutativa</strong></td><td>a+b = b+a &nbsp;·&nbsp; a·b = b·a</td></tr>
+      <tr><td><strong>Asociativa</strong></td><td>(a+b)+c = a+(b+c)</td></tr>
+      <tr><td><strong>Neutro</strong></td><td>a+0 = a &nbsp;·&nbsp; a·1 = a</td></tr>
+      <tr><td><strong>Inverso</strong></td><td>a+(−a)=0 &nbsp;·&nbsp; a·(1/a)=1</td></tr>
+      <tr><td><strong>Distributiva</strong></td><td>a·(b+c) = a·b+a·c</td></tr>
+    </table>
+  </div>
+
+  <!-- B2a: identifica la propiedad -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">A</span><h4 style="margin:0">¿Qué propiedad justifica esto?</h4></div>
+    <div class="expr" id="b2a-expr"></div>
+    <div id="b2a-opts"></div>
+    <div class="fb" id="fb-b2a"></div>
+  </div>
+
+  <!-- B2b: segundo ejemplo -->
+  <div class="card" id="b2b-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">B</span><h4 style="margin:0">¿Qué propiedad justifica esto?</h4></div>
+    <div class="expr" id="b2b-expr"></div>
+    <div id="b2b-opts"></div>
+    <div class="fb" id="fb-b2b"></div>
+  </div>
+
+  <!-- B2c: aplica propiedad numérica -->
+  <div class="card" id="b2c-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">C</span><h4 style="margin:0">Aplica la propiedad distributiva</h4></div>
+    <p style="font-size:13px;color:#555">Expande usando <strong>a·(b+c) = a·b + a·c</strong>:</p>
+    <div class="expr" id="b2c-expr"></div>
+    <button class="pb" onclick="tp('h-b2c')">💡 Pista</button>
+    <div class="pbox" id="h-b2c"></div>
+    <input type="number" id="inp-b2c" placeholder="Resultado de la expansión">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB2c()">Verificar</button>
+    <div class="fb" id="fb-b2c"></div>
+  </div>
+
+  <button class="btn bp" id="btn-b2" disabled onclick="ir('s5',4)">Continuar a potencias →</button>
+  <button class="skip-btn" onclick="ir('s5',4)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S5: B3 POTENCIACIÓN Y RADICACIÓN -->
+<div id="s5" class="sec">
+  <div class="tag">BLOQUE 3 · POTENCIACIÓN Y RADICACIÓN</div>
+  <div class="tit">aⁿ y ⁿ√a — operaciones inversas</div>
+
+  <div class="card cmo2">
+    <h3>📐 Leyes de los exponentes</h3>
+    <div class="frm" style="font-size:14px;margin-bottom:5px">aᵐ · aⁿ = aᵐ⁺ⁿ &nbsp;&nbsp;<span style="opacity:.6;font-size:12px">(misma base, suma exponentes)</span></div>
+    <div class="frm frm-az" style="font-size:14px;margin-bottom:5px">aᵐ ÷ aⁿ = aᵐ⁻ⁿ &nbsp;&nbsp;<span style="opacity:.6;font-size:12px">(misma base, resta exponentes)</span></div>
+    <div class="frm frm-ve" style="font-size:14px;margin-bottom:5px">(aᵐ)ⁿ = aᵐ·ⁿ &nbsp;&nbsp;<span style="opacity:.6;font-size:12px">(potencia de potencia)</span></div>
+    <div class="frm frm-am" style="font-size:14px;margin-bottom:5px">a⁻ⁿ = <span class="frac"><span class="num" style="color:#fff;border-color:#fff">1</span><span class="den">aⁿ</span></span> &nbsp;&nbsp;<span style="opacity:.6;font-size:12px">(exp. negativo = inverso)</span></div>
+    <div class="frm" style="font-size:14px">ⁿ√a = a<sup style="font-size:.6em">1/n</sup> &nbsp;&nbsp;<span style="opacity:.6;font-size:12px">(raíz = exponente fraccionario)</span></div>
+  </div>
+
+  <!-- B3a: calcula la potencia -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">A</span><h4 style="margin:0">Calcula aplicando la ley correcta</h4></div>
+    <div class="expr" id="b3a-expr"></div>
+    <button class="pb" onclick="tp('h-b3a')">💡 Pista</button>
+    <div class="pbox" id="h-b3a"></div>
+    <input type="number" id="inp-b3a" placeholder="Resultado">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB3a()">Verificar</button>
+    <div class="fb" id="fb-b3a"></div>
+  </div>
+
+  <!-- B3b: radicación con potencia -->
+  <div class="card" id="b3b-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">B</span><h4 style="margin:0">Raíz como potencia fraccionaria</h4></div>
+    <p style="font-size:13px;color:#555">Convierte la raíz a potencia y calcula:</p>
+    <div class="expr" id="b3b-expr"></div>
+    <button class="pb" onclick="tp('h-b3b')">💡 Pista</button>
+    <div class="pbox" id="h-b3b"></div>
+    <input type="number" id="inp-b3b" placeholder="Resultado" step="0.01">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB3b()">Verificar</button>
+    <div class="fb" id="fb-b3b"></div>
+  </div>
+
+  <!-- B3c: exponente negativo -->
+  <div class="card" id="b3c-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">C</span><h4 style="margin:0">Exponente negativo</h4></div>
+    <p style="font-size:13px;color:#555">Escribe el resultado como fracción decimal:</p>
+    <div class="expr" id="b3c-expr"></div>
+    <button class="pb" onclick="tp('h-b3c')">💡 Pista</button>
+    <div class="pbox" id="h-b3c"></div>
+    <input type="number" id="inp-b3c" placeholder="Resultado decimal" step="0.001">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB3c()">Verificar</button>
+    <div class="fb" id="fb-b3c"></div>
+  </div>
+
+  <button class="btn bp" id="btn-b3" disabled onclick="ir('s6',5)">Continuar a √2 →</button>
+  <button class="skip-btn" onclick="ir('s6',5)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S6: B4 √2 IRRACIONAL -->
+<div id="s6" class="sec">
+  <div class="tag">BLOQUE 4 · √2 — EL NÚMERO QUE "NO CABE" EN ℚ</div>
+  <div class="tit">Un cuadrado de lado 1 y su secreto</div>
+
+  <div class="card">
+    <h3>📐 Demostración visual</h3>
+    <p style="font-size:13px;color:#555">Un cuadrado de lado exactamente 1 metro. ¿Cuánto mide su diagonal?</p>
+    <canvas id="cvs-raiz" width="280" height="200"></canvas>
+    <p style="font-size:13px;margin-top:6px">Por el <strong>Teorema de Pitágoras</strong>:</p>
+    <div class="frm" style="font-size:15px">d² = 1² + 1² = 2 &nbsp;→&nbsp; d = √2</div>
+    <div class="card cam" style="font-size:13px;margin-top:8px">
+      <strong>El problema:</strong> √2 = 1.41421356… los decimales <em>nunca terminan ni se repiten</em>. No existe ninguna fracción a/b (con a,b enteros) que sea exactamente √2.
+    </div>
+  </div>
+
+  <!-- B4a: aproximación -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">A</span><h4 style="margin:0">Verifica con tu calculadora</h4></div>
+    <p style="font-size:13px;color:#555">Calcula <strong>√2</strong> con tu calculadora y escribe los primeros 4 decimales:</p>
+    <input type="text" id="inp-b4a" placeholder="1.____" maxlength="8" autocomplete="off">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB4a()">Verificar</button>
+    <div class="fb" id="fb-b4a"></div>
+  </div>
+
+  <!-- B4b: ¿es racional? MC -->
+  <div class="card" id="b4b-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">B</span><h4 style="margin:0">¿Podemos escribir √2 como fracción?</h4></div>
+    <p style="font-size:13px;color:#555">Un estudiante dice que √2 ≈ 7/5 = 1.4. ¿Es exactamente igual?</p>
+    <div class="expr">7/5 = 1.4 &nbsp;&nbsp;·&nbsp;&nbsp; √2 = 1.4142…</div>
+    <div id="b4b-opts"></div>
+    <div class="fb" id="fb-b4b"></div>
+  </div>
+
+  <!-- B4c: texto explicación -->
+  <div class="card" id="b4c-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">C</span><h4 style="margin:0">Con tus propias palabras</h4></div>
+    <p style="font-size:13px;color:#555">¿Qué hace diferente a √2 de un número racional como 3/4? ¿Por qué lo llamamos "irracional"?</p>
+    <div class="min-badge">Mínimo <strong>10 palabras</strong></div>
+    <textarea id="r-b4c" onpaste="return false" oncopy="return false" placeholder="√2 es diferente porque sus decimales…" oninput="chkB4cTxt()"></textarea>
+    <div class="cnt-txt" id="cnt-b4c">0 / 10 palabras</div>
+  </div>
+
+  <button class="btn bp" id="btn-b4" disabled onclick="ir('s7',6)">Continuar al contexto CDMX →</button>
+  <button class="skip-btn" onclick="ir('s7',6)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S7: B5 CDMX -->
+<div id="s7" class="sec">
+  <div class="tag">BLOQUE 5 · CONTEXTO CDMX</div>
+  <div class="tit">Los números reales en tu ciudad</div>
+
+  <div class="card">
+    <div id="b5-ctx" class="card caz" style="font-size:14px;line-height:1.75;margin-bottom:10px"></div>
+
+    <div id="b5-mc-wrap">
+      <h4>📋 Parte 1 — Clasificación</h4>
+      <p style="font-size:13px;color:#555">¿A qué conjunto pertenece el número que aparece en el problema?</p>
+      <div class="expr" id="b5-num-disp"></div>
+      <div id="b5-mc-opts"></div>
+      <div class="fb" id="fb-b5mc"></div>
+    </div>
+
+    <div id="b5-calc-wrap" style="display:none;margin-top:10px">
+      <div class="sep"></div>
+      <h4>🔢 Parte 2 — Calcula</h4>
+      <div class="expr" id="b5-expr-disp"></div>
+      <button class="pb" onclick="tp('h-b5')">💡 Pista</button>
+      <div class="pbox" id="h-b5"></div>
+      <input type="number" id="inp-b5" placeholder="Resultado" step="0.01">
+      <button class="btn bsm bp" style="margin-top:7px" onclick="chkB5()">Verificar</button>
+      <div class="fb" id="fb-b5"></div>
+    </div>
+
+    <div id="b5-txt-wrap" style="display:none;margin-top:10px">
+      <div class="sep"></div>
+      <h4>✍️ Parte 3 — Interpreta</h4>
+      <p style="font-size:13px;color:#555">¿Qué significa ese número en el contexto del problema?</p>
+      <div class="min-badge">Mínimo <strong>8 palabras</strong></div>
+      <textarea id="r-b5-int" onpaste="return false" oncopy="return false" placeholder="El resultado significa que…" oninput="chkB5Txt()"></textarea>
+      <div class="cnt-txt" id="cnt-b5">0 / 8 palabras</div>
+    </div>
+  </div>
+
+  <button class="btn bp" id="btn-b5" disabled onclick="ir('s8',7)">Continuar a la ficha →</button>
+  <button class="skip-btn" onclick="ir('s8',7)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S8: B6 FICHA -->
+<div id="s8" class="sec">
+  <div class="tag">BLOQUE 6 · FICHA PARA EL CUADERNO</div>
+  <div class="tit">Copia — esto entra en examen</div>
+
+  <div style="background:var(--ro);color:#fff;padding:9px 14px;border-radius:8px 8px 0 0;font-size:12px;font-weight:900;text-transform:uppercase">✏️ ACCIÓN — COPIA EN TU CUADERNO AHORA</div>
+  <div class="card cam" style="border-radius:0 0 10px 10px;margin-top:0;margin-bottom:12px">
+    <strong>📓</strong> La captura de pantalla NO cuenta. Copia con tus propios ejemplos al lado de cada definición.
+  </div>
+
+  <div class="cua-card">
+    <h3 style="margin-bottom:12px">ℝ — Mapa de los números reales</h3>
+    <table class="prop-tabla">
+      <tr><th>Conjunto</th><th>Símbolo</th><th>Ejemplos</th></tr>
+      <tr><td>Naturales</td><td><strong>ℕ</strong></td><td>0, 1, 2, 3, 100…</td></tr>
+      <tr><td>Enteros</td><td><strong>ℤ</strong></td><td>…−3,−2,−1, 0, 1, 2…</td></tr>
+      <tr><td>Racionales</td><td><strong>ℚ</strong></td><td>½, −¾, 0.5, 0.333…</td></tr>
+      <tr><td>Irracionales</td><td><strong>𝕀</strong></td><td>√2, π, √3, e…</td></tr>
+      <tr><td>Reales</td><td><strong>ℝ</strong></td><td>ℚ ∪ 𝕀 (todos)</td></tr>
+    </table>
+    <div class="sep"></div>
+    <h4 style="margin-bottom:8px">Las 6 propiedades — con ejemplo numérico</h4>
+    <table class="prop-tabla">
+      <tr><th>Propiedad</th><th>Ejemplo numérico</th></tr>
+      <tr><td><strong>Cerradura</strong></td><td>3 + (−5) = −2 ∈ ℝ</td></tr>
+      <tr><td><strong>Conmutativa</strong></td><td>3 + 5 = 5 + 3 = 8</td></tr>
+      <tr><td><strong>Asociativa</strong></td><td>(2+3)+4 = 2+(3+4) = 9</td></tr>
+      <tr><td><strong>Neutro</strong></td><td>7 + 0 = 7 &nbsp;·&nbsp; 7 × 1 = 7</td></tr>
+      <tr><td><strong>Inverso</strong></td><td>5 + (−5) = 0 &nbsp;·&nbsp; 4 × ¼ = 1</td></tr>
+      <tr><td><strong>Distributiva</strong></td><td>3(4+5) = 3·4 + 3·5 = 27</td></tr>
+    </table>
+    <div class="sep"></div>
+    <h4 style="margin-bottom:8px">Leyes de exponentes — con ejemplo</h4>
+    <div class="frm" style="font-size:13px;margin:4px 0">2³ · 2⁴ = 2⁷ = 128 &nbsp;(suma exp.)</div>
+    <div class="frm frm-az" style="font-size:13px;margin:4px 0">3⁵ ÷ 3² = 3³ = 27 &nbsp;(resta exp.)</div>
+    <div class="frm frm-ve" style="font-size:13px;margin:4px 0">(2³)² = 2⁶ = 64 &nbsp;(potencia de potencia)</div>
+    <div class="frm frm-am" style="font-size:13px;margin:4px 0">2⁻³ = 1/8 = 0.125 &nbsp;(exp. negativo)</div>
+    <div class="frm" style="font-size:13px;margin:4px 0">√16 = 16^(1/2) = 4 &nbsp;(raíz = exp. ½)</div>
+    <div class="sep"></div>
+    <div class="card caz" style="font-size:13px;margin-top:0">
+      <strong>√2 es irracional</strong> porque su representación decimal es infinita y no periódica: 1.41421356… No existe ninguna fracción a/b con enteros que lo represente exactamente.
+    </div>
+  </div>
+
+  <div class="card" style="border:2px solid var(--gr2)">
+    <label style="display:flex;align-items:flex-start;gap:11px;cursor:pointer">
+      <input type="checkbox" id="check-ficha" onchange="checkFicha()" style="width:20px;height:20px;margin-top:2px;accent-color:var(--ve2)">
+      <span style="font-size:14px;line-height:1.6">Copié esta ficha en mi cuaderno con mis propios ejemplos numéricos en cada renglón</span>
+    </label>
+  </div>
+
+  <button class="btn bp" id="btn-b6" disabled onclick="ir('s9',8)">Continuar al quiz →</button>
+  <button class="skip-btn" onclick="ir('s9',8)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- S9: QUIZ -->
+<div id="s9" class="sec">
+  <div class="tag">BLOQUE 7 · QUIZ INDIVIDUAL</div>
+  <div class="tit">4 reactivos sin retroalimentación</div>
+  <div class="card cmo" style="padding:13px 15px">
+    <span style="font-size:18px;display:block;margin-bottom:4px">⚠️</span>
+    <p style="font-size:14px;margin:0;line-height:1.7">Guarda cada respuesta. <strong>No verás si están bien hasta el final.</strong> Puedes usar la ficha del cuaderno.</p>
+  </div>
+  <div class="prac-ind">Guardados: <span id="quiz-cnt">0</span> de 4</div>
+
+  <!-- Q1: MC clasificación -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">1</span><h4 style="margin:0">Clasificación de número</h4></div>
+    <p style="font-size:13px;color:#555;margin-bottom:6px">¿Cuál es el conjunto <em>más específico</em> al que pertenece este número?</p>
+    <div class="expr" id="q1-num"></div>
+    <div id="q1-opts"></div>
+    <div id="q1-sel" style="display:none;margin-top:5px"><span style="font-size:13px;color:var(--ve);font-weight:700">✓ Opción guardada</span></div>
+    <button class="btn bsm bp" id="btn-q1" style="margin-top:7px;display:none" onclick="guardarQ(1)">Guardar →</button>
+  </div>
+
+  <!-- Q2: potencia numérica -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">2</span><h4 style="margin:0">Calcula la potencia</h4></div>
+    <p style="font-size:13px;color:#555">Aplica la ley de exponentes correspondiente:</p>
+    <div class="expr" id="q2-expr"></div>
+    <input type="number" id="inp-q2" placeholder="Resultado">
+    <button class="btn bsm bp" id="btn-q2" style="margin-top:7px" onclick="guardarQ(2)">Guardar →</button>
+    <div id="conf-q2" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <!-- Q3: radicación/combinado -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">3</span><h4 style="margin:0">Radicación y exponente</h4></div>
+    <p style="font-size:13px;color:#555">Convierte y calcula:</p>
+    <div class="expr" id="q3-expr"></div>
+    <input type="number" id="inp-q3" placeholder="Resultado" step="0.01">
+    <button class="btn bsm bp" id="btn-q3" style="margin-top:7px" onclick="guardarQ(3)">Guardar →</button>
+    <div id="conf-q3" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <!-- Q4: texto -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:7px"><span class="nc">4</span><h4 style="margin:0">Explicación escrita</h4></div>
+    <p style="font-size:14px;line-height:1.65">Da un ejemplo de tu vida diaria en la CDMX donde aparezca cada tipo de número: uno <strong>natural</strong>, uno <strong>entero negativo</strong>, uno <strong>racional no entero</strong> y uno <strong>irracional</strong>. Explica por qué cada uno pertenece a ese conjunto.</p>
+    <div class="min-badge" style="background:var(--mo);color:#fff">📝 Mínimo <strong>20 palabras</strong> para guardar</div>
+    <textarea id="inp-q4" onpaste="return false" oncopy="return false" placeholder="En mi vida, un número natural que uso es… Un entero negativo aparece cuando… Un racional como… Y un irracional como…" oninput="chkQ4Txt()"></textarea>
+    <div class="cnt-txt" id="cnt-q4">0 / 20 palabras</div>
+    <button class="btn bsm bp" id="btn-q4" style="margin-top:7px" onclick="guardarQ(4)">Guardar →</button>
+    <div id="conf-q4" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <button class="btn bp" id="btn-quiz" disabled onclick="ir('s10',9)">Ver síntesis →</button>
+</div>
+
+<!-- S10: SÍNTESIS -->
+<div id="s10" class="sec">
+  <div class="tag">BLOQUE 8 · SÍNTESIS + PUENTE S05</div>
+  <div class="tit">Cierra con tus propias palabras</div>
+
+  <!-- Tarjeta de anclaje: recordatorio de los irracionales ya vistos -->
+  <div class="card cam">
+    <h4 style="margin-bottom:7px">🔍 Recapitula lo que ya viste</h4>
+    <p style="font-size:13px;line-height:1.75">
+      Durante esta sesión los irracionales aparecieron en situaciones muy concretas:<br>
+      • La diagonal del cuadrado de lado 1 → dio <strong>√2</strong>, un número que la calculadora no termina nunca.<br>
+      • La rampa en Xochimilco, la sección triangular de Chapultepec, la Torre Latino → todos produjeron raíces no exactas.<br>
+      • Los exponentes fraccionarios como <strong>h^(2/3)</strong> también generaron irracionales aunque la base fuera entera.
+    </p>
+    <p style="font-size:13px;margin-top:8px;line-height:1.7">
+      Esos no son ejemplos inventados: cada vez que mides una diagonal, calculas una distancia entre dos puntos, o modelas una señal que se atenúa, los irracionales aparecen <em>aunque los datos originales sean números enteros</em>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Reflexión final</h3>
+    <p style="background:var(--gr);border-radius:10px;padding:11px;line-height:1.7">
+      ¿Dónde aparecen los números irracionales o las potencias en situaciones de la CDMX que vivas tú? Da un ejemplo concreto y explica qué tipo de número es y por qué lo clasificarías así.
+    </p>
+    <div class="min-badge">Mínimo <strong>25 palabras</strong> para continuar</div>
+    <textarea id="r-sint-1" onpaste="return false" oncopy="return false" placeholder="Un ejemplo real en la CDMX donde aparece un número de este tipo es… porque sus decimales… y por eso pertenece a…" oninput="chkSint()"></textarea>
+    <div class="cnt-txt" id="cnt-sint1">0 / 25 palabras</div>
+  </div>
+
+  <div class="card">
+    <h3>🔭 Vista previa — S05: Signos de agrupación</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:8px">En la siguiente sesión usarás paréntesis, corchetes y llaves para organizar expresiones que incluyen potencias y raíces. Observa esta expresión:</p>
+    <div class="expr">{3·[2² − (√4 + 1)] + 5}</div>
+    <p style="font-size:14px;margin:8px 0">¿Qué tendrías que resolver primero? ¿Qué papel juega el √4 aquí?</p>
+    <div class="min-badge">Mínimo <strong>10 palabras</strong></div>
+    <textarea id="r-sint-2" onpaste="return false" oncopy="return false" placeholder="Primero resolvería… porque…" oninput="chkSint()"></textarea>
+    <div class="cnt-txt" id="cnt-sint2">0 / 10 palabras</div>
+  </div>
+
+  <button class="btn bp" id="btn-sint" disabled onclick="ir('s11',9)">Ver resultados finales →</button>
+</div>
+
+<!-- S11: RESULTADOS -->
+<div id="s11" class="sec">
+  <div class="card grade-box" id="marc-card">
+    <div id="marc-ico" style="font-size:42px;margin-bottom:5px"></div>
+    <div id="marc-nombre" style="font-size:14px;font-weight:800;letter-spacing:.5px;opacity:.85;margin-bottom:4px"></div>
+    <div class="grade-num" id="marc-pts"></div>
+    <div class="grade-lbl" id="marc-lbl"></div>
+  </div>
+
+  <div class="tag" style="margin-bottom:7px">📖 TUS RESULTADOS DETALLADOS</div>
+  <div id="detalle-quiz"></div>
+
+  <div class="card cmo2" style="margin-top:4px">
+    <h4>✍️ Tus reflexiones registradas</h4>
+    <p id="res-sint1" style="font-size:13px;font-style:italic;color:#555;margin-top:5px"></p>
+    <div class="sep"></div>
+    <p id="res-sint2" style="font-size:13px;font-style:italic;color:#555"></p>
+  </div>
+
+  <div class="tag" style="margin-top:8px;margin-bottom:7px;background:var(--az)">👨‍🏫 REGISTRO DOCENTE — muestra esta pantalla al Prof. Cruz</div>
+  <div class="prof-strip" id="prof-strip"></div>
+
+  <button class="btn bve" id="btn-copiar" style="margin-top:10px" onclick="copiarRes()">📋 Copiar para Classroom</button>
+  <div id="fb-copia" style="font-size:13px;color:var(--ve);margin-top:5px;text-align:center;min-height:15px"></div>
+  <div class="copy-area" id="copy-area"></div>
+
+  <div class="card cam" style="margin-top:10px;font-size:13px">
+    <strong>Siguiente paso:</strong> Muestra esta pantalla al Prof. Cruz y sube captura a Classroom.
+  </div>
+  <div id="wrap-reintento" style="margin-top:6px;display:none">
+    <button class="btn bp" onclick="reiniciar()">🔄 Reintentar con ejercicios nuevos</button>
+  </div>
+</div>
+
+<!-- ─────────── JAVASCRIPT ─────────── -->
+<script>
+'use strict';
+
+// ── ESTADO ──────────────────────────────────────────────────────────
+let nombre='', intento=1;
+let V={};
+let QR=[null,null,null,null];
+let QM=[null,null,null,null];
+let QB=[null,null,null,null];
+let quizGuardados=0;
+let b1aOk=false,b1bOk=false,b1cTxtOk=false;
+let b2aOk=false,b2bOk=false,b2cOk=false;
+let b3aOk=false,b3bOk=false,b3cOk=false;
+let b4aOk=false,b4bOk=false,b4cTxtOk=false;
+let b5mcOk=false,b5calcOk=false,b5txtOk=false;
+let b0mcOk=false,b0txtOk=false;
+let AT={b2c:0,b3a:0,b3b:0,b3c:0,b5:0};
+let SP={b2c:false,b3a:false,b3b:false,b3c:false,b5:false};
+const WM={b0:8,b1c:10,b4c:10,b5:8,q4:20,sint1:25,sint2:10};
+
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+
+// ── BANCOS ──────────────────────────────────────────────────────────
+
+// B0 MC — ¿cuál no es fracción exacta?
+const B0_MC=[
+  {opts:['7','−5','3/4','√2'],ans:3,fb:'✓ Correcto. √2 = 1.41421… — sus decimales no terminan ni se repiten. Es irracional.'},
+  {opts:['0.5','π','−8','100'],ans:1,fb:'✓ Correcto. π = 3.14159… es irracional. 0.5 = ½, −8 y 100 son racionales exactos.'},
+  {opts:['√3','4','−2/3','0'],ans:0,fb:'✓ Correcto. √3 = 1.73205… es irracional. Los demás tienen representación fraccionaria exacta.'},
+  {opts:['0.333…','9','√5','−7'],ans:2,fb:'✓ Correcto. √5 = 2.23606… es irracional. 0.333… = 1/3, exactamente racional.'},
+  {opts:['e = 2.718…','−6','¼','25'],ans:0,fb:'✓ Correcto. e = 2.71828… es irracional (número de Euler). Los demás son racionales.'},
+  {opts:['½','√7','3','−11'],ans:1,fb:'✓ Correcto. √7 = 2.64575… irracional. Los demás caben en ℚ.'}
+];
+
+// B1 — clasificación de números (6 pares)
+const B1_BANK=[
+  {a:{n:'−7',conj:'ℤ (Enteros)',ans:1,fb:'−7 es entero negativo: pertenece a ℤ pero no a ℕ.'},
+   b:{n:'√9',conj:'ℕ (Naturales)',ans:0,fb:'√9 = 3, número natural. Ojo: aunque tiene raíz, su resultado es entero positivo.'}},
+  {a:{n:'0.75',conj:'ℚ (Racionales)',ans:2,fb:'0.75 = 3/4, fracción exacta → racional.'},
+   b:{n:'−√2',conj:'𝕀 ∈ ℝ (Irracional)',ans:3,fb:'−√2 = −1.41421… irracional negativo. Pertenece a ℝ pero no a ℚ.'}},
+  {a:{n:'0',conj:'ℕ (Naturales)',ans:0,fb:'0 pertenece a ℕ en la convención del programa.'},
+   b:{n:'2/3',conj:'ℚ (Racionales)',ans:2,fb:'2/3 = 0.666… — decimal periódico, racional exacto.'}},
+  {a:{n:'√16',conj:'ℕ (Naturales)',ans:0,fb:'√16 = 4. El resultado es natural.'},
+   b:{n:'π',conj:'𝕀 ∈ ℝ (Irracional)',ans:3,fb:'π = 3.14159… nunca termina ni se repite — irracional.'}},
+  {a:{n:'−100',conj:'ℤ (Enteros)',ans:1,fb:'−100 es entero negativo.'},
+   b:{n:'1.5',conj:'ℚ (Racionales)',ans:2,fb:'1.5 = 3/2. Fracción exacta → racional.'}},
+  {a:{n:'√25',conj:'ℕ (Naturales)',ans:0,fb:'√25 = 5, natural.'},
+   b:{n:'−3/4',conj:'ℚ (Racionales)',ans:2,fb:'−3/4 es fracción racional negativa.'}}
+];
+const CONJ_OPTS=['ℕ (Naturales)','ℤ (Enteros)','ℚ (Racionales)','𝕀 ∈ ℝ (Irracional)'];
+
+// B2 — propiedades (6 ejemplos)
+const B2_BANK=[
+  {a:{expr:'(3 + 7) + 4 = 3 + (7 + 4)',prop:'Asociativa',fb:'✓ El paréntesis cambia de lugar sin cambiar el resultado — propiedad asociativa.'},
+   b:{expr:'5 · (2 + 8) = 5·2 + 5·8',prop:'Distributiva',fb:'✓ La multiplicación se distribuye sobre la suma.'},
+   c_a:5,c_b:3,c_c:4,h:'Identifica a, b y c en la expresión a·(b+c). Aplica la propiedad: multiplica a por b por separado, luego a por c por separado. Finalmente suma esos dos productos.'},
+  {a:{expr:'−6 + 6 = 0',prop:'Inverso aditivo',fb:'✓ Todo número sumado a su opuesto da cero — inverso aditivo.'},
+   b:{expr:'12 + 5 = 5 + 12',prop:'Conmutativa',fb:'✓ El orden no altera la suma — propiedad conmutativa.'},
+   c_a:3,c_b:7,c_c:2,h:'La distributiva dice: el factor externo multiplica a cada sumando por separado. Trabaja los dos productos independientemente antes de sumarlos.'},
+  {a:{expr:'√2 + π ∈ ℝ',prop:'Cerradura en ℝ',fb:'✓ La suma de dos reales siempre da un real — cerradura.'},
+   b:{expr:'9 · 1 = 9',prop:'Neutro multiplicativo',fb:'✓ Multiplicar por 1 deja el número igual — neutro multiplicativo.'},
+   c_a:4,c_b:5,c_c:3,h:'Escribe primero los dos productos que genera la distributiva (sin sumarlos todavía). ¿Cuánto es cada uno? Solo al final los sumas.'},
+  {a:{expr:'7 · (1/7) = 1',prop:'Inverso multiplicativo',fb:'✓ Todo número multiplicado por su recíproco da 1 — inverso multiplicativo.'},
+   b:{expr:'2 · (3 · 5) = (2 · 3) · 5',prop:'Asociativa',fb:'✓ Asociativa: el agrupamiento no importa en la multiplicación.'},
+   c_a:6,c_b:4,c_c:2,h:'Separa la multiplicación: haz a·b primero, escríbelo. Luego a·c, escríbelo. Esos son los dos términos que quedan antes de sumar.'},
+  {a:{expr:'−8 + 0 = −8',prop:'Neutro aditivo',fb:'✓ Sumar cero no cambia el número — neutro aditivo.'},
+   b:{expr:'3.14 · 2 = 2 · 3.14',prop:'Conmutativa',fb:'✓ El orden no altera el producto — conmutativa.'},
+   c_a:2,c_b:6,c_c:5,h:'Recuerda: a·(b+c) se convierte en dos términos separados. ¿Qué papel juega el factor externo con cada elemento del paréntesis?'},
+  {a:{expr:'(−3) · 1/3 = 1? ¿o −1?',prop:'Inverso multiplicativo (−3 · 1/3 = −1, no 1)',fb:'⚠️ Ojo: el inverso multiplicativo de −3 es −1/3 (no 1/3). (−3)·(−1/3) = 1.'},
+   b:{expr:'8 + (−8) = 0',prop:'Inverso aditivo',fb:'✓ Inverso aditivo: la suma con el opuesto da cero.'},
+   c_a:7,c_b:3,c_c:4,h:'Aplica la fórmula sin calcular mentalmente de golpe: escribe los dos productos separados primero, luego súmalos. Cuida los signos.'}
+];
+const PROP_OPTS=['Cerradura','Conmutativa','Asociativa','Neutro (0 o 1)','Inverso aditivo o multiplicativo','Distributiva'];
+
+// B3 — potencias y raíces (6 sets) — pistas NO revelan resultado
+const B3_BANK=[
+  {a:{expr:'2³ · 2⁴',fn:()=>128,hint:'¿Qué ley aplica al multiplicar potencias de la misma base? Enuncia esa ley primero y escribe el exponente resultante, antes de calcular.',ans:128},
+   b:{expr:'√64',fn:()=>8,hint:'Convierte a potencia fraccionaria: √a = a^(1/2). Luego busca el entero positivo x tal que x² = 64. Verifica multiplicando.',ans:8},
+   c:{expr:'3⁻²',fn:()=>1/9,ans:0.111,hint:'Reescribe sin exponente negativo usando la definición general. Ten la fracción escrita antes de convertir a decimal.'}},
+  {a:{expr:'5² · 5³',fn:()=>3125,hint:'Enuncia qué pasa con los exponentes al multiplicar potencias de la misma base. Escribe el nuevo exponente, luego calcula la potencia.',ans:3125},
+   b:{expr:'√81',fn:()=>9,hint:'Escribe 81 como producto de dos factores iguales. ¿Qué entero, multiplicado por sí mismo, produce ese valor?',ans:9},
+   c:{expr:'2⁻⁴',fn:()=>1/16,ans:0.0625,hint:'Define el exponente negativo como fracción primero. ¿Cuánto vale el denominador? Después convierte esa fracción a decimal exacto.'}},
+  {a:{expr:'(3²)³',fn:()=>729,hint:'La ley de potencia de potencia conecta los dos exponentes con una operación concreta. Nómbrala y aplícala antes de calcular el resultado.',ans:729},
+   b:{expr:'√121',fn:()=>11,hint:'¿Entre qué dos enteros consecutivos x y (x+1) está √121? Verifica x² y (x+1)² para acotarlo.',ans:11},
+   c:{expr:'4⁻¹',fn:()=>0.25,ans:0.25,hint:'El exponente −1 da el inverso multiplicativo. ¿Qué fracción es el inverso multiplicativo de 4? Exprésala como decimal.'}},
+  {a:{expr:'2⁶ ÷ 2³',fn:()=>8,hint:'¿Qué le pasa a los exponentes al dividir potencias de igual base? (Esa operación es la opuesta a la que usas al multiplicar.)',ans:8},
+   b:{expr:'√144',fn:()=>12,hint:'Factoriza 144 = 4 · 36. ¿Puedes aplicar la propiedad de la raíz sobre un producto para simplificar antes de calcular?',ans:12},
+   c:{expr:'5⁻²',fn:()=>0.04,ans:0.04,hint:'Escribe primero la fracción equivalente (sin decimales). Para convertir a decimal, divide manualmente numerador entre denominador.'}},
+  {a:{expr:'3⁴ · 3²',fn:()=>729,hint:'Identifica la ley correcta. Escribe la expresión simplificada (base con nuevo exponente) antes de calcular su valor numérico.',ans:729},
+   b:{expr:'√49',fn:()=>7,hint:'Acota: calcula 6² y 8². ¿Entre cuál de esos cuadrados está 49? Solo uno de los enteros intermedios es solución.',ans:7},
+   c:{expr:'10⁻³',fn:()=>0.001,ans:0.001,hint:'Escribe 10³ explícitamente. La fracción resultante tiene un numerador fijo. ¿Cuántos lugares decimales necesitas para representarla?'}},
+  {a:{expr:'(2²)⁴',fn:()=>256,hint:'Escribe el exponente final antes de calcular. ¿Cuál ley relaciona (aᵐ)ⁿ con un solo exponente?',ans:256},
+   b:{expr:'√36',fn:()=>6,hint:'Calcula 5² y 7² para delimitar. ¿Cuál es el único entero x con 5 < x < 7 tal que x² = 36?',ans:6},
+   c:{expr:'3⁻³',fn:()=>1/27,ans:0.037,hint:'Escribe la fracción primero. Para obtener 3 cifras decimales, realiza la división entera 1 ÷ 27 paso a paso.'}}
+];
+
+// B5 — contextos CDMX (6) — problemas 6° semestre, pistas metodológicas (no revelan resultado)
+const B5_BANK=[
+  (v)=>({
+    ctx:`En la <strong>Línea 12 del Metro CDMX</strong> un ingeniero modela la atenuación de vibraciones en el riel con la expresión <em>A = k · 2⁻ⁿ</em>, donde k es la amplitud inicial (N) y n el número de amortiguadores activos. Con k = ${v.b*8} N y n = 3, calcula la amplitud residual A. Expresa el resultado primero como fracción y luego en Newtons.`,
+    num:`2⁻³`,numDisp:`2⁻³`,
+    cnjOpts:['ℚ (Racional — fracción exacta)','ℕ (Natural)','𝕀 (Irracional)'],ansOpts:0,
+    exprCalc:`${v.b*8} · 2⁻³`,
+    fn:()=>v.b*8*(1/8),
+    hint:()=>`Antes de multiplicar: ¿cuál es la definición de a⁻ⁿ? Escribe 2⁻³ como fracción. Después aplica esa fracción como factor de ${v.b*8}. No conviertas a decimal hasta tener la fracción completa.`,
+    cnjFb:`✓ 2⁻³ = 1/8 → fracción exacta, número racional.`
+  }),
+  (v)=>({
+    ctx:`El <strong>Bosque de Chapultepec</strong> tiene una sección cuya forma es un triángulo rectángulo. Los dos catetos miden ${v.b} m y ${v.b+2} m. Un técnico necesita la hipotenusa para instalar un cerco diagonal. Calcula esa longitud con el Teorema de Pitágoras y decide si el resultado es racional o irracional.`,
+    num:`√(${v.b}²+${(v.b+2)}²)`,numDisp:`√(${v.b*v.b+(v.b+2)*(v.b+2)})`,
+    cnjOpts:['𝕀 (Irracional — decimales infinitos)','ℕ (Natural)','ℚ (Racional exacto)'],ansOpts:0,
+    exprCalc:`√(${v.b*v.b+(v.b+2)*(v.b+2)})`,
+    fn:()=>parseFloat(Math.sqrt(v.b*v.b+(v.b+2)*(v.b+2)).toFixed(4)),
+    hint:()=>`Aplica c² = a² + b². Calcula ${v.b}² y ${v.b+2}² por separado, súmalos. Luego verifica: ¿ese resultado es un cuadrado perfecto? Eso determina si la raíz es racional.`,
+    cnjFb:`✓ √(${v.b*v.b+(v.b+2)*(v.b+2)}) no es cuadrado perfecto → irracional.`
+  }),
+  (v)=>({
+    ctx:`Un <strong>departamento en Tlatelolco</strong> tiene superficie total S = (${v.b} + 1)² m². El arquitecto expande el binomio y halla que S = ${(v.b+1)*(v.b+1)} m². Quiere saber la longitud de la diagonal usando Pitágoras. Si cada lado del cuarto cuadrado mide √S m, calcula la diagonal y simplifica al máximo.`,
+    num:`√(2·${(v.b+1)*(v.b+1)})`,numDisp:`√${2*(v.b+1)*(v.b+1)}`,
+    cnjOpts:['𝕀 (Irracional)','ℕ (Natural)','ℚ (Racional)'],ansOpts:0,
+    exprCalc:`√(2·${(v.b+1)*(v.b+1)})`,
+    fn:()=>parseFloat(((v.b+1)*Math.sqrt(2)).toFixed(4)),
+    hint:()=>`La diagonal de un cuadrado de lado L es L·√2. Identifica el valor de L (es un entero). ¿Multiplicar un entero por √2 produce un número racional o irracional? Argumenta.`,
+    cnjFb:`✓ ${v.b+1}·√2 es irracional: √2 multiplicado por cualquier entero no nulo sigue siendo irracional.`
+  }),
+  (v)=>({
+    ctx:`La <strong>Torre Latinoamericana</strong> tiene ${v.a} m de altura. Por acción del viento, el desplazamiento máximo de la punta sigue el modelo d = 0.01 · h^(2/3) metros, donde h = ${v.a} m. Calcula d en centímetros (recuerda: 1 m = 100 cm). Interpreta si el resultado es racional o irracional y justifica.`,
+    num:`${v.a}^(2/3)`,numDisp:`${v.a}^(2/3)`,
+    cnjOpts:['𝕀 (Irracional)','ℕ (Natural)','ℚ (Racional exacto)'],ansOpts:0,
+    exprCalc:`0.01 · ${v.a}^(2/3) · 100`,
+    fn:()=>parseFloat((Math.pow(v.a,2/3)).toFixed(4)),
+    hint:()=>`Reescribe h^(2/3) = (h^(1/3))². Calcula ∛${v.a} con calculadora. Eleva ese valor al cuadrado. Multiplica por 0.01 y convierte a cm. ¿El resultado termina o se repite?`,
+    cnjFb:`✓ ${v.a}^(2/3) generalmente produce un irracional.`
+  }),
+  (v)=>({
+    ctx:`En el <strong>Mercado de Jamaica</strong> un distribuidor tiene ${v.b}⁵ rosas en total y las agrupa en cajas de ${v.b}³ rosas cada una. ¿Cuántas cajas completas forma? Aplica la ley de división de potencias. Además: si sobraran ${v.b}² rosas sueltas, ¿seguiría siendo natural el total de cajas? Argumenta.`,
+    num:`${v.b}⁵ ÷ ${v.b}³`,numDisp:`${v.b}⁵ ÷ ${v.b}³`,
+    cnjOpts:['ℕ (Natural)','ℚ (Racional fraccionario)','𝕀 (Irracional)'],ansOpts:0,
+    exprCalc:`${v.b}⁵ ÷ ${v.b}³`,
+    fn:()=>v.b*v.b,
+    hint:()=>`Escribe la ley de división de potencias con la misma base. ¿Qué operación aplicas a los exponentes? Escribe la expresión simplificada antes de calcular su valor.`,
+    cnjFb:`✓ ${v.b}⁵ ÷ ${v.b}³ = ${v.b}^(5−3) = ${v.b}² = ${v.b*v.b}, número natural.`
+  }),
+  (v)=>({
+    ctx:`En <strong>Xochimilco</strong> se quiere construir una rampa de acceso. La base horizontal mide ${v.b} m y la altura vertical mide ${v.b-1} m. Un ingeniero calcula la longitud de la rampa (hipotenusa) con Pitágoras y obtiene √${v.b*v.b+(v.b-1)*(v.b-1)} m. ¿Ese valor es racional o irracional? Luego calcula cuánto mosaico se necesita si se tapiza ambos lados de la rampa (2 · largo · 1.2 m de ancho).`,
+    num:`√${v.b*v.b+(v.b-1)*(v.b-1)}`,numDisp:`√${v.b*v.b+(v.b-1)*(v.b-1)}`,
+    cnjOpts:['𝕀 (Irracional)','ℕ (Natural)','ℚ (Racional)'],ansOpts:0,
+    exprCalc:`2 · √${v.b*v.b+(v.b-1)*(v.b-1)} · 1.2`,
+    fn:()=>parseFloat((2*Math.sqrt(v.b*v.b+(v.b-1)*(v.b-1))*1.2).toFixed(4)),
+    hint:()=>`Verifica si ${v.b*v.b+(v.b-1)*(v.b-1)} es cuadrado perfecto (intenta encontrar un entero x tal que x² = ${v.b*v.b+(v.b-1)*(v.b-1)}). Eso determina la clasificación. Para el área: largo = raíz aproximada, usa 4 cifras decimales.`,
+    cnjFb:`✓ √${v.b*v.b+(v.b-1)*(v.b-1)} es irracional — su decimal no termina.`
+  })
+];
+
+// Quiz Q1 — clasificación MC (6)
+const Q1_BANK=[
+  {n:'−3/5',ans:2,fb:'−3/5 es fracción exacta → ℚ (racional).'},
+  {n:'√49',ans:0,fb:'√49 = 7, número natural.'},
+  {n:'π/2',ans:3,fb:'π/2 es irracional — π no tiene representación fraccionaria.'},
+  {n:'−15',ans:1,fb:'−15 es entero negativo → ℤ.'},
+  {n:'0.666…',ans:2,fb:'0.666… = 2/3, fracción exacta → racional.'},
+  {n:'√11',ans:3,fb:'√11 = 3.31662… irracional.'}
+];
+
+// Quiz Q2 — potencias (6)
+const Q2_BANK=[
+  {expr:'4³',fn:()=>64,proc:'4³ = 4·4·4 = 64'},
+  {expr:'2⁵',fn:()=>32,proc:'2⁵ = 32'},
+  {expr:'3³ · 3²',fn:()=>243,proc:'3^(3+2) = 3⁵ = 243'},
+  {expr:'(2³)²',fn:()=>64,proc:'2^(3·2) = 2⁶ = 64'},
+  {expr:'5² · 5',fn:()=>125,proc:'5^(2+1) = 5³ = 125'},
+  {expr:'2⁸ ÷ 2⁵',fn:()=>8,proc:'2^(8−5) = 2³ = 8'}
+];
+
+// Quiz Q3 — radicación combinada (6)
+const Q3_BANK=[
+  {expr:'√36 + 2²',fn:()=>10,proc:'√36=6, 2²=4 → 6+4=10'},
+  {expr:'√100 − 3²',fn:()=>1,proc:'√100=10, 3²=9 → 10−9=1'},
+  {expr:'2³ + √25',fn:()=>13,proc:'2³=8, √25=5 → 8+5=13'},
+  {expr:'(√16)²',fn:()=>16,proc:'√16=4, 4²=16'},
+  {expr:'3² − √9',fn:()=>6,proc:'3²=9, √9=3 → 9−3=6'},
+  {expr:'√64 + 1³',fn:()=>9,proc:'√64=8, 1³=1 → 8+1=9'}
+];
+
+// Keywords evaluación texto
+const KW=['natural','entero','racional','irracional','real','fracción','decimal','periódico','conjunto','subconjunto',
+          'potencia','raíz','exponente','infinito','propiedad','cerradura','conmutativa','asociativa','neutro','inverso'];
+
+// ── UTILITARIOS ──────────────────────────────────────────────────────
+function tp(id){const e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block';}
+function wc(id){return document.getElementById(id).value.trim().split(/\s+/).filter(w=>w.length>0).length;}
+function updCnt(cntId,n,min){
+  const el=document.getElementById(cntId);
+  el.textContent=n+' / '+min+' palabras';
+  el.style.color=n>=min?'var(--ve)':'var(--ro)';
+}
+function evaluarTexto(txt,min){
+  const ws=txt.trim().split(/\s+/).filter(w=>w.length>0);
+  const n=ws.length,tl=txt.toLowerCase();
+  const kw=KW.filter(k=>tl.includes(k)).length;
+  if(n<min)return{score:0,cls:'txt-zero',lbl:`Insuficiente (${n}/${min} palabras)`};
+  if(kw>=3)return{score:1,cls:'txt-full',lbl:`Completo ✓ (${n} palabras, vocabulario temático)`};
+  if(kw>=1)return{score:0.75,cls:'txt-ok',lbl:`Aceptable`};
+  return{score:0.5,cls:'txt-low',lbl:`Básico — usa: natural, racional, irracional, exponente…`};
+}
+
+// ── CANVAS √2 ────────────────────────────────────────────────────────
+function dibujarRaiz2(){
+  const cv=document.getElementById('cvs-raiz');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height,s=100,ox=(W-s)/2-20,oy=(H-s)/2+10;
+  ctx.clearRect(0,0,W,H);
+  // cuadrado
+  ctx.strokeStyle='#2563a8';ctx.lineWidth=2.5;
+  ctx.strokeRect(ox,oy,s,s);
+  // diagonal
+  ctx.beginPath();ctx.moveTo(ox,oy+s);ctx.lineTo(ox+s,oy);
+  ctx.strokeStyle='#5c1a8e';ctx.lineWidth=2.5;ctx.stroke();
+  // ángulo recto
+  ctx.strokeStyle='#888';ctx.lineWidth=1;
+  ctx.strokeRect(ox,oy+s-12,12,12);
+  // etiquetas
+  ctx.fillStyle='#1a3a6b';ctx.font='bold 13px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('1',ox+s/2,oy+s+16);
+  ctx.fillText('1',ox-14,oy+s/2+5);
+  ctx.fillStyle='#5c1a8e';ctx.font='bold 14px Segoe UI,Arial';
+  ctx.save();ctx.translate(ox+s/2+16,oy+s/2-10);ctx.rotate(-0.785);
+  ctx.fillText('√2',0,0);ctx.restore();
+  // punto de Pitágoras
+  ctx.fillStyle='#b82020';ctx.font='bold 11px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('d² = 1² + 1² = 2',ox+s+10,oy+s/2);
+  ctx.fillText('∴ d = √2',ox+s+10,oy+s/2+18);
+  // marca √2 en recta numérica
+  const rx=ox-30,ry=oy+s+35;
+  ctx.strokeStyle='#888';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(rx-10,ry);ctx.lineTo(rx+s+60,ry);ctx.stroke();
+  [0,1,1.414,2].forEach((x,i)=>{
+    const px=rx+x*40;
+    ctx.strokeStyle='#888';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(px,ry-5);ctx.lineTo(px,ry+5);ctx.stroke();
+    ctx.fillStyle=i===2?'#5c1a8e':'#555';
+    ctx.font=i===2?'bold 12px Segoe UI,Arial':'11px Segoe UI,Arial';
+    ctx.textAlign='center';
+    ctx.fillText(i===2?'√2':x,px,ry+17);
+  });
+}
+
+// ── LOGIN ────────────────────────────────────────────────────────────
+function iniciar(){
+  nombre=document.getElementById('inp-nombre').value.trim().toUpperCase();
+  const fb=document.getElementById('fb-login');
+  if(nombre.length<4){fb.textContent='Escribe tu nombre completo.';return;}
+  fb.textContent='';
+  generar();
+  document.getElementById('chip-txt').textContent=nombre;
+  document.getElementById('hdr-chip').textContent=nombre.split(' ')[0];
+  document.getElementById('msg-bienvenida').innerHTML=
+    `Hola, <strong>${nombre.split(' ')[0]}</strong>. Hoy trabajamos la base de <em>toda</em> la matemática que han visto: los números reales y sus familias. `+
+    `Como ya manejan álgebra, Cálculo y Geometría Analítica, no nos vamos a quedar en "¿qué es un número natural?". `+
+    `Vamos a entender <em>por qué</em> √2 es diferente y qué garantizan las propiedades que han usado siempre sin saberlo.<br><br><em>— Prof. Adrián Cruz</em>`;
+  document.getElementById('hdr').style.display='block';
+  ir('s1',0);
+}
+
+// ── GENERAR ──────────────────────────────────────────────────────────
+function generar(){
+  V.b0i=rnd(0,5);
+  V.b1i=rnd(0,5);
+  V.b2i=rnd(0,5);
+  V.b3i=rnd(0,5);
+  V.b5i=rnd(0,5);
+  V.b5v={a:rnd(5,8)*10, b:rnd(3,7), c:[25,50,18,75,32,98][rnd(0,5)]};
+  V.q1i=rnd(0,5);
+  V.q2i=rnd(0,5);
+  V.q3i=rnd(0,5);
+}
+
+// ── NAVEGACIÓN ───────────────────────────────────────────────────────
+function ir(id,paso){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('bwf').style.width=(paso/9*100)+'%';
+  document.getElementById('bwc').textContent=paso;
+  if(id==='s2')cargB0();
+  if(id==='s3')cargB1();
+  if(id==='s4')cargB2();
+  if(id==='s5')cargB3();
+  if(id==='s6'){dibujarRaiz2();cargB4();}
+  if(id==='s7')cargB5();
+  if(id==='s9')cargQuiz();
+  if(id==='s11')mostrarRes();
+}
+
+// ── B0 ───────────────────────────────────────────────────────────────
+function cargB0(){
+  const b=B0_MC[V.b0i];
+  const d=document.getElementById('b0-mc-opts'); d.innerHTML='';
+  b.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='ob';btn.textContent=o;
+    btn.onclick=()=>mcB0(btn,i,b);
+    d.appendChild(btn);
+  });
+}
+function mcB0(btn,i,b){
+  document.querySelectorAll('#b0-mc-opts .ob').forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById('fb-b0mc');
+  if(i===b.ans){
+    btn.classList.add('eok');
+    fb.className='fb ok';fb.textContent=b.fb;
+    b0mcOk=true;
+    document.getElementById('btn-b0').disabled=!(b0txtOk&&b0mcOk);
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er';fb.textContent='Piénsalo: ¿cuál de esos tiene decimales que nunca terminan ni se repiten?';
+    setTimeout(()=>{document.querySelectorAll('#b0-mc-opts .ob').forEach(x=>x.classList.remove('dx','eml'));},2200);
+  }
+}
+function chkB0Txt(){
+  const n=wc('r-b0-txt');updCnt('cnt-b0',n,WM.b0);
+  b0txtOk=n>=WM.b0;
+  document.getElementById('btn-b0').disabled=!(b0txtOk&&b0mcOk);
+}
+
+// ── B1 ───────────────────────────────────────────────────────────────
+function cargB1(){
+  const par=B1_BANK[V.b1i];
+  // B1a
+  document.getElementById('b1a-num').textContent=par.a.n;
+  const da=document.getElementById('b1a-opts');da.innerHTML='';
+  CONJ_OPTS.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='ob';btn.textContent=o;
+    btn.onclick=()=>mcB1x('b1a',btn,i,par.a,'b1b-card');
+    da.appendChild(btn);
+  });
+}
+function mcB1x(id,btn,i,data,nextId){
+  document.querySelectorAll(`#${id}-opts .ob`).forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById(`fb-${id}`);
+  if(i===data.ans){
+    btn.classList.add('eok');
+    fb.className='fb ok';fb.innerHTML='✓ '+data.fb;
+    if(id==='b1a'){
+      b1aOk=true;
+      const par=B1_BANK[V.b1i];
+      document.getElementById('b1b-card').style.display='block';
+      document.getElementById('b1b-num').textContent=par.b.n;
+      const db=document.getElementById('b1b-opts');db.innerHTML='';
+      CONJ_OPTS.forEach((o,i2)=>{
+        const btn2=document.createElement('button');
+        btn2.className='ob';btn2.textContent=o;
+        btn2.onclick=()=>mcB1x('b1b',btn2,i2,par.b,'b1c-card');
+        db.appendChild(btn2);
+      });
+    }
+    if(id==='b1b'){
+      b1bOk=true;
+      document.getElementById('b1c-card').style.display='block';
+    }
+    chkBtn1();
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er';fb.textContent='Revisa el diagrama. Recuerda: ℕ⊂ℤ⊂ℚ. Irracionales están en ℝ pero fuera de ℚ.';
+    setTimeout(()=>{document.querySelectorAll(`#${id}-opts .ob`).forEach(x=>x.classList.remove('dx','eml'));},2200);
+  }
+}
+function chkB1cTxt(){
+  const n=wc('r-b1c');updCnt('cnt-b1c',n,WM.b1c);
+  b1cTxtOk=n>=WM.b1c;
+  chkBtn1();
+}
+function chkBtn1(){
+  document.getElementById('btn-b1').disabled=!(b1aOk&&b1bOk&&b1cTxtOk);
+}
+
+// ── B2 ───────────────────────────────────────────────────────────────
+function cargB2(){
+  const s=B2_BANK[V.b2i];
+  document.getElementById('b2a-expr').textContent=s.a.expr;
+  mcProp('b2a',s.a);
+}
+function mcProp(id,data){
+  const opts=[...PROP_OPTS].sort(()=>Math.random()-.5);
+  const d=document.getElementById(`${id}-opts`);d.innerHTML='';
+  opts.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='ob';btn.textContent=o;
+    btn.onclick=()=>mcB2x(id,btn,o,data);
+    d.appendChild(btn);
+  });
+}
+function mcB2x(id,btn,osel,data){
+  document.querySelectorAll(`#${id}-opts .ob`).forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById(`fb-${id}`);
+  const ok=osel.toLowerCase().includes(data.prop.toLowerCase().split(' ')[0].toLowerCase());
+  if(ok){
+    btn.classList.add('eok');
+    fb.className='fb ok';fb.innerHTML=data.fb;
+    if(id==='b2a'){
+      b2aOk=true;
+      const s=B2_BANK[V.b2i];
+      document.getElementById('b2b-card').style.display='block';
+      document.getElementById('b2b-expr').textContent=s.b.expr;
+      mcProp('b2b',s.b);
+    }
+    if(id==='b2b'){
+      b2bOk=true;
+      const s=B2_BANK[V.b2i];
+      document.getElementById('b2c-card').style.display='block';
+      document.getElementById('b2c-expr').textContent=`${s.c_a} · (${s.c_b} + ${s.c_c})`;
+      document.getElementById('h-b2c').textContent=s.h;
+    }
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er';fb.textContent=`No es esa. Pista: "${data.prop}" — revisa la tabla de propiedades.`;
+    setTimeout(()=>{document.querySelectorAll(`#${id}-opts .ob`).forEach(x=>x.classList.remove('dx','eml'));},2200);
+  }
+}
+function chkB2c(){
+  const s=B2_BANK[V.b2i];
+  const ans=s.c_a*s.c_b+s.c_a*s.c_c;
+  const v=parseFloat(document.getElementById('inp-b2c').value);
+  const fb=document.getElementById('fb-b2c');
+  AT.b2c++;
+  if(!isNaN(v)&&v===ans){
+    fb.className='fb ok';fb.textContent=`✓ Correcto. ${s.c_a}·${s.c_b}+${s.c_a}·${s.c_c} = ${s.c_a*s.c_b}+${s.c_a*s.c_c} = ${ans}`;
+    document.getElementById('inp-b2c').disabled=true;
+    b2cOk=true;
+    document.getElementById('btn-b2').disabled=false;
+  } else if(AT.b2c>=3){
+    SP.b2c=true;
+    fb.className='fb in';
+    fb.innerHTML=`⚠️ Intentos agotados. Resultado: <strong>${ans}</strong>. Registrado como revelado.`;
+    document.getElementById('inp-b2c').disabled=true;
+    document.getElementById('btn-b2').disabled=false;
+  } else {
+    fb.className='fb er';fb.textContent=`Intento ${AT.b2c}/3. Distribuye: ${s.c_a}·${s.c_b} = ${s.c_a*s.c_b}, luego ${s.c_a}·${s.c_c} = ${s.c_a*s.c_c}, suma.`;
+  }
+}
+
+// ── B3 ───────────────────────────────────────────────────────────────
+function cargB3(){
+  const s=B3_BANK[V.b3i];
+  document.getElementById('b3a-expr').textContent=s.a.expr;
+  document.getElementById('h-b3a').textContent=s.a.hint;
+  document.getElementById('b3b-expr').textContent=''; // cargado después
+  document.getElementById('b3c-expr').textContent='';
+}
+function chkB3a(){
+  const s=B3_BANK[V.b3i];
+  const v=parseFloat(document.getElementById('inp-b3a').value);
+  const fb=document.getElementById('fb-b3a'); AT.b3a++;
+  if(!isNaN(v)&&v===s.a.ans){
+    fb.className='fb ok';fb.textContent=`✓ Correcto: ${s.a.hint}`;
+    document.getElementById('inp-b3a').disabled=true;
+    b3aOk=true;
+    document.getElementById('b3b-card').style.display='block';
+    document.getElementById('b3b-expr').textContent=s.b.expr;
+    document.getElementById('h-b3b').textContent=s.b.hint;
+  } else if(AT.b3a>=3){
+    SP.b3a=true;fb.className='fb in';
+    fb.innerHTML=`⚠️ Intentos agotados. Respuesta: <strong>${s.a.ans}</strong>. ${s.a.hint}`;
+    document.getElementById('inp-b3a').disabled=true;
+    b3aOk=true;
+    document.getElementById('b3b-card').style.display='block';
+    document.getElementById('b3b-expr').textContent=s.b.expr;
+    document.getElementById('h-b3b').textContent=s.b.hint;
+  } else {
+    fb.className='fb er';fb.textContent=`Intento ${AT.b3a}/3. ${s.a.hint.split('.')[0]}`;
+  }
+}
+function chkB3b(){
+  const s=B3_BANK[V.b3i];
+  const v=parseFloat(document.getElementById('inp-b3b').value);
+  const fb=document.getElementById('fb-b3b'); AT.b3b++;
+  if(!isNaN(v)&&v===s.b.ans){
+    fb.className='fb ok';fb.textContent=`✓ Correcto: ${s.b.hint}`;
+    document.getElementById('inp-b3b').disabled=true;
+    b3bOk=true;
+    document.getElementById('b3c-card').style.display='block';
+    document.getElementById('b3c-expr').textContent=s.c.expr;
+    document.getElementById('h-b3c').textContent=s.c.hint;
+  } else if(AT.b3b>=3){
+    SP.b3b=true;fb.className='fb in';
+    fb.innerHTML=`⚠️ Intentos agotados. Respuesta: <strong>${s.b.ans}</strong>. ${s.b.hint}`;
+    document.getElementById('inp-b3b').disabled=true;
+    b3bOk=true;
+    document.getElementById('b3c-card').style.display='block';
+    document.getElementById('b3c-expr').textContent=s.c.expr;
+    document.getElementById('h-b3c').textContent=s.c.hint;
+  } else {
+    fb.className='fb er';fb.textContent=`Intento ${AT.b3b}/3. ${s.b.hint}`;
+  }
+}
+function chkB3c(){
+  const s=B3_BANK[V.b3i];
+  const v=parseFloat(document.getElementById('inp-b3c').value);
+  const fb=document.getElementById('fb-b3c'); AT.b3c++;
+  if(!isNaN(v)&&Math.abs(v-s.c.ans)<0.002){
+    fb.className='fb ok';fb.textContent=`✓ Correcto: ${s.c.hint}`;
+    document.getElementById('inp-b3c').disabled=true;
+    b3cOk=true;
+    document.getElementById('btn-b3').disabled=false;
+  } else if(AT.b3c>=3){
+    SP.b3c=true;fb.className='fb in';
+    fb.innerHTML=`⚠️ Intentos agotados. Respuesta: <strong>${s.c.ans}</strong>. ${s.c.hint}`;
+    document.getElementById('inp-b3c').disabled=true;
+    document.getElementById('btn-b3').disabled=false;
+  } else {
+    fb.className='fb er';fb.textContent=`Intento ${AT.b3c}/3. ${s.c.hint}`;
+  }
+}
+
+// ── B4 ───────────────────────────────────────────────────────────────
+function cargB4(){}
+function chkB4a(){
+  const v=document.getElementById('inp-b4a').value.replace(',','.');
+  const fb=document.getElementById('fb-b4a');
+  const ok=v.startsWith('1.41')||v.startsWith('1,41');
+  if(ok){
+    fb.className='fb ok';fb.innerHTML='✓ Correcto. √2 ≈ 1.41421356… Los decimales nunca terminan ni se repiten.';
+    document.getElementById('inp-b4a').disabled=true;
+    b4aOk=true;
+    // B4b
+    document.getElementById('b4b-card').style.display='block';
+    const d=document.getElementById('b4b-opts');d.innerHTML='';
+    const opts=[
+      {t:'Sí, 7/5 = √2 exactamente',ok:false},
+      {t:'No, 7/5 es solo una aproximación — √2 es irracional',ok:true},
+      {t:'Depende del contexto del problema',ok:false}
+    ];
+    opts.forEach(o=>{
+      const btn=document.createElement('button');btn.className='ob';btn.textContent=o.t;
+      btn.onclick=()=>mcB4b(btn,o.ok);d.appendChild(btn);
+    });
+  } else {
+    fb.className='fb er';fb.textContent='Revisa: √2 comienza con 1.414… Usa la calculadora del celular.';
+  }
+}
+function mcB4b(btn,ok){
+  document.querySelectorAll('#b4b-opts .ob').forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById('fb-b4b');
+  if(ok){
+    btn.classList.add('eok');
+    fb.className='fb ok';fb.textContent='✓ Exacto. 7/5 = 1.4 ≠ 1.41421… La fracción es aproximación, no igualdad.';
+    b4bOk=true;
+    document.getElementById('b4c-card').style.display='block';
+    document.getElementById('btn-b4').disabled=false;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er';fb.textContent='Compara: 7/5 = 1.40000 vs √2 = 1.41421… No son iguales.';
+    setTimeout(()=>{document.querySelectorAll('#b4b-opts .ob').forEach(x=>x.classList.remove('dx','eml'));},2200);
+  }
+}
+function chkB4cTxt(){
+  const n=wc('r-b4c');updCnt('cnt-b4c',n,WM.b4c);
+  b4cTxtOk=n>=WM.b4c;
+  // El botón ya se desbloqueó con B4b; el texto es complementario pero lo validamos para el score
+}
+
+// ── B5 ───────────────────────────────────────────────────────────────
+function cargB5(){
+  const gen=B5_BANK[V.b5i](V.b5v);V.b5gen=gen;
+  document.getElementById('b5-ctx').innerHTML=gen.ctx;
+  document.getElementById('b5-num-disp').textContent=gen.numDisp;
+  const d=document.getElementById('b5-mc-opts');d.innerHTML='';
+  gen.cnjOpts.forEach((o,i)=>{
+    const btn=document.createElement('button');btn.className='ob';btn.textContent=o;
+    btn.onclick=()=>mcB5mc(btn,i,gen);d.appendChild(btn);
+  });
+}
+function mcB5mc(btn,i,gen){
+  document.querySelectorAll('#b5-mc-opts .ob').forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById('fb-b5mc');
+  if(i===gen.ansOpts){
+    btn.classList.add('eok');fb.className='fb ok';fb.textContent=gen.cnjFb;
+    b5mcOk=true;
+    document.getElementById('b5-calc-wrap').style.display='block';
+    document.getElementById('b5-expr-disp').textContent=gen.exprCalc;
+    document.getElementById('h-b5').textContent=gen.hint();
+  } else {
+    btn.classList.add('eml');fb.className='fb er';fb.textContent='Revisa el número del problema: ¿tiene decimales infinitos? ¿es fracción exacta?';
+    setTimeout(()=>{document.querySelectorAll('#b5-mc-opts .ob').forEach(x=>x.classList.remove('dx','eml'));},2200);
+  }
+}
+function chkB5(){
+  const gen=V.b5gen;
+  const v=parseFloat(document.getElementById('inp-b5').value);
+  const ans=gen.fn();const fb=document.getElementById('fb-b5'); AT.b5++;
+  if(!isNaN(v)&&Math.abs(v-ans)<0.01){
+    fb.className='fb ok';fb.textContent=`✓ Correcto. Resultado = ${ans}`;
+    document.getElementById('inp-b5').disabled=true;
+    b5calcOk=true;
+    document.getElementById('b5-txt-wrap').style.display='block';
+    chkB5Txt();
+  } else if(AT.b5>=3){
+    SP.b5=true;fb.className='fb in';
+    fb.innerHTML=`⚠️ Intentos agotados. Resultado: <strong>${ans}</strong>. ${gen.hint()}`;
+    document.getElementById('inp-b5').disabled=true;
+    document.getElementById('b5-txt-wrap').style.display='block';
+    b5calcOk=true;chkB5Txt();
+  } else {
+    fb.className='fb er';fb.textContent=`Intento ${AT.b5}/3. Usa la pista.`;
+  }
+}
+function chkB5Txt(){
+  const n=wc('r-b5-int');updCnt('cnt-b5',n,WM.b5);
+  b5txtOk=n>=WM.b5;
+  document.getElementById('btn-b5').disabled=!b5txtOk;
+}
+
+// ── FICHA ────────────────────────────────────────────────────────────
+function checkFicha(){
+  document.getElementById('btn-b6').disabled=!document.getElementById('check-ficha').checked;
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────────
+function cargQuiz(){
+  quizGuardados=0;QR=[null,null,null,null];q1Sel=-1;
+  document.getElementById('quiz-cnt').textContent='0';
+  // Q1
+  const q1=Q1_BANK[V.q1i];QB[0]=q1;
+  document.getElementById('q1-num').textContent=q1.n;
+  const dq=document.getElementById('q1-opts');dq.innerHTML='';
+  CONJ_OPTS.forEach((o,i)=>{
+    const btn=document.createElement('button');btn.className='ob';btn.textContent=o;
+    btn.onclick=()=>selQ1(i,btn);dq.appendChild(btn);
+  });
+  // Q2
+  const q2=Q2_BANK[V.q2i];QB[1]=q2;QM[1]=q2.fn();
+  document.getElementById('q2-expr').textContent=q2.expr;
+  // Q3
+  const q3=Q3_BANK[V.q3i];QB[2]=q3;QM[2]=q3.fn();
+  document.getElementById('q3-expr').textContent=q3.expr;
+}
+let q1Sel=-1;
+function selQ1(i,btn){
+  q1Sel=i;
+  document.querySelectorAll('#q1-opts .ob').forEach(x=>x.classList.remove('eok'));
+  btn.classList.add('eok');
+  document.getElementById('btn-q1').style.display='inline-block';
+}
+function guardarQ(n){
+  if(n===1){
+    if(q1Sel<0)return;
+    QR[0]=q1Sel;
+    document.querySelectorAll('#q1-opts .ob').forEach(x=>{x.disabled=true;x.style.pointerEvents='none'});
+    document.getElementById('btn-q1').style.display='none';
+    document.getElementById('q1-sel').style.display='block';
+  } else if(n===2){
+    const v=document.getElementById('inp-q2').value;if(!v.trim())return;
+    QR[1]=parseFloat(v);document.getElementById('inp-q2').disabled=true;
+    document.getElementById('btn-q2').disabled=true;document.getElementById('conf-q2').style.display='block';
+  } else if(n===3){
+    const v=document.getElementById('inp-q3').value;if(!v.trim())return;
+    QR[2]=parseFloat(v);document.getElementById('inp-q3').disabled=true;
+    document.getElementById('btn-q3').disabled=true;document.getElementById('conf-q3').style.display='block';
+  } else if(n===4){
+    const v=document.getElementById('inp-q4').value.trim();if(!v)return;
+    QR[3]=v;document.getElementById('inp-q4').disabled=true;
+    document.getElementById('btn-q4').disabled=true;document.getElementById('conf-q4').style.display='block';
+  }
+  quizGuardados++;
+  document.getElementById('quiz-cnt').textContent=quizGuardados;
+  if(quizGuardados>=4)document.getElementById('btn-quiz').disabled=false;
+}
+function chkQ4Txt(){
+  const n=wc('inp-q4');updCnt('cnt-q4',n,WM.q4);
+  document.getElementById('btn-q4').disabled=n<WM.q4;
+}
+
+// ── SÍNTESIS ─────────────────────────────────────────────────────────
+function chkSint(){
+  const w1=wc('r-sint-1'),w2=wc('r-sint-2');
+  updCnt('cnt-sint1',w1,WM.sint1);updCnt('cnt-sint2',w2,WM.sint2);
+  document.getElementById('btn-sint').disabled=!(w1>=WM.sint1&&w2>=WM.sint2);
+}
+
+// ── RESULTADOS ───────────────────────────────────────────────────────
+function mostrarRes(){
+  const q1=QB[0];const q1ok=(QR[0]===Q1_BANK.findIndex(x=>x.n===q1.n)?true:
+    QR[0]===CONJ_OPTS.indexOf(q1.ans>=0?CONJ_OPTS[q1.ans]:CONJ_OPTS[0])||
+    (()=>{const idx=CONJ_OPTS.indexOf(q1.ans>=0?CONJ_OPTS[q1.ans]:'');return QR[0]===q1.ans;})()
+  );
+  // Simpler: q1 ans is index into CONJ_OPTS
+  const q1Correct=QR[0]===Q1_BANK[V.q1i].ans;
+  const q2ok=QR[1]!==null&&Math.abs(QR[1]-QM[1])<0.5;
+  const q3ok=QR[2]!==null&&Math.abs(QR[2]-QM[2])<0.05;
+  const txt4=QR[3]||'';
+  const ev4=evaluarTexto(txt4,WM.q4);
+
+  let correctas=0;
+  if(q1Correct)correctas++;
+  if(q2ok)correctas++;
+  if(q3ok)correctas++;
+  if(ev4.score>=0.75)correctas++;
+
+  const meta=correctas>=3;
+  const mc=document.getElementById('marc-card');
+  mc.style.background=meta?'#1b6b35':'var(--mo)';
+  document.getElementById('marc-nombre').textContent=nombre;
+  document.getElementById('marc-ico').textContent=meta?'🏆':'📊';
+  document.getElementById('marc-pts').textContent=`${correctas} / 4`;
+  document.getElementById('marc-lbl').innerHTML=meta
+    ?'✓ Meta alcanzada. Muestra al Prof. Cruz.'
+    :`${3-correctas} más para la meta. Puedes reintentar.`;
+  document.getElementById('wrap-reintento').style.display=meta?'none':'block';
+
+  const q2b=QB[1];const q3b=QB[2];
+  const items=[
+    {lbl:'Q1 — Clasificación de número',tipo:'MC',ok:q1Correct,
+     resp:QR[0]!==null?CONJ_OPTS[QR[0]]:'—',esp:CONJ_OPTS[Q1_BANK[V.q1i].ans],
+     proc:`Número: ${Q1_BANK[V.q1i].n}<br>${Q1_BANK[V.q1i].fb}`},
+    {lbl:'Q2 — Potencia',tipo:'Cálculo',ok:q2ok,resp:QR[1]!==null?QR[1]:'—',esp:QM[1],
+     proc:`${q2b.expr}<br>${q2b.proc}<br>Respuesta: <span class="ans-ok">${QM[1]}</span>`},
+    {lbl:'Q3 — Radicación combinada',tipo:'Cálculo',ok:q3ok,resp:QR[2]!==null?QR[2]:'—',esp:QM[2],
+     proc:`${q3b.expr}<br>${q3b.proc}<br>Respuesta: <span class="ans-ok">${QM[2]}</span>`},
+    {lbl:'Q4 — Explicación escrita',tipo:'Texto',ok:ev4.score>=0.75,resp:txt4||'—',
+     proc:`Evaluación: <span class="txt-badge ${ev4.cls}">${ev4.lbl}</span>`}
+  ];
+
+  let html='';
+  items.forEach((it,i)=>{
+    html+=`<div class="q-item">
+      <div class="q-head ${it.ok?'q-head-ok':'q-head-er'}">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:16px;font-weight:800">${it.ok?'✅':'❌'} Ej. ${i+1}</span>
+          <span style="font-size:10px;background:var(--mo);color:#fff;border-radius:5px;padding:2px 7px;font-weight:700">${it.tipo}</span>
+        </div>
+        <span style="font-weight:700;font-size:14px">${it.ok?'Correcto':'Incorrecto'}</span>
+      </div>
+      <div class="q-body">
+        <p style="font-size:13px;font-weight:700;margin-bottom:6px">${it.lbl}</p>
+        <div>
+          <span class="chip-resp ${it.ok?'chip-ok':'chip-er'}">Tu resp.: ${it.resp}</span>
+          ${it.esp!==undefined?`<span class="chip-resp chip-eu">Correcto: ${it.esp}</span>`:''}
+        </div>
+        <div class="proc-box"><h4>Procedimiento / Clave</h4>${it.proc}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('detalle-quiz').innerHTML=html;
+  document.getElementById('res-sint1').textContent=document.getElementById('r-sint-1').value.trim()||'(no respondida)';
+  document.getElementById('res-sint2').textContent=document.getElementById('r-sint-2').value.trim()||'(no respondida)';
+
+  const fe=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  const ho=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const chips=[q1Correct,q2ok,q3ok,ev4.score>=0.75].map((ok,i)=>
+    `<span class="pq ${ok?'pq-ok':'pq-er'}">E${i+1}${ok?'✓':'✗'}</span>`).join(' ');
+  const cod=`S4-${correctas}/4-INT${intento}`;
+  document.getElementById('prof-strip').innerHTML=`
+    <div class="mini-title">── REGISTRO DOCENTE TSM III S04 ──</div>
+    <div style="font-size:15px;font-weight:700">${nombre}</div>
+    <div style="font-size:13px;opacity:.7">${fe} ${ho} · Intento ${intento}</div>
+    <div style="font-size:24px;font-weight:900;margin:6px 0">${correctas}/4 &nbsp;${meta?'✓ META':'✗ sin meta'}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">${chips}</div>
+    <div style="font-size:12px;opacity:.6;font-family:'Courier New',monospace">${cod}</div>`;
+
+  const txt=`════════════════════════════\nNÚMEROS REALES · TSM III · G658\n════════════════════════════\nAlumno : ${nombre}\nFecha  : ${fe} ${ho}\nIntento: ${intento}\n${correctas}/4 ${meta?'✓ META':'✗ sin meta'}\n\nE1(MC):${q1Correct?'✓':'✗'} E2(pot):${q2ok?'✓':'✗'} E3(rad):${q3ok?'✓':'✗'} E4(txt):${ev4.score>=0.75?'✓':'✗'}\n\nReflexión:\n${document.getElementById('r-sint-1').value.trim()}\n════════════════════════════\n${cod}\n════════════════════════════`;
+  document.getElementById('copy-area').textContent=txt;
+  window._rt=txt;
+}
+
+function copiarRes(){
+  const t=window._rt||'';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(t).then(()=>{
+      document.getElementById('fb-copia').textContent='✓ Copiado — pégalo en Classroom';
+      document.getElementById('btn-copiar').textContent='✓ Copiado';
+    });
+  } else {
+    const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');document.getElementById('fb-copia').textContent='✓ Copiado';}
+    catch{document.getElementById('copy-area').style.display='block';}
+    document.body.removeChild(ta);
+  }
+}
+
+function reiniciar(){
+  intento++;
+  quizGuardados=0;QR=[null,null,null,null];q1Sel=-1;
+  b1aOk=b1bOk=b1cTxtOk=b2aOk=b2bOk=b2cOk=b3aOk=b3bOk=b3cOk=false;
+  b4aOk=b4bOk=b4cTxtOk=b5mcOk=b5calcOk=b5txtOk=b0mcOk=b0txtOk=false;
+  AT={b2c:0,b3a:0,b3b:0,b3c:0,b5:0};SP={b2c:false,b3a:false,b3b:false,b3c:false,b5:false};
+  ['inp-b2c','inp-b3a','inp-b3b','inp-b3c','inp-b4a','inp-b5'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}
+  });
+  ['fb-b0mc','fb-b1a','fb-b1b','fb-b2a','fb-b2b','fb-b2c','fb-b3a','fb-b3b','fb-b3c','fb-b4a','fb-b4b','fb-b5mc','fb-b5'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.className='fb';
+  });
+  ['b1b-card','b1c-card','b2b-card','b2c-card','b3b-card','b3c-card','b4b-card','b4c-card','b5-calc-wrap','b5-txt-wrap'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+  ['btn-b0','btn-b1','btn-b2','btn-b3','btn-b4','btn-b5','btn-b6','btn-quiz'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.disabled=true;
+  });
+  document.getElementById('check-ficha').checked=false;
+  ['r-b0-txt','r-b1c','r-b4c','r-b5-int','r-sint-1','r-sint-2','inp-q4'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.value='';el.disabled=false;}
+  });
+  generar();
+  ir('s2',1);
+}
+
+// ── PANEL DOCENTE ────────────────────────────────────────────────────
+let _t=0,_tt=0;
+function tapSym(){
+  const now=Date.now();
+  if(now-_tt>3000)_t=0;
+  _tt=now;_t++;
+  if(_t>=5){_t=0;abrirPin();}
+}
+function abrirPin(){
+  document.getElementById('pin-modal').classList.add('show');
+  document.getElementById('pin-inp').value='';
+  document.getElementById('pin-fb').textContent='';
+  setTimeout(()=>document.getElementById('pin-inp').focus(),100);
+}
+function cerrarPin(){document.getElementById('pin-modal').classList.remove('show');}
+function chkPin(v){
+  if(v==='890'){cerrarPin();document.body.classList.add('teacher-mode');abrirProf();}
+  else if(v.length>=3)document.getElementById('pin-fb').textContent='Código incorrecto.';
+}
+function abrirProf(){
+  document.getElementById('prof-overlay').style.display='block';
+  document.getElementById('btn-xp').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function cerrarProf(){
+  document.getElementById('prof-overlay').style.display='none';
+  document.getElementById('btn-xp').style.display='none';
+  document.body.style.overflow='';
+}
+function profSimular(){document.getElementById('prof-sim-wrap').style.display='block';}
+function profEntrar(){
+  const nm=document.getElementById('prof-sim-nom').value.trim().toUpperCase()||'DOCENTE DEMO';
+  cerrarProf();document.getElementById('inp-nombre').value=nm;iniciar();
+}
+function profVerMuestra(){
+  cerrarProf();
+  nombre='MUESTRA DOCENTE';
+  document.getElementById('chip-txt').textContent=nombre;
+  generar();
+  QR[0]=Q1_BANK[V.q1i].ans;
+  QR[1]=Q2_BANK[V.q2i].fn();QM[1]=QR[1];
+  QR[2]=Q3_BANK[V.q3i].fn();QM[2]=QR[2];
+  QR[3]='En la CDMX uso números naturales para contar las estaciones del metro racional al calcular el precio por km como fracción y los irracionales aparecen cuando calculo la diagonal de un cuadrado por el teorema de Pitágoras';
+  QB[0]=Q1_BANK[V.q1i];QB[1]=Q2_BANK[V.q2i];QB[2]=Q3_BANK[V.q3i];
+  document.getElementById('r-sint-1').value='En la CDMX los números irracionales aparecen cuando calculas la distancia diagonal entre colonias usando el teorema de Pitágoras ya que √2 tiene decimales infinitos no periódicos y no puede representarse como fracción exacta.';
+  document.getElementById('r-sint-2').value='Primero resolvería el √4 que es 2 luego el 2² que da 4 y después los paréntesis de adentro hacia afuera.';
+  document.getElementById('hdr').style.display='block';
+  ir('s11',9);
+}
+</script>
+</body>
+</html>

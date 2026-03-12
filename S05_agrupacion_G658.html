@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>S05 · Signos de Agrupación · TSM III · G658</title>
+<style>
+:root{
+  --mo:#5c1a8e;--mo2:#8b3fc8;--mo3:#f0e6fa;
+  --az:#1a3a6b;--az2:#2563a8;--az3:#e6f0fb;
+  --ve:#1b6b35;--ve2:#27a74f;--ve3:#e6f7ed;
+  --ro:#b82020;--ro3:#fce8e8;
+  --am:#c06000;--am3:#fff2e0;
+  --gr:#f0f2f8;--gr2:#dde2ee;--bl:#fff;
+  --tx:#131828;--sh:0 2px 14px rgba(0,0,0,.11);
+  --r:12px
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gr);color:var(--tx);font-size:15px;min-height:100vh;
+  -webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:200;background:var(--mo);padding:8px 15px 6px;display:none}
+#hdr-tag{color:rgba(255,255,255,.55);font-size:11px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+#hdr-tit{color:#fff;font-size:14px;font-weight:800}
+#hdr-chip{background:rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;float:right;margin-top:-18px}
+#bwt{background:rgba(255,255,255,.15);height:5px}
+#bwf{background:linear-gradient(90deg,#d4a8ff,#fff);height:5px;width:0%;transition:width .5s}
+#bwn{color:rgba(255,255,255,.6);font-size:11px;text-align:right;margin-top:2px}
+
+/* SECCIONES */
+.sec{display:none;max-width:600px;margin:0 auto;padding:14px 12px 40px;animation:fi .35s ease}
+.sec.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* TARJETAS */
+.card{background:var(--bl);border-radius:var(--r);padding:17px 15px;box-shadow:var(--sh);margin-bottom:12px}
+.cmo{background:var(--mo);color:#fff}
+.cmo2{background:var(--mo3);border-left:4px solid var(--mo2)}
+.caz{background:var(--az3);border-left:4px solid var(--az2)}
+.cve{background:var(--ve3);border-left:4px solid var(--ve2)}
+.cam{background:var(--am3);border-left:4px solid var(--am)}
+.cgr{background:var(--gr2)}
+.crojo{background:var(--ro3);border-left:4px solid var(--ro)}
+
+/* TIPOGRAFÍA */
+h3{font-size:16px;font-weight:800;margin-bottom:7px;color:var(--mo)}
+h4{font-size:14px;font-weight:700;margin-bottom:5px}
+p{line-height:1.65;margin-bottom:7px}
+.tit{font-size:20px;font-weight:800;color:var(--mo);margin-bottom:3px}
+.tag{display:inline-block;background:var(--mo);color:#fff;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700;margin-bottom:7px;letter-spacing:.5px}
+.sep{height:1px;background:var(--gr2);margin:12px 0}
+.nc{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--mo);color:#fff;font-weight:800;font-size:12px;margin-right:6px;flex-shrink:0}
+
+/* FRACCIONES VERTICALES */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;margin:0 2px;font-size:.88em}
+.frac .num{border-bottom:2px solid currentColor;padding:1px 4px;text-align:center;min-width:12px}
+.frac .den{padding:1px 4px;text-align:center}
+.frm{background:var(--mo);color:#fff;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:700;text-align:center;margin:8px 0;display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;line-height:2.1}
+.frm .frac .num,.frm .frac .den{color:#fff}
+.frm .frac .num{border-color:#fff}
+.frm-az{background:var(--az2)}
+
+/* EXPRESIONES MATEMÁTICAS */
+.expr{background:var(--gr);border:1.5px solid var(--gr2);border-radius:9px;padding:10px 14px;font-size:16px;font-weight:700;font-family:'Courier New',monospace;text-align:center;margin:8px 0;letter-spacing:.3px;line-height:2}
+.expr-viral{background:var(--mo);color:#fff;border-radius:10px;padding:12px 16px;font-size:22px;font-weight:900;font-family:'Courier New',monospace;text-align:center;margin:10px 0;letter-spacing:1px}
+.paso-box{background:var(--gr);border-radius:8px;padding:8px 12px;margin:5px 0;font-size:13px;line-height:1.7}
+.paso-box strong{color:var(--mo)}
+
+/* INPUTS */
+input[type=text],input[type=number],textarea{width:100%;border:2px solid var(--gr2);border-radius:10px;padding:10px 12px;font-size:15px;font-family:inherit;background:var(--gr);transition:border .2s;-webkit-appearance:none;-webkit-user-select:text!important;user-select:text!important}
+input:focus,textarea:focus{outline:none;border-color:var(--mo2);background:#fff}
+input:disabled,textarea:disabled{background:var(--gr2);color:#777;cursor:not-allowed}
+textarea{resize:vertical;min-height:85px}
+
+/* BOTONES */
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:9px;transition:transform .15s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--mo);color:#fff;box-shadow:0 4px 14px rgba(92,26,142,.3)}
+.bp:disabled{background:#c4a0e0;box-shadow:none;cursor:not-allowed;transform:none}
+.baz{background:var(--az2);color:#fff}
+.bve{background:var(--ve2);color:#fff}
+.bsm{display:inline-block;width:auto;padding:7px 13px;font-size:13px}
+.skip-btn{display:none;background:transparent;border:2px dashed #999;color:#777;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;width:100%;margin-top:6px}
+.teacher-mode .skip-btn{display:block}
+
+/* OPCIONES MC */
+.ob{display:block;width:100%;text-align:left;background:var(--bl);border:2px solid var(--gr2);border-radius:10px;padding:11px 13px;margin-bottom:7px;cursor:pointer;font-size:14px;font-family:inherit;transition:border .15s;line-height:1.4}
+.ob:hover{border-color:var(--mo2);background:var(--mo3)}
+.ob.eok{border-color:var(--ve2);background:var(--ve3);color:var(--ve);pointer-events:none;font-weight:700}
+.ob.eml{border-color:var(--ro);background:var(--ro3);color:var(--ro);pointer-events:none}
+.ob.dx{opacity:.45;pointer-events:none}
+
+/* FEEDBACK */
+.fb{border-radius:10px;padding:11px 13px;margin-top:7px;font-size:14px;display:none;line-height:1.55}
+.fb.ok{display:block;background:var(--ve3);border-left:4px solid var(--ve2);color:#1a5c30}
+.fb.er{display:block;background:var(--ro3);border-left:4px solid var(--ro);color:#8a1515}
+.fb.in{display:block;background:var(--mo3);border-left:4px solid var(--mo2);color:#4a1a7a}
+
+/* PISTAS */
+.pb{background:none;border:1px dashed var(--am);color:#7a4000;border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;margin-top:5px;font-family:inherit}
+.pbox{display:none;background:var(--am3);border-radius:8px;padding:9px 12px;margin-top:5px;font-size:13px;color:#7a4000;line-height:1.7}
+
+/* PRÁCTICA */
+.prac-ind{background:var(--gr2);border-radius:10px;padding:7px 14px;font-size:13px;color:#555;text-align:center;margin-bottom:10px}
+
+/* QUIZ ITEMS */
+.q-item{border-radius:12px;border:2px solid var(--gr2);margin-bottom:11px;overflow:hidden}
+.q-head{padding:9px 13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px}
+.q-head-ok{background:var(--ve3);border-bottom:2px solid var(--ve2)}
+.q-head-er{background:var(--ro3);border-bottom:2px solid var(--ro)}
+.q-body{padding:11px 13px}
+.chip-resp{display:inline-flex;align-items:center;gap:5px;border-radius:18px;padding:4px 12px;font-size:13px;font-weight:700;margin:4px 4px 0 0}
+.chip-ok{background:var(--ve3);color:var(--ve);border:2px solid var(--ve2)}
+.chip-er{background:var(--ro3);color:var(--ro);border:2px solid var(--ro)}
+.chip-eu{background:var(--gr2);color:#555;border:2px solid var(--gr2)}
+.proc-box{background:var(--gr);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;line-height:1.9}
+.proc-box h4{font-size:11px;color:var(--mo);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.ans-ok{color:var(--ve);font-weight:800}
+
+/* TIRA DOCENTE */
+.prof-strip{background:var(--az);color:#fff;border-radius:12px;padding:14px 16px;margin-top:10px}
+.mini-title{font-size:10px;letter-spacing:2px;opacity:.6;margin-bottom:4px}
+.pq{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:24px;border-radius:6px;font-size:11px;font-weight:700;padding:0 5px}
+.pq-ok{background:var(--ve2);color:#fff}
+.pq-er{background:var(--ro);color:#fff}
+.pq-eu{background:rgba(255,255,255,.2);color:rgba(255,255,255,.7)}
+
+/* FICHA CUADERNO */
+.cua-card{background:var(--bl);border-radius:var(--r);padding:17px 15px;box-shadow:var(--sh);margin-bottom:12px;border:2px dashed var(--mo2)}
+.regla-box{background:var(--mo3);border-radius:10px;padding:12px 14px;margin:6px 0}
+.regla-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:14px}
+.regla-sym{font-size:20px;width:28px;flex-shrink:0;text-align:center}
+.regla-txt{line-height:1.6}
+.regla-txt strong{color:var(--mo)}
+
+/* CONTADORES */
+.cnt-txt{font-size:12px;color:#aaa;text-align:right;margin-top:3px}
+
+/* TEXTO EVAL BADGE */
+.txt-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:6px}
+.txt-full{background:var(--ve3);color:var(--ve)}
+.txt-ok{background:var(--az3);color:var(--az2)}
+.txt-low{background:var(--am3);color:var(--am)}
+.txt-zero{background:var(--ro3);color:var(--ro)}
+
+/* BARRA GRADO */
+.grade-box{text-align:center;padding:22px 16px;border-radius:12px;margin-bottom:12px}
+.grade-num{font-size:46px;font-weight:900;line-height:1}
+.grade-lbl{font-size:14px;font-weight:700;margin-top:5px;opacity:.85}
+
+/* PIN MODAL */
+#pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:8000;align-items:center;justify-content:center}
+#pin-modal.show{display:flex}
+#pin-box{background:#fff;border-radius:16px;padding:26px 22px;max-width:290px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+#pin-inp{border:2px solid var(--gr2);border-radius:10px;padding:10px;font-size:22px;text-align:center;letter-spacing:10px;width:100%;margin:10px 0;font-family:inherit;-webkit-appearance:none}
+#pin-inp:focus{outline:none;border-color:var(--az2)}
+
+/* PANEL DOCENTE */
+#prof-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,30,.94);z-index:9000;overflow-y:auto}
+#prof-panel{max-width:620px;margin:18px auto;padding:14px}
+.pcrd{background:#fff;border-radius:14px;padding:15px 14px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.prof-head{background:linear-gradient(135deg,var(--az),var(--mo));color:#fff;border-radius:14px;padding:18px;margin-bottom:12px;text-align:center}
+#btn-xp{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);color:#fff;font-size:20px;cursor:pointer;border-radius:50%;width:40px;height:40px;z-index:9001;font-family:inherit;display:none;line-height:1}
+
+/* MISC */
+#sym{cursor:default;user-select:none;-webkit-user-select:none}
+.copy-area{background:var(--gr);border-radius:10px;padding:11px;font-size:12px;font-family:'Courier New',monospace;white-space:pre-wrap;word-break:break-word;border:1px solid var(--gr2);max-height:170px;overflow-y:auto;line-height:1.5;display:none;margin-top:8px}
+.viral-bando{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.bando-card{flex:1;min-width:120px;border-radius:10px;padding:11px 13px;text-align:center}
+.b-a{background:#fde8e8;border:2px solid var(--ro)}
+.b-b{background:var(--ve3);border:2px solid var(--ve2)}
+.bando-num{font-size:28px;font-weight:900;display:block}
+.bando-lbl{font-size:12px;font-weight:700;margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="hdr">
+  <div id="hdr-chip"></div>
+  <div id="hdr-tag">TSM III · G658 · Sesión 5</div>
+  <div id="hdr-tit">Signos de Agrupación</div>
+  <div id="bwt"><div id="bwf"></div></div>
+  <div id="bwn">Bloque <span id="bwc">0</span> de 9</div>
+</div>
+
+<!-- PIN MODAL -->
+<div id="pin-modal">
+  <div id="pin-box">
+    <div style="font-size:30px">🔑</div>
+    <h3 style="color:var(--az);margin:8px 0 3px">Panel docente</h3>
+    <p style="font-size:13px;color:#666">Código de acceso</p>
+    <input type="password" id="pin-inp" maxlength="6" placeholder="••••" oninput="chkPin(this.value)" autocomplete="off">
+    <div id="pin-fb" style="font-size:13px;color:var(--ro);min-height:15px;margin-top:2px"></div>
+    <button class="btn" style="background:var(--gr2);color:var(--tx);padding:10px;margin-top:7px" onclick="cerrarPin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- PANEL DOCENTE -->
+<div id="prof-overlay">
+  <button id="btn-xp" onclick="cerrarProf()">✕</button>
+  <div id="prof-panel">
+    <div class="prof-head">
+      <div style="font-size:34px">👨‍🏫</div>
+      <h2 style="margin:7px 0 3px">Panel del Profesor</h2>
+      <div style="font-size:13px;opacity:.8">TSM III · S05 · Signos de Agrupación · G658</div>
+    </div>
+    <div class="pcrd">
+      <h3>Acciones rápidas</h3>
+      <div style="display:grid;gap:9px;grid-template-columns:1fr 1fr;margin-top:9px">
+        <button class="btn baz" style="margin:0;font-size:13px" onclick="profSimular()">🧑‍🎓 Simular alumno</button>
+        <button class="btn bp" style="margin:0;font-size:13px" onclick="profVerMuestra()">📊 Ver muestra resultados</button>
+      </div>
+      <div id="prof-sim-wrap" style="display:none;margin-top:10px">
+        <input type="text" id="prof-sim-nom" placeholder="NOMBRE PARA SIMULAR" autocomplete="off" style="margin-bottom:7px">
+        <button class="btn bve" style="margin:0;font-size:13px" onclick="profEntrar()">Entrar como alumno →</button>
+      </div>
+    </div>
+    <div class="pcrd">
+      <h3>📐 Bancos y respuestas clave</h3>
+      <div style="font-size:13px;color:#555;line-height:1.8;margin-top:6px">
+        <strong>B1b (eliminar +):</strong> generado aleatoriamente · respuesta = a+b−c+d<br>
+        <strong>B1c (eliminar −):</strong> generado aleatoriamente · respuesta = a−b+c−d<br>
+        <strong>B2a (doble anidación):</strong> 6 expresiones con x dado<br>
+        <strong>B2b (triple + x²):</strong> 6 expresiones con x dado<br>
+        <strong>B3 (viral):</strong> 4 variantes · conv. estricta (I→D): respuesta correcta mostrada<br>
+        <strong>B4 (CDMX):</strong> 6 contextos aleatorios<br>
+        <strong>Quiz Q1:</strong> 6 opciones MC · Q2/Q3: 6 expresiones · Q4: texto<br>
+        <strong>PIN docente:</strong> 890 · <strong>Código verificador:</strong> S5-[X]/4-INT[Y]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S0: LOGIN ════ -->
+<div id="s0" class="sec on">
+  <div style="text-align:center;padding:30px 0 16px">
+    <div id="sym" style="font-size:52px;color:var(--mo)" onclick="tapSym()">∑</div>
+    <div style="font-size:21px;font-weight:800;color:var(--mo);margin-top:8px">TSM III · Grupo 658</div>
+    <div style="font-size:13px;color:#666;margin-top:3px">Sesión 5 · Signos de Agrupación</div>
+  </div>
+  <div class="card">
+    <h3>¿Cómo te llamas?</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:9px">Escribe comenzando por tus <strong>apellidos</strong>:</p>
+    <input type="text" id="inp-nombre" placeholder="GARCÍA LÓPEZ JUAN PABLO" autocorrect="off" autocapitalize="characters" onkeydown="if(event.key==='Enter')iniciar()">
+    <div id="fb-login" style="font-size:13px;color:var(--ro);margin-top:5px;min-height:15px"></div>
+    <button class="btn bp" onclick="iniciar()">Comenzar actividad →</button>
+  </div>
+  <div class="card cam" style="font-size:13px">
+    <strong>ℹ️</strong> Puedes reintentar cuantas veces necesites. Cada intento usa ejercicios diferentes.
+  </div>
+</div>
+
+<!-- ════ S1: BIENVENIDA ════ -->
+<div id="s1" class="sec">
+  <div class="chip" style="display:inline-flex;align-items:center;gap:6px;background:var(--mo);color:#fff;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700;margin-bottom:10px">
+    👤 <span id="chip-txt"></span>
+  </div>
+  <div class="card cmo">
+    <span style="font-size:26px;display:block;margin-bottom:5px">👨‍🏫</span>
+    <h3 style="color:#fff">Prof. Cruz</h3>
+    <div style="height:1px;background:rgba(255,255,255,.2);margin:7px 0"></div>
+    <p id="msg-bienvenida" style="font-size:14px;line-height:1.7"></p>
+  </div>
+  <div class="card">
+    <h3>Lo que trabajarás hoy</h3>
+    <div style="display:flex;align-items:flex-start;margin-bottom:8px"><span class="nc">1</span><p>Analizarás el <strong>error viral</strong> que divide a internet cada vez que aparece.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:8px"><span class="nc">2</span><p>Aprenderás las reglas de eliminación de paréntesis, corchetes y llaves.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:8px"><span class="nc">3</span><p>Evaluarás expresiones con variable x y anidación múltiple.</p></div>
+    <div style="display:flex;align-items:flex-start"><span class="nc">4</span><p>Resolverás 4 reactivos de práctica. <strong>No verás si están bien hasta el final.</strong></p></div>
+  </div>
+  <button class="btn bp" onclick="ir('s2',1)">Empezar →</button>
+  <button class="skip-btn" onclick="ir('s2',1)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S2: B0 DETONADOR ════ -->
+<div id="s2" class="sec">
+  <div class="tag">BLOQUE 0 · DETONADOR</div>
+  <div class="tit">El error que divide a internet</div>
+  <div class="card">
+    <h3>📱 Lo que se viraliza cada año</h3>
+    <p>Esta expresión aparece periódicamente en redes sociales y genera miles de respuestas contradictorias. Dos bandos se forman:</p>
+    <div class="expr-viral">8 ÷ 2(2+2)</div>
+    <div class="viral-bando">
+      <div class="bando-card b-a"><span class="bando-num" style="color:var(--ro)">1</span><div class="bando-lbl" style="color:var(--ro)">Bando A</div></div>
+      <div style="display:flex;align-items:center;font-weight:800;font-size:18px">vs</div>
+      <div class="bando-card b-b"><span class="bando-num" style="color:var(--ve)">16</span><div class="bando-lbl" style="color:var(--ve)">Bando B</div></div>
+    </div>
+    <p style="font-size:13px;color:#666">¿Quién tiene razón? ¿O los dos tienen razón de alguna manera?</p>
+  </div>
+  <div class="card">
+    <h4>✍️ Tu predicción — antes de ver las reglas</h4>
+    <p style="font-size:13px;color:#555;margin-bottom:7px">Escribe qué crees que responde correctamente y por qué. Usa tus palabras — no hay respuesta incorrecta aquí.</p>
+    <textarea id="r-b0-1" onpaste="return false" oncopy="return false" placeholder="Creo que la respuesta es... porque..." oninput="cntWords('r-b0-1','cnt-b0-1')"></textarea>
+    <div class="cnt-txt" id="cnt-b0-1">0 palabras</div>
+  </div>
+  <div class="card" id="b0-mc-card">
+    <h4>💭 Opción múltiple</h4>
+    <p>Para resolver esta expresión <em>sin ambigüedad</em>, ¿qué convención necesitas conocer?</p>
+    <button class="ob" onclick="mcB0(this,'r')">Solo respetar la multiplicación antes que todo</button>
+    <button class="ob" onclick="mcB0(this,'c')">El orden de las operaciones: jerarquía y asociatividad (izquierda a derecha)</button>
+    <button class="ob" onclick="mcB0(this,'r')">Calcular desde el número más grande hacia el más pequeño</button>
+    <button class="ob" onclick="mcB0(this,'r')">No es posible resolverla — la expresión está incompleta</button>
+    <div class="fb" id="fb-b0mc"></div>
+  </div>
+  <button class="btn bp" id="btn-b0" disabled onclick="ir('s3',2)">Descubrir las reglas →</button>
+  <button class="skip-btn" onclick="ir('s3',2)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S3: B1 PARÉNTESIS ════ -->
+<div id="s3" class="sec">
+  <div class="tag">BLOQUE 1 · SIGNOS DE AGRUPACIÓN</div>
+  <div class="tit">( ) [ ] { } — tres niveles, un orden</div>
+
+  <div class="card cmo2">
+    <h3>🧠 Regla fundamental</h3>
+    <p>Los signos de agrupación forman <strong>niveles de profundidad</strong>. Siempre se resuelve de <strong>adentro hacia afuera</strong>:</p>
+    <div style="text-align:center;font-size:22px;font-weight:900;margin:10px 0;letter-spacing:3px;color:var(--mo)">
+      { &nbsp;&nbsp; [ &nbsp;&nbsp; ( &nbsp; ) &nbsp;&nbsp; ] &nbsp;&nbsp; }
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <span style="background:var(--mo);color:#fff;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700">( ) Nivel 1 — primero</span>
+      <span style="background:var(--az2);color:#fff;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700">[ ] Nivel 2 — segundo</span>
+      <span style="background:var(--ve2);color:#fff;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700">{ } Nivel 3 — tercero</span>
+    </div>
+  </div>
+
+  <!-- B1a: identificar nivel más interno -->
+  <div class="card" id="b1a-card">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">A</span><h4 style="margin:0">Identifica el nivel más interno</h4></div>
+    <p style="font-size:13px;color:#555">¿Cuál signo de agrupación resuelves <em>primero</em>?</p>
+    <div class="expr" id="b1a-expr"></div>
+    <div id="b1a-opts"></div>
+    <div class="fb" id="fb-b1a"></div>
+  </div>
+
+  <!-- B1b: eliminar con + -->
+  <div class="card" id="b1b-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">B</span><h4 style="margin:0">Elimina el paréntesis — signo +</h4></div>
+    <div class="card cve" style="font-size:13px;margin-bottom:8px">
+      <strong>Regla:</strong> <span style="font-family:'Courier New',monospace;font-size:15px">+(a − b + c)</span> → los signos <strong>no cambian</strong>
+    </div>
+    <div class="expr" id="b1b-expr"></div>
+    <p style="font-size:13px;color:#555">Simplifica sin el paréntesis y calcula el resultado:</p>
+    <input type="number" id="inp-b1b" placeholder="Resultado numérico">
+    <button class="pb" onclick="tp('h-b1b')">💡 Pista</button>
+    <div class="pbox" id="h-b1b"></div>
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB1b()">Verificar</button>
+    <div class="fb" id="fb-b1b"></div>
+  </div>
+
+  <!-- B1c: eliminar con - -->
+  <div class="card" id="b1c-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">C</span><h4 style="margin:0">Elimina el paréntesis — signo −</h4></div>
+    <div class="card crojo" style="font-size:13px;margin-bottom:8px">
+      <strong>⚠️ Regla clave:</strong> <span style="font-family:'Courier New',monospace;font-size:15px">−(a − b + c)</span> → <strong>todos los signos cambian</strong>
+    </div>
+    <div class="expr" id="b1c-expr"></div>
+    <p style="font-size:13px;color:#555">Simplifica cambiando los signos y calcula:</p>
+    <input type="number" id="inp-b1c" placeholder="Resultado numérico">
+    <button class="pb" onclick="tp('h-b1c')">💡 Pista</button>
+    <div class="pbox" id="h-b1c"></div>
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB1c()">Verificar</button>
+    <div class="fb" id="fb-b1c"></div>
+  </div>
+
+  <button class="btn bp" id="btn-b1" disabled onclick="ir('s4',3)">Continuar a anidaciones →</button>
+  <button class="skip-btn" onclick="ir('s4',3)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S4: B2 ANIDACIONES CON X ════ -->
+<div id="s4" class="sec">
+  <div class="tag">BLOQUE 2 · ANIDACIONES CON VARIABLE</div>
+  <div class="tit">Expresiones con x — de adentro hacia afuera</div>
+
+  <div class="card cam" style="font-size:13px">
+    <strong>⚡ Procedimiento:</strong> (1) Sustituye x por su valor dado. (2) Resuelve el nivel más interno primero. (3) Avanza hacia afuera. (4) Opera lo que queda.
+  </div>
+
+  <!-- B2a: doble anidación -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">A</span><h4 style="margin:0">Doble anidación</h4></div>
+    <div class="card caz" style="margin-bottom:8px">
+      <strong>Valor asignado: x = <span id="b2-xval">?</span></strong>
+    </div>
+    <p style="font-size:13px;color:#555">Sustituye x = <span id="b2a-xref">?</span> y evalúa:</p>
+    <div class="expr" id="b2a-expr"></div>
+    <button class="pb" onclick="tp('h-b2a')">💡 Paso a paso</button>
+    <div class="pbox" id="h-b2a"></div>
+    <input type="number" id="inp-b2a" placeholder="Resultado">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB2a()">Verificar</button>
+    <div class="fb" id="fb-b2a"></div>
+  </div>
+
+  <!-- B2b: triple anidación con x² -->
+  <div class="card" id="b2b-card" style="display:none">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">B</span><h4 style="margin:0">Triple anidación con x²</h4></div>
+    <p style="font-size:13px;color:#555">Mismo valor x = <span id="b2b-xref">?</span>:</p>
+    <div class="expr" id="b2b-expr"></div>
+    <button class="pb" onclick="tp('h-b2b')">💡 Paso a paso</button>
+    <div class="pbox" id="h-b2b"></div>
+    <input type="number" id="inp-b2b" placeholder="Resultado">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB2b()">Verificar</button>
+    <div class="fb" id="fb-b2b"></div>
+
+    <div class="sep"></div>
+    <h4>✍️ Pregunta de análisis</h4>
+    <p style="font-size:13px;color:#555">¿Qué cambiaría en el resultado si quitaras el corchete exterior de la expresión anterior? Explica con palabras propias.</p>
+    <textarea id="r-b2-anl" onpaste="return false" oncopy="return false" placeholder="Si quitara el corchete exterior..." oninput="cntWords('r-b2-anl','cnt-b2-anl')"></textarea>
+    <div class="cnt-txt" id="cnt-b2-anl">0 palabras</div>
+  </div>
+
+  <button class="btn bp" id="btn-b2" disabled onclick="ir('s5',4)">Continuar al viral resuelto →</button>
+  <button class="skip-btn" onclick="ir('s5',4)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S5: B3 VIRAL RESUELTO ════ -->
+<div id="s5" class="sec">
+  <div class="tag">BLOQUE 3 · EL VIRAL RESUELTO</div>
+  <div class="tit">Ahora sí sabes las reglas — ¿quién tenía razón?</div>
+
+  <div class="card cmo2">
+    <h3>⚖️ La convención que falta</h3>
+    <p>La expresión <strong>8 ÷ 2(2+2)</strong> es ambigua porque mezcla la multiplicación <em>implícita</em> con la división. La convención estricta dice:</p>
+    <div class="card cgr" style="font-size:13px;margin-top:6px">
+      División y multiplicación tienen <strong>la misma jerarquía</strong> y se resuelven de <strong>izquierda a derecha</strong> cuando no hay agrupación explícita.
+    </div>
+    <p style="font-size:13px;margin-top:5px">Por eso los dos bandos pueden tener una lógica, pero hay una forma <em>canónica</em> de resolverla.</p>
+  </div>
+
+  <div class="card">
+    <h4>🔢 Resuelve formalmente esta variante</h4>
+    <div class="expr-viral" id="b3-expr-disp"></div>
+    <p style="font-size:13px;color:#555;margin-top:6px">Aplica: primero paréntesis, luego izquierda a derecha:</p>
+    <input type="number" id="inp-b3" placeholder="Tu respuesta" step="0.01">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB3()">Verificar</button>
+    <div class="fb" id="fb-b3"></div>
+  </div>
+
+  <div class="card" id="b3-var-card" style="display:none">
+    <h4>🔁 ¿Cambia el resultado con corchetes?</h4>
+    <p style="font-size:13px;color:#555">Ahora la expresión tiene corchetes explícitos:</p>
+    <div class="expr" id="b3-var-expr"></div>
+    <input type="number" id="inp-b3v" placeholder="Resultado con corchetes" step="0.01">
+    <button class="btn bsm bp" style="margin-top:7px" onclick="chkB3v()">Verificar</button>
+    <div class="fb" id="fb-b3v"></div>
+  </div>
+
+  <div class="card" id="b3-txt-card" style="display:none">
+    <h4>✍️ ¿Qué convención le faltaba al bando equivocado?</h4>
+    <textarea id="r-b3-txt" onpaste="return false" oncopy="return false" placeholder="El bando que respondió ___ cometió el error de..." oninput="cntWords('r-b3-txt','cnt-b3')"></textarea>
+    <div class="cnt-txt" id="cnt-b3">0 palabras</div>
+  </div>
+
+  <button class="btn bp" id="btn-b3" disabled onclick="ir('s6',5)">Continuar al contexto CDMX →</button>
+  <button class="skip-btn" onclick="ir('s6',5)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S6: B4 CDMX ════ -->
+<div id="s6" class="sec">
+  <div class="tag">BLOQUE 4 · CONTEXTO CDMX</div>
+  <div class="tit">Modela y evalúa en tu ciudad</div>
+
+  <div class="card" id="b4-ctx-card">
+    <div id="b4-ctx-txt" class="card caz" style="font-size:14px;line-height:1.7;margin-bottom:10px"></div>
+
+    <div id="b4-expr-card">
+      <h4>📐 Parte 1 — Identifica la expresión</h4>
+      <p style="font-size:13px;color:#555">El problema describe esta expresión. ¿Cuál es el signo de agrupación más externo?</p>
+      <div class="expr" id="b4-expr-disp"></div>
+      <div id="b4-opts-mc"></div>
+      <div class="fb" id="fb-b4mc"></div>
+    </div>
+
+    <div id="b4-calc-card" style="display:none;margin-top:10px">
+      <div class="sep"></div>
+      <h4>🔢 Parte 2 — Evalúa la expresión</h4>
+      <p style="font-size:13px;color:#555">Sustituye los valores del problema y calcula:</p>
+      <div class="expr" id="b4-expr-sust"></div>
+      <button class="pb" onclick="tp('h-b4')">💡 Pista</button>
+      <div class="pbox" id="h-b4"></div>
+      <input type="number" id="inp-b4" placeholder="Resultado" step="0.01">
+      <button class="btn bsm bp" style="margin-top:7px" onclick="chkB4()">Verificar</button>
+      <div class="fb" id="fb-b4"></div>
+    </div>
+
+    <div id="b4-interp-card" style="display:none;margin-top:10px">
+      <div class="sep"></div>
+      <h4>✍️ Parte 3 — Interpreta el resultado</h4>
+      <p style="font-size:13px;color:#555">¿Qué significa ese número en el contexto del problema?</p>
+      <textarea id="r-b4-int" onpaste="return false" oncopy="return false" placeholder="El resultado significa que..." oninput="cntWords('r-b4-int','cnt-b4')"></textarea>
+      <div class="cnt-txt" id="cnt-b4">0 palabras</div>
+    </div>
+  </div>
+
+  <button class="btn bp" id="btn-b4" disabled onclick="ir('s7',6)">Continuar a la ficha →</button>
+  <button class="skip-btn" onclick="ir('s7',6)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S7: B5 FICHA ════ -->
+<div id="s7" class="sec">
+  <div class="tag">BLOQUE 5 · FICHA PARA EL CUADERNO</div>
+  <div class="tit">Copia estas reglas — son para el examen</div>
+
+  <div style="background:var(--ro);color:#fff;padding:9px 14px;border-radius:8px 8px 0 0;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.4px">✏️ ACCIÓN — COPIA EN TU CUADERNO AHORA</div>
+  <div class="card cam" style="border-radius:0 0 10px 10px;margin-top:0">
+    <strong>📓</strong> La captura de pantalla no cuenta. Copia la ficha completa con tus propios ejemplos numéricos al lado de cada regla.
+  </div>
+
+  <div class="cua-card">
+    <h3 style="margin-bottom:12px">📐 Signos de Agrupación — Reglas de eliminación</h3>
+
+    <div class="regla-box">
+      <div class="regla-row"><span class="regla-sym">( )</span><div class="regla-txt"><strong>Paréntesis</strong> — nivel más interno. Se resuelven siempre primero.</div></div>
+      <div class="regla-row"><span class="regla-sym">[ ]</span><div class="regla-txt"><strong>Corchetes</strong> — nivel medio. Se resuelven cuando el paréntesis ya fue eliminado.</div></div>
+      <div class="regla-row"><span class="regla-sym">{ }</span><div class="regla-txt"><strong>Llaves</strong> — nivel exterior. Se resuelven al final.</div></div>
+    </div>
+
+    <div class="sep"></div>
+    <h4 style="margin-bottom:8px">Reglas de cambio de signo al eliminar</h4>
+
+    <div class="frm" style="font-size:14px;margin-bottom:6px">
+      <strong>+(a − b + c)</strong> &nbsp;=&nbsp; a − b + c &nbsp;&nbsp;
+      <span style="opacity:.7;font-size:12px">(signo + NO cambia nada)</span>
+    </div>
+    <div class="frm frm-az" style="font-size:14px;margin-bottom:6px">
+      <strong>−(a − b + c)</strong> &nbsp;=&nbsp; −a + b − c &nbsp;&nbsp;
+      <span style="opacity:.7;font-size:12px">(signo − CAMBIA TODOS)</span>
+    </div>
+    <div class="frm" style="background:var(--ve2);font-size:13px">
+      <strong>Anidación:</strong> &nbsp; { [ ( ) ] } &nbsp;→&nbsp; resuelve de adentro hacia afuera
+    </div>
+
+    <div class="sep"></div>
+    <h4 style="margin-bottom:8px">Ejemplo con x — cómo documentarlo en el cuaderno</h4>
+    <div class="paso-box">
+      <strong>Expresión:</strong> 3·[x² − (2x + 1)] + 4 &nbsp; con x = 3<br>
+      <strong>Paso 1 (paréntesis):</strong> (2·3 + 1) = 7<br>
+      <strong>Paso 2 (corchete):</strong> [9 − 7] = 2<br>
+      <strong>Paso 3 (multiplicación):</strong> 3·2 = 6<br>
+      <strong>Paso 4 (suma):</strong> 6 + 4 = <span class="ans-ok">10</span>
+    </div>
+
+    <div class="sep"></div>
+    <h4 style="margin-bottom:8px">Jerarquía completa (para la S06)</h4>
+    <div class="frm frm-az" style="font-size:13px;line-height:2.2">
+      { [ ( ) ] } &nbsp;→&nbsp; Potencias &nbsp;→&nbsp; × ÷ &nbsp;→&nbsp; + −
+    </div>
+  </div>
+
+  <div style="background:var(--bl);border-radius:var(--r);padding:15px;box-shadow:var(--sh);margin-bottom:12px;border:2px solid var(--gr2)">
+    <label style="display:flex;align-items:flex-start;gap:11px;cursor:pointer">
+      <input type="checkbox" id="check-ficha" onchange="checkFicha()" style="width:20px;height:20px;margin-top:2px;accent-color:var(--ve2)">
+      <span style="font-size:14px;line-height:1.6">Copié esta ficha en mi cuaderno con mis propios ejemplos numéricos al lado de cada regla</span>
+    </label>
+  </div>
+
+  <button class="btn bp" id="btn-b5" disabled onclick="ir('s8',7)">Continuar al quiz →</button>
+  <button class="skip-btn" onclick="ir('s8',7)">↷ Avanzar (docente)</button>
+</div>
+
+<!-- ════ S8: B6 QUIZ ════ -->
+<div id="s8" class="sec">
+  <div class="tag">BLOQUE 6 · QUIZ INDIVIDUAL</div>
+  <div class="tit">4 reactivos sin retroalimentación</div>
+  <div class="card cmo" style="padding:13px 15px">
+    <span style="font-size:18px;display:block;margin-bottom:4px">⚠️</span>
+    <p style="font-size:14px;margin:0;line-height:1.7">Guarda cada respuesta. <strong>No sabrás si están bien hasta el final.</strong> Trabaja solo. Puedes usar la ficha que copiaste en el cuaderno.</p>
+  </div>
+  <div class="prac-ind">Guardados: <span id="quiz-cnt">0</span> de 4</div>
+
+  <!-- Q1: MC error clásico -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">1</span><h4 style="margin:0">Opción múltiple — error de signo</h4></div>
+    <p id="q1-txt" style="font-size:14px;line-height:1.65;margin-bottom:8px"></p>
+    <div id="q1-opts"></div>
+    <div id="q1-sel" style="display:none;margin-top:5px">
+      <span style="font-size:13px;color:var(--ve);font-weight:700">✓ Opción guardada</span>
+    </div>
+    <button class="btn bsm bp" id="btn-q1" style="margin-top:7px;display:none" onclick="guardarQ(1)">Guardar →</button>
+  </div>
+
+  <!-- Q2: triple anidación -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">2</span><h4 style="margin:0">Triple anidación con x²</h4></div>
+    <div class="card caz" style="font-size:13px;margin-bottom:8px">x = <strong id="q2-xval">?</strong></div>
+    <div class="expr" id="q2-expr"></div>
+    <input type="number" id="inp-q2" placeholder="Resultado">
+    <button class="btn bsm bp" id="btn-q2" style="margin-top:7px" onclick="guardarQ(2)">Guardar →</button>
+    <div id="conf-q2" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <!-- Q3: con fracción -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">3</span><h4 style="margin:0">Expresión con fracción anidada</h4></div>
+    <div class="card caz" style="font-size:13px;margin-bottom:8px">x = <strong id="q3-xval">?</strong></div>
+    <div class="expr" id="q3-expr"></div>
+    <input type="number" id="inp-q3" placeholder="Resultado" step="0.1">
+    <button class="btn bsm bp" id="btn-q3" style="margin-top:7px" onclick="guardarQ(3)">Guardar →</button>
+    <div id="conf-q3" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <!-- Q4: texto -->
+  <div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:8px"><span class="nc">4</span><h4 style="margin:0">Explicación escrita</h4></div>
+    <p style="font-size:14px;line-height:1.65">Explica con tus propias palabras, usando un ejemplo concreto <em>que no sea de clase</em>, la diferencia entre:</p>
+    <div style="display:flex;gap:8px;margin:8px 0;flex-wrap:wrap">
+      <div class="frm" style="flex:1;min-width:120px;padding:8px 12px;font-size:14px">a − (b + c)</div>
+      <div style="display:flex;align-items:center;font-weight:800">≠</div>
+      <div class="frm frm-az" style="flex:1;min-width:120px;padding:8px 12px;font-size:14px">a + (b + c)</div>
+    </div>
+    <p style="font-size:12px;color:#999;margin-bottom:6px">Mínimo 25 palabras. No copies definiciones.</p>
+    <textarea id="inp-q4" onpaste="return false" oncopy="return false" placeholder="La diferencia está en que... Por ejemplo en mi vida diaria..." oninput="cntWords('inp-q4','cnt-q4')"></textarea>
+    <div class="cnt-txt" id="cnt-q4">0 palabras</div>
+    <button class="btn bsm bp" id="btn-q4" style="margin-top:7px" onclick="guardarQ(4)">Guardar →</button>
+    <div id="conf-q4" style="display:none;color:var(--ve);font-size:13px;font-weight:700;margin-top:5px">✓ Guardado</div>
+  </div>
+
+  <button class="btn bp" id="btn-quiz" disabled onclick="ir('s9',8)">Ver síntesis →</button>
+</div>
+
+<!-- ════ S9: B7 SÍNTESIS ════ -->
+<div id="s9" class="sec">
+  <div class="tag">BLOQUE 7 · SÍNTESIS + PUENTE</div>
+  <div class="tit">Cierra con tus propias palabras</div>
+
+  <div class="card">
+    <h3>Reflexión final</h3>
+    <p style="background:var(--gr);border-radius:10px;padding:11px;line-height:1.7;margin-bottom:8px">
+      ¿En qué situación de tu vida cotidiana en CDMX el <strong>orden en que realizas operaciones</strong> importa? Da un ejemplo concreto donde si cambias el orden el resultado sea distinto. No uses ejemplos de clase.
+    </p>
+    <p style="font-size:12px;color:#999;margin-bottom:6px">Mínimo 35 palabras.</p>
+    <textarea id="r-sint-1" onpaste="return false" oncopy="return false" placeholder="Un ejemplo de mi vida donde el orden importa es..." oninput="chkSint()"></textarea>
+    <div class="cnt-txt" id="cnt-sint1">0 palabras</div>
+  </div>
+
+  <div class="card">
+    <h3>🔭 Vista previa — lo que viene en S06</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:8px">La siguiente sesión integrarás lo de hoy con la jerarquía completa. Observa esta expresión:</p>
+    <div class="expr">3² + 4 × (8 − 5) ÷ 6 − {2 + [1 − (−3)]}</div>
+    <p style="font-size:14px;margin:8px 0">¿Sabrías resolverla ya? ¿Qué reglas crees que necesitarás además de las de hoy?</p>
+    <p style="font-size:12px;color:#999;margin-bottom:6px">Mínimo 20 palabras.</p>
+    <textarea id="r-sint-2" onpaste="return false" oncopy="return false" placeholder="Creo que para resolver eso necesitaría..." oninput="chkSint()"></textarea>
+    <div class="cnt-txt" id="cnt-sint2">0 palabras</div>
+  </div>
+
+  <button class="btn bp" id="btn-sint" disabled onclick="ir('s10',9)">Ver resultados finales →</button>
+</div>
+
+<!-- ════ S10: RESULTADOS ════ -->
+<div id="s10" class="sec">
+  <!-- Marcador -->
+  <div class="card grade-box" id="marc-card" style="text-align:center;padding:20px">
+    <div id="marc-ico" style="font-size:42px;margin-bottom:5px"></div>
+    <div class="grade-num" id="marc-pts"></div>
+    <div class="grade-lbl" id="marc-lbl"></div>
+  </div>
+
+  <!-- Detalle reactivos -->
+  <div class="tag" style="margin-bottom:7px">📖 TUS RESULTADOS DETALLADOS</div>
+  <div id="detalle-quiz"></div>
+
+  <!-- Reflexiones -->
+  <div class="card cmo2" style="margin-top:4px">
+    <h4>✍️ Tus reflexiones registradas</h4>
+    <p id="res-sint1" style="font-size:13px;font-style:italic;color:#555;margin-top:5px"></p>
+    <div class="sep"></div>
+    <p id="res-sint2" style="font-size:13px;font-style:italic;color:#555"></p>
+  </div>
+
+  <!-- Tira docente -->
+  <div class="tag" style="margin-top:8px;margin-bottom:7px;background:var(--az)">👨‍🏫 REGISTRO DOCENTE — muestra esta pantalla al Prof. Cruz</div>
+  <div class="prof-strip" id="prof-strip"></div>
+
+  <!-- Copiar -->
+  <button class="btn bve" id="btn-copiar" style="margin-top:10px" onclick="copiarRes()">📋 Copiar para Classroom</button>
+  <div id="fb-copia" style="font-size:13px;color:var(--ve);margin-top:5px;text-align:center;min-height:15px"></div>
+  <div class="copy-area" id="copy-area"></div>
+
+  <div class="card cam" style="margin-top:10px;font-size:13px">
+    <strong>Siguiente paso:</strong> Muestra esta pantalla al Prof. Cruz y luego sube la captura a Classroom.
+  </div>
+
+  <div id="wrap-reintento" style="margin-top:6px;display:none">
+    <button class="btn bp" onclick="reiniciar()">🔄 Reintentar con ejercicios nuevos</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── ANTI-COPY GLOBAL ──────────────────────────────────────────────
+document.addEventListener('copy', function(e){
+  const tag = document.activeElement ? document.activeElement.tagName : '';
+  if(tag === 'INPUT' || tag === 'TEXTAREA') return;
+  e.preventDefault();
+  if(e.clipboardData) e.clipboardData.setData('text/plain','[Actividad protegida — TSM III S05 · Prof. Adrián Cruz]');
+});
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+document.addEventListener('selectstart', function(e){
+  const t = e.target.tagName;
+  if(t !== 'INPUT' && t !== 'TEXTAREA') e.preventDefault();
+});
+
+// ── ESTADO GLOBAL ─────────────────────────────────────────────────
+let nombre = '', intento = 1;
+let V = {};      // valores generados
+let QR = [null,null,null,null]; // respuestas quiz (0-3)
+let QM = [null,null,null,null]; // respuestas correctas quiz
+let QB = [null,null,null,null]; // banks usados quiz
+let quizGuardados = 0;
+let b3Fase = 0;  // 0=inicial, 1=var, 2=txt
+let b4Fase = 0;  // 0=mc, 1=calc, 2=interp
+let b1aOk=false, b1bOk=false, b1cOk=false;
+let b2aOk=false, b2bOk=false;
+let b0mcOk=false;
+let b3Ok=false, b3vOk=false;
+let b4mcOk=false, b4calcOk=false;
+
+const rnd = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+const fr = (n,d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const sup = n => `<sup style="font-size:.7em">${n}</sup>`;
+
+// ── BANCOS ────────────────────────────────────────────────────────
+
+// B1a — identificar nivel más interno (6 expresiones)
+const B1A = [
+  {
+    expr:'5 + {3·[2 − (4 + 1)]}',
+    opts:['(4 + 1) — nivel más interno','[2 − (4+1)] — nivel medio','{3·[...]} — nivel externo'],
+    ans:0, fb:'✓ Los paréntesis ( ) son siempre el nivel más interno. Se resuelven primero: 4+1=5.'
+  },
+  {
+    expr:'10 − {[6 + (3 − 2)] · 2}',
+    opts:['[6+(3−2)] — nivel medio','(3 − 2) — nivel más interno','{...·2} — nivel externo'],
+    ans:1, fb:'✓ (3−2) es el paréntesis más interno. Resultado: 3−2=1, luego [6+1]=7, luego {7·2}=14.'
+  },
+  {
+    expr:'2·{x + [5·(x − 3)] − 1}',
+    opts:['{x+[...]−1} — nivel externo','(x − 3) — nivel más interno','[5·(x−3)] — nivel medio'],
+    ans:1, fb:'✓ (x−3) está dentro del corchete, que a su vez está dentro de las llaves. Primero el paréntesis.'
+  },
+  {
+    expr:'{4 − [x² + (2x − 1)]}',
+    opts:['[x²+(2x−1)] — nivel medio','{4−[...]} — nivel externo','(2x − 1) — nivel más interno'],
+    ans:2, fb:'✓ (2x−1) está en el nivel más profundo dentro del corchete, dentro de las llaves.'
+  },
+  {
+    expr:'3·{2x − [x + (1 − x²)]}',
+    opts:['(1 − x²) — nivel más interno','[x+(1−x²)] — nivel medio','3·{...} — nivel externo'],
+    ans:0, fb:'✓ (1−x²) está dentro del corchete, dentro de las llaves. Se resuelve primero.'
+  },
+  {
+    expr:'{[8 − (3 + 1)] · 2 + 6}',
+    opts:['(3 + 1) — nivel más interno','{[...]·2+6} — nivel externo','[8−(3+1)] — nivel medio'],
+    ans:0, fb:'✓ (3+1)=4 es el nivel más interno. Luego [8−4]=4, luego {4·2+6}=14.'
+  }
+];
+
+// B2a — doble anidación con x (6 expresiones)
+const B2A_BANK = [
+  {
+    label: x => `4 − {2·[x + (x − 3)]}`,
+    fn: x => 4 - 2*(x + (x-3)),
+    hint: x => `Paso 1: (x−3) = (${x}−3) = ${x-3} | Paso 2: [${x} + ${x-3}] = ${x+(x-3)} | Paso 3: 2·${x+(x-3)} = ${2*(x+(x-3))} | Paso 4: 4−${2*(x+(x-3))} = ${4-2*(x+(x-3))}`
+  },
+  {
+    label: x => `{5·[2x − (x + 1)] + 3}`,
+    fn: x => 5*(2*x-(x+1))+3,
+    hint: x => `Paso 1: (x+1)=(${x}+1)=${x+1} | Paso 2: [2·${x}−${x+1}]=${2*x-(x+1)} | Paso 3: 5·${2*x-(x+1)}=${5*(2*x-(x+1))} | Paso 4: ${5*(2*x-(x+1))}+3=${5*(2*x-(x+1))+3}`
+  },
+  {
+    label: x => `{3·[x + (2 − x)] − x²}`,
+    fn: x => 3*(x+(2-x))-x*x,
+    hint: x => `Paso 1: (2−x)=(2−${x})=${2-x} | Paso 2: [${x}+${2-x}]=${x+(2-x)} | Paso 3: 3·${x+(2-x)}=${3*(x+(2-x))} | Paso 4: ${3*(x+(2-x))}−${x}²=${3*(x+(2-x))-x*x}`
+  },
+  {
+    label: x => `10 − {x·[2 + (x − 4)]}`,
+    fn: x => 10 - x*(2+(x-4)),
+    hint: x => `Paso 1: (x−4)=(${x}−4)=${x-4} | Paso 2: [2+${x-4}]=${2+(x-4)} | Paso 3: ${x}·${2+(x-4)}=${x*(2+(x-4))} | Paso 4: 10−${x*(2+(x-4))}=${10-x*(2+(x-4))}`
+  },
+  {
+    label: x => `{2x·[x − (1 + x)] + 8}`,
+    fn: x => 2*x*(x-(1+x))+8,
+    hint: x => `Paso 1: (1+x)=(1+${x})=${1+x} | Paso 2: [${x}−${1+x}]=${x-(1+x)} | Paso 3: 2·${x}·${x-(1+x)}=${2*x*(x-(1+x))} | Paso 4: ${2*x*(x-(1+x))}+8=${2*x*(x-(1+x))+8}`
+  },
+  {
+    label: x => `2·{x² − [3·(x − 1) + 2]}`,
+    fn: x => 2*(x*x-(3*(x-1)+2)),
+    hint: x => `Paso 1: (x−1)=${x-1} | Paso 2: 3·${x-1}+2=${3*(x-1)+2} | Paso 3: [${x*x}−${3*(x-1)+2}]=${x*x-(3*(x-1)+2)} | Paso 4: 2·${x*x-(3*(x-1)+2)}=${2*(x*x-(3*(x-1)+2))}`
+  }
+];
+
+// B2b — triple anidación con x² (6 expresiones)
+const B2B_BANK = [
+  {
+    label: x => `3·[x² − (2x + 1)] + 4`,
+    fn: x => 3*(x*x-(2*x+1))+4,
+    hint: x => `Paso 1: (2·${x}+1)=${2*x+1} | Paso 2: [${x*x}−${2*x+1}]=${x*x-(2*x+1)} | Paso 3: 3·${x*x-(2*x+1)}=${3*(x*x-(2*x+1))} | Paso 4: ${3*(x*x-(2*x+1))}+4=${3*(x*x-(2*x+1))+4}`
+  },
+  {
+    label: x => `5 − {2·[x + (x² − 4)]}`,
+    fn: x => 5-2*(x+(x*x-4)),
+    hint: x => `Paso 1: (x²−4)=(${x*x}−4)=${x*x-4} | Paso 2: [${x}+${x*x-4}]=${x+(x*x-4)} | Paso 3: 2·${x+(x*x-4)}=${2*(x+(x*x-4))} | Paso 4: 5−${2*(x+(x*x-4))}=${5-2*(x+(x*x-4))}`
+  },
+  {
+    label: x => `4x − {3·[x² − (x − 1)]}`,
+    fn: x => 4*x-3*(x*x-(x-1)),
+    hint: x => `Paso 1: (x−1)=${x-1} | Paso 2: [${x*x}−${x-1}]=${x*x-(x-1)} | Paso 3: 3·${x*x-(x-1)}=${3*(x*x-(x-1))} | Paso 4: 4·${x}−${3*(x*x-(x-1))}=${4*x-3*(x*x-(x-1))}`
+  },
+  {
+    label: x => `{x² − 2·[x + (3 − x²)]}`,
+    fn: x => x*x-2*(x+(3-x*x)),
+    hint: x => `Paso 1: (3−x²)=(3−${x*x})=${3-x*x} | Paso 2: [${x}+${3-x*x}]=${x+(3-x*x)} | Paso 3: 2·${x+(3-x*x)}=${2*(x+(3-x*x))} | Paso 4: ${x*x}−${2*(x+(3-x*x))}=${x*x-2*(x+(3-x*x))}`
+  },
+  {
+    label: x => `{2·[3x − (x² + 1)] − x}`,
+    fn: x => 2*(3*x-(x*x+1))-x,
+    hint: x => `Paso 1: (x²+1)=${x*x+1} | Paso 2: [3·${x}−${x*x+1}]=${3*x-(x*x+1)} | Paso 3: 2·${3*x-(x*x+1)}=${2*(3*x-(x*x+1))} | Paso 4: ${2*(3*x-(x*x+1))}−${x}=${2*(3*x-(x*x+1))-x}`
+  },
+  {
+    label: x => `x² + {2·[x − (3 + x)]}`,
+    fn: x => x*x+2*(x-(3+x)),
+    hint: x => `Paso 1: (3+x)=${3+x} | Paso 2: [${x}−${3+x}]=${x-(3+x)} | Paso 3: 2·${x-(3+x)}=${2*(x-(3+x))} | Paso 4: ${x*x}+${2*(x-(3+x))}=${x*x+2*(x-(3+x))}`
+  }
+];
+
+// B3 — variantes del viral (4 expresiones)
+const B3_BANK = [
+  {
+    expr:'8 ÷ 2(2+2)', varExpr:'8 ÷ [2(2+2)]',
+    ans:16, varAns:1,
+    proc:'8÷2(2+2) = 8÷2·4 = 4·4 = 16 (izq→der, mismo nivel)',
+    procVar:'8÷[2(2+2)] = 8÷[2·4] = 8÷8 = 1 (el corchete agrupa 2·4)'
+  },
+  {
+    expr:'6 ÷ 2(1+2)', varExpr:'6 ÷ [2(1+2)]',
+    ans:9, varAns:1,
+    proc:'6÷2(1+2) = 6÷2·3 = 3·3 = 9 (izq→der)',
+    procVar:'6÷[2(1+2)] = 6÷[2·3] = 6÷6 = 1 (corchete agrupa)'
+  },
+  {
+    expr:'12 ÷ 3(1+3)', varExpr:'12 ÷ [3(1+3)]',
+    ans:16, varAns:1,
+    proc:'12÷3(1+3) = 12÷3·4 = 4·4 = 16 (izq→der)',
+    procVar:'12÷[3(1+3)] = 12÷[3·4] = 12÷12 = 1 (corchete agrupa)'
+  },
+  {
+    expr:'10 ÷ 5(1+4)', varExpr:'10 ÷ [5(1+4)]',
+    ans:10, varAns:0.4,
+    proc:'10÷5(1+4) = 10÷5·5 = 2·5 = 10 (izq→der)',
+    procVar:'10÷[5(1+4)] = 10÷[5·5] = 10÷25 = 0.4 (corchete agrupa)'
+  }
+];
+
+// B4 — contextos CDMX (6 situaciones)
+const B4_BANK = [
+  (v)=>({
+    ctx:`En el <strong>Metro CDMX</strong> una persona carga ${v.a} pesos. Gasta ${v.b} pesos en boletaje y ${v.c} pesos en una bebida; a ese total le aplican un cargo de ${v.d} pesos. La expresión del saldo restante es:`,
+    exprStr:`${v.a} − {(${v.b} + ${v.c}) + ${v.d}}`,
+    sustStr:`${v.a} − {(${v.b} + ${v.c}) + ${v.d}}`,
+    outer:'{ } — llaves', opts:['{ } — llaves', '( ) — paréntesis', 'No hay agrupación externa'],
+    ansOpts:0, fn:()=>v.a-(v.b+v.c+v.d),
+    hint:()=>`Paso 1: (${v.b}+${v.c})=${v.b+v.c} | Paso 2: {${v.b+v.c}+${v.d}}=${v.b+v.c+v.d} | Paso 3: ${v.a}−${v.b+v.c+v.d}=${v.a-(v.b+v.c+v.d)}`
+  }),
+  (v)=>({
+    ctx:`Un puesto en <strong>La Merced</strong> vende ${v.a} kg de fruta a $${v.b} el kg. Aplica un descuento de $${v.c} si llevas más de 3 kg, y cobra $${v.d} de envío solo si pagas con tarjeta. Expresión del total:`,
+    exprStr:`${v.a}·${v.b} − [${v.c} − (${v.d} − ${v.d})]`,
+    sustStr:`${v.a}·${v.b} − [${v.c} − (${v.d} − ${v.d})]`,
+    outer:'[ ] — corchetes', opts:['[ ] — corchetes','( ) — paréntesis','{ } — llaves'],
+    ansOpts:0, fn:()=>v.a*v.b-(v.c-(v.d-v.d)),
+    hint:()=>`Paso 1: (${v.d}−${v.d})=0 | Paso 2: [${v.c}−0]=${v.c} | Paso 3: ${v.a*v.b}−${v.c}=${v.a*v.b-v.c}`
+  }),
+  (v)=>({
+    ctx:`En <strong>Tepito</strong> un comerciante calcula su ganancia semanal. Ingresó $${v.a} y tuvo gastos de $${v.b} en renta y $${v.c} en mercancía. Además invirtió $${v.d} en publicidad. Ganancia neta:`,
+    exprStr:`${v.a} − {[${v.b} + (${v.c} − ${v.d})] + ${v.d}}`,
+    sustStr:`${v.a} − {[${v.b} + (${v.c} − ${v.d})] + ${v.d}}`,
+    outer:'{ } — llaves', opts:['{ } — llaves','( ) — paréntesis','[ ] — corchetes'],
+    ansOpts:0, fn:()=>v.a-(v.b+(v.c-v.d)+v.d),
+    hint:()=>`Paso 1: (${v.c}−${v.d})=${v.c-v.d} | Paso 2: [${v.b}+${v.c-v.d}]=${v.b+(v.c-v.d)} | Paso 3: {${v.b+(v.c-v.d)}+${v.d}}=${v.b+(v.c-v.d)+v.d} | Paso 4: ${v.a}−${v.b+(v.c-v.d)+v.d}=${v.a-(v.b+(v.c-v.d)+v.d)}`
+  }),
+  (v)=>({
+    ctx:`Un estudiante del <strong>CEB 4/2</strong> quiere saber cuánto le sobra del mes. Recibe $${v.a} de beca. Paga $${v.b} de transporte y $${v.c} de comida, pero le devuelven $${v.d} de un préstamo anterior. Dinero disponible:`,
+    exprStr:`${v.a} − (${v.b} + ${v.c}) + ${v.d}`,
+    sustStr:`${v.a} − (${v.b} + ${v.c}) + ${v.d}`,
+    outer:'( ) — paréntesis', opts:['( ) — paréntesis','[ ] — corchetes','No hay llave exterior'],
+    ansOpts:0, fn:()=>v.a-(v.b+v.c)+v.d,
+    hint:()=>`Paso 1: (${v.b}+${v.c})=${v.b+v.c} | Paso 2: ${v.a}−${v.b+v.c}+${v.d}=${v.a-(v.b+v.c)+v.d}`
+  }),
+  (v)=>({
+    ctx:`En un <strong>Oxxo de Insurgentes</strong> un producto cuesta $${v.a}. Hay un descuento del 2×1 así que pagas la mitad, pero además el sistema aplica $${v.b} de cargo digital y descuenta $${v.c} de puntos. Monto final:`,
+    exprStr:`{(${v.a} ÷ 2) + ${v.b}} − ${v.c}`,
+    sustStr:`{(${v.a} ÷ 2) + ${v.b}} − ${v.c}`,
+    outer:'{ } — llaves', opts:['{ } — llaves','( ) — paréntesis','No hay signo externo'],
+    ansOpts:0, fn:()=>(v.a/2+v.b)-v.c,
+    hint:()=>`Paso 1: (${v.a}÷2)=${v.a/2} | Paso 2: {${v.a/2}+${v.b}}=${v.a/2+v.b} | Paso 3: ${v.a/2+v.b}−${v.c}=${(v.a/2+v.b)-v.c}`
+  }),
+  (v)=>({
+    ctx:`Para un viaje en <strong>Ecobici</strong>, la tarifa es $${v.a} más $${v.b} por minuto extra. Si tardas ${v.c} minutos y tienes un cupón de $${v.d}:`,
+    exprStr:`{${v.a} + [${v.b}·(${v.c} − 30)]} − ${v.d}`,
+    sustStr:`{${v.a} + [${v.b}·(${v.c} − 30)]} − ${v.d}`,
+    outer:'{ } — llaves', opts:['{ } — llaves','( ) — paréntesis','[ ] — corchetes'],
+    ansOpts:0, fn:()=>Math.max(0,(v.a + v.b*(v.c-30))-v.d),
+    hint:()=>`Paso 1: (${v.c}−30)=${v.c-30} | Paso 2: [${v.b}·${v.c-30}]=${v.b*(v.c-30)} | Paso 3: {${v.a}+${v.b*(v.c-30)}}=${v.a+v.b*(v.c-30)} | Paso 4: ${v.a+v.b*(v.c-30)}−${v.d}=${(v.a+v.b*(v.c-30))-v.d}`
+  })
+];
+
+// Quiz Q1 — MC error de signo (6 opciones)
+const Q1_BANK = [
+  {
+    preg:'Un alumno resuelve: <strong>10 − (3 − 5 + 2)</strong> y obtiene <strong>10</strong>. ¿Cuál fue su error?',
+    opts:['No aplicó jerarquía', 'No cambió los signos al eliminar el paréntesis con signo −', 'Sumó antes de restar', 'No hay error, 10 es correcto'],
+    ans:1, fb:'✓ Con signo −, todos los signos cambian: 10−3+5−2=10. El error es no cambiar los signos.'
+  },
+  {
+    preg:'Se pide simplificar: <strong>a − (b − c)</strong>. Alguien escribe <strong>a − b − c</strong>. ¿Qué falló?',
+    opts:['Debió cambiar el signo de b al eliminar el paréntesis con −', 'Debió cambiar todos los signos dentro del paréntesis al eliminar con −', 'No se puede simplificar esa expresión', 'Está correcto, a−b−c es el resultado'],
+    ans:1, fb:'✓ −(b−c) = −b+c. Cambian TODOS: −b pasa a −b y −c pasa a +c. Resultado: a−b+c.'
+  },
+  {
+    preg:'¿Cuál es la simplificación correcta de <strong>5 + (−3 + x − 2)</strong>?',
+    opts:['5 − 3 + x − 2 = x', '5 + 3 − x + 2 = 10−x', '5 − 3 − x − 2 = −x', '5 + (−3) + x − 2 = x (mismos signos)'],
+    ans:3, fb:'✓ Con signo +, los signos no cambian: 5+(−3+x−2) = 5−3+x−2 = x. La opción 4 también es equivalente.'
+  },
+  {
+    preg:'Alguien obtiene <strong>7</strong> al resolver <strong>15 − (4 + 4)</strong>. ¿Es correcto?',
+    opts:['Sí, 15−4+4=15', 'No, 15−(4+4)=15−8=7, eso sí es correcto', 'No, debió dar 15+4+4=23', 'No se puede saber sin más información'],
+    ans:1, fb:'✓ 15−(4+4): primero resuelves el paréntesis: 4+4=8. Luego: 15−8=7. ¡Correcto!'
+  },
+  {
+    preg:'¿Cuál es el error en: <strong>8 − (2x − 3) = 8 − 2x − 3 = 5 − 2x</strong>?',
+    opts:['No hay error, 5−2x es correcto', 'El signo de 3 no cambió al eliminar con −; debe ser +3', 'Debió multiplicar 8 por (2x−3)', 'No se pueden eliminar paréntesis con variables'],
+    ans:1, fb:'✓ −(2x−3) = −2x+3. El −3 debió cambiar a +3. Correcto: 8−2x+3 = 11−2x.'
+  },
+  {
+    preg:'Evalúa: <strong>20 − (5 − 3 + 8)</strong>. ¿Cuál es el resultado correcto?',
+    opts:['20−5−3+8 = 20 (error: no cambió signos)','20−5+3−8 = 10 (correcto: cambió todos los signos)','20+5+3+8 = 36 (cambió solo positivos)','20−5+3+8 = 26'],
+    ans:1, fb:'✓ −(5−3+8): cambian todos los signos → −5+3−8. Resultado: 20−5+3−8=10.'
+  }
+];
+
+// Quiz Q2 — triple anidación con x² (6 expresiones)
+const Q2_BANK = [
+  {
+    label: x => `{4·[2x − (x + 3)] − x²}`,
+    fn: x => 4*(2*x-(x+3))-x*x,
+    proc: x => `(x+3)=${x+3} | [2·${x}−${x+3}]=${2*x-(x+3)} | 4·${2*x-(x+3)}=${4*(2*x-(x+3))} | ${4*(2*x-(x+3))}−${x*x}=${4*(2*x-(x+3))-x*x}`
+  },
+  {
+    label: x => `3x − {[x² − (2x − 1)] · 2}`,
+    fn: x => 3*x-2*(x*x-(2*x-1)),
+    proc: x => `(2x−1)=${2*x-1} | [${x*x}−${2*x-1}]=${x*x-(2*x-1)} | ${x*x-(2*x-1)}·2=${2*(x*x-(2*x-1))} | ${3*x}−${2*(x*x-(2*x-1))}=${3*x-2*(x*x-(2*x-1))}`
+  },
+  {
+    label: x => `{x² − 3·[x + (4 − 2x)]}`,
+    fn: x => x*x-3*(x+(4-2*x)),
+    proc: x => `(4−2x)=${4-2*x} | [${x}+${4-2*x}]=${x+(4-2*x)} | 3·${x+(4-2*x)}=${3*(x+(4-2*x))} | ${x*x}−${3*(x+(4-2*x))}=${x*x-3*(x+(4-2*x))}`
+  },
+  {
+    label: x => `2·{3 − [x·(x + 1) − 4]}`,
+    fn: x => 2*(3-(x*(x+1)-4)),
+    proc: x => `(x+1)=${x+1} | x·${x+1}=${x*(x+1)} | [${x*(x+1)}−4]=${x*(x+1)-4} | {3−${x*(x+1)-4}}=${3-(x*(x+1)-4)} | 2·${3-(x*(x+1)-4)}=${2*(3-(x*(x+1)-4))}`
+  },
+  {
+    label: x => `x² + {2·[x − (3x − 2)] − 1}`,
+    fn: x => x*x+2*(x-(3*x-2))-1,
+    proc: x => `(3x−2)=${3*x-2} | [${x}−${3*x-2}]=${x-(3*x-2)} | 2·${x-(3*x-2)}=${2*(x-(3*x-2))} | {${2*(x-(3*x-2))}−1}=${2*(x-(3*x-2))-1} | ${x*x}+${2*(x-(3*x-2))-1}=${x*x+2*(x-(3*x-2))-1}`
+  },
+  {
+    label: x => `{5x − 2·[x² − (x + 3)]} + 1`,
+    fn: x => 5*x-2*(x*x-(x+3))+1,
+    proc: x => `(x+3)=${x+3} | [${x*x}−${x+3}]=${x*x-(x+3)} | 2·${x*x-(x+3)}=${2*(x*x-(x+3))} | ${5*x}−${2*(x*x-(x+3))}+1=${5*x-2*(x*x-(x+3))+1}`
+  }
+];
+
+// Quiz Q3 — con fracción anidada (6 expresiones, x fijo por expr)
+const Q3_BANK = [
+  {
+    xv: 2, label:'(4x − 2)/2 − {3 − [x + (1 − x)]}',
+    fn: x => (4*x-2)/2-(3-(x+(1-x))),
+    proc: x => `(1−x)=${1-x} | [x+${1-x}]=${x+(1-x)} | {3−${x+(1-x)}}=${3-(x+(1-x))} | (4·${x}−2)/2=${(4*x-2)/2} | ${(4*x-2)/2}−${3-(x+(1-x))}=${(4*x-2)/2-(3-(x+(1-x)))}`
+  },
+  {
+    xv: 3, label:'{x² + 2·[x − (x + 3)]}/3',
+    fn: x => (x*x+2*(x-(x+3)))/3,
+    proc: x => `(x+3)=${x+3} | [${x}−${x+3}]=${x-(x+3)} | 2·${x-(x+3)}=${2*(x-(x+3))} | ${x*x}+${2*(x-(x+3))}=${x*x+2*(x-(x+3))} | ÷3 = ${(x*x+2*(x-(x+3)))/3}`
+  },
+  {
+    xv: 4, label:'(x²+x)/2 − {3·[x − (2x−1)]}',
+    fn: x => (x*x+x)/2-3*(x-(2*x-1)),
+    proc: x => `(2x−1)=${2*x-1} | [${x}−${2*x-1}]=${x-(2*x-1)} | 3·${x-(2*x-1)}=${3*(x-(2*x-1))} | (${x*x}+${x})/2=${(x*x+x)/2} | ${(x*x+x)/2}−${3*(x-(2*x-1))}=${(x*x+x)/2-3*(x-(2*x-1))}`
+  },
+  {
+    xv: 3, label:'2·{[x + (x−2)]/2 − x²}',
+    fn: x => 2*((x+(x-2))/2-x*x),
+    proc: x => `(x−2)=${x-2} | [${x}+${x-2}]/2=${(x+(x-2))/2} | ${(x+(x-2))/2}−${x*x}=${(x+(x-2))/2-x*x} | 2·${(x+(x-2))/2-x*x}=${2*((x+(x-2))/2-x*x)}`
+  },
+  {
+    xv: 5, label:'(2x+2)/3 − {2·[x − (x+1)]} + 1',
+    fn: x => (2*x+2)/3-2*(x-(x+1))+1,
+    proc: x => `(x+1)=${x+1} | [${x}−${x+1}]=${x-(x+1)} | 2·${x-(x+1)}=${2*(x-(x+1))} | (2·${x}+2)/3=${(2*x+2)/3} | ${(2*x+2)/3}−${2*(x-(x+1))}+1=${(2*x+2)/3-2*(x-(x+1))+1}`
+  },
+  {
+    xv: 2, label:'3x − {2·[(x+4)/3 + (x−2)]}',
+    fn: x => 3*x-2*((x+4)/3+(x-2)),
+    proc: x => `(x+4)/3=${(x+4)/3} | (x−2)=${x-2} | [${(x+4)/3}+${x-2}]=${(x+4)/3+(x-2)} | 2·${(x+4)/3+(x-2)}=${2*((x+4)/3+(x-2))} | ${3*x}−${2*((x+4)/3+(x-2))}=${3*x-2*((x+4)/3+(x-2))}`
+  }
+];
+
+// KEYWORDS evaluación de texto
+const KW = ['paréntesis','corchete','llave','signo','agrupación','eliminar','cambia','cambio',
+            'jerarquía','anidación','interior','exterior','orden','operación','negativo','positivo',
+            'expresión','nivel','resultado','primero'];
+
+// ── FUNCIONES UTILITARIAS ──────────────────────────────────────────
+function tp(id){ const e=document.getElementById(id); e.style.display=e.style.display==='block'?'none':'block'; }
+function cntWords(tid,cid){
+  const w=document.getElementById(tid).value.trim().split(/\s+/).filter(w=>w.length>0).length;
+  document.getElementById(cid).textContent=w+' palabra'+(w===1?'':'s');
+}
+function evaluarTexto(txt, min){
+  const ws=txt.trim().split(/\s+/).filter(w=>w.length>0);
+  const n=ws.length, tl=txt.toLowerCase();
+  const kw=KW.filter(k=>tl.includes(k)).length;
+  if(n<min) return{score:0, cls:'txt-zero', lbl:`Insuficiente (${n}/${min} palabras)`};
+  if(kw>=3) return{score:1, cls:'txt-full', lbl:`Completo ✓ (${n} palabras, vocabulario temático)`};
+  if(kw>=1) return{score:0.75, cls:'txt-ok', lbl:`Aceptable (incluye vocabulario del tema)`};
+  return{score:0.5, cls:'txt-low', lbl:`Básico — usa términos: paréntesis, signo, agrupación...`};
+}
+
+// ── LOGIN ──────────────────────────────────────────────────────────
+function iniciar(){
+  nombre=document.getElementById('inp-nombre').value.trim().toUpperCase();
+  const fb=document.getElementById('fb-login');
+  if(nombre.length<4){fb.textContent='Escribe tu nombre completo.';return;}
+  fb.textContent='';
+  generar();
+  document.getElementById('chip-txt').textContent=nombre;
+  document.getElementById('msg-bienvenida').innerHTML=
+    `Hola, <strong>${nombre.split(' ')[0]}</strong>. Hoy trabajamos algo que parece simple pero que engaña a miles de personas en internet: los signos de agrupación. `+
+    `Como ya ven 6° semestre y conocen álgebra, cálculo y geometría analítica, el enfoque no será básico — sino preciso y con variables. `+
+    `Cuando termines pásate conmigo para registrar tu calificación.<br><br><em>— Prof. Adrián Cruz</em>`;
+  document.getElementById('hdr').style.display='block';
+  ir('s1',0);
+}
+
+// ── GENERAR VALORES ────────────────────────────────────────────────
+function generar(){
+  // B1
+  V.b1a=pick(B1A);
+  V.b1b_a=rnd(-6,10); V.b1b_b=rnd(1,8); V.b1b_c=rnd(1,8); V.b1b_d=rnd(1,8);
+  V.b1c_a=rnd(8,20); V.b1c_b=rnd(1,8); V.b1c_c=rnd(1,8); V.b1c_d=rnd(1,8);
+  // B2
+  V.xval=[2,3,4,5][rnd(0,3)];
+  V.b2ai=rnd(0,5); V.b2bi=rnd(0,5);
+  // B3
+  V.b3i=rnd(0,3);
+  // B4
+  const pa={a:rnd(4,8)*10, b:rnd(1,4)*10, c:rnd(1,3)*10, d:rnd(2,8)*5};
+  V.b4i=rnd(0,5); V.b4v=pa;
+  // Quiz
+  V.q1i=rnd(0,5);
+  V.q2i=rnd(0,5); V.q2x=[2,3,4][rnd(0,2)];
+  V.q3i=rnd(0,5);
+}
+
+// ── NAVEGACIÓN ─────────────────────────────────────────────────────
+function ir(id, paso){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('bwf').style.width=(paso/9*100)+'%';
+  document.getElementById('bwc').textContent=paso;
+  if(id==='s3') cargB1();
+  if(id==='s4') cargB2();
+  if(id==='s5') cargB3();
+  if(id==='s6') cargB4();
+  if(id==='s8') cargQuiz();
+  if(id==='s10') mostrarRes();
+}
+
+// ── B1 ─────────────────────────────────────────────────────────────
+function cargB1(){
+  const b=V.b1a;
+  document.getElementById('b1a-expr').textContent=b.expr;
+  const d=document.getElementById('b1a-opts');
+  d.innerHTML='';
+  b.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='ob'; btn.innerHTML=o;
+    btn.onclick=()=>mcB1a(btn,i,b);
+    d.appendChild(btn);
+  });
+  // B1b
+  const{b1b_a:a,b1b_b:b2,b1b_c:c,b1b_d:dd}=V;
+  const sgnB=b2>=0?`+${b2}`:`${b2}`, sgnC=c>=0?`−${c}`:`+${-c}`, sgnD=dd>=0?`+${dd}`:`−${-dd}`;
+  document.getElementById('b1b-expr').innerHTML=`${a} + (${sgnB} ${sgnC} ${sgnD})`;
+  document.getElementById('h-b1b').innerHTML=`Con signo +, los signos NO cambian: ${a} + ${b2} − ${c} + ${dd} = ${a+b2-c+dd}`;
+  // B1c
+  const{b1c_a:a2,b1c_b:b3,b1c_c:c2,b1c_d:d2}=V;
+  document.getElementById('b1c-expr').innerHTML=`${a2} − (${b3} − ${c2} + ${d2})`;
+  document.getElementById('h-b1c').innerHTML=`Con signo −, TODOS los signos cambian:<br>${a2} − ${b3} + ${c2} − ${d2} = ${a2-b3+c2-d2}`;
+}
+function mcB1a(btn,i,b){
+  document.querySelectorAll('#b1a-opts .ob').forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById('fb-b1a');
+  if(i===b.ans){
+    btn.classList.add('eok');
+    fb.className='fb ok'; fb.textContent=b.fb;
+    document.getElementById('b1b-card').style.display='block';
+    b1aOk=true;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er'; fb.textContent='Observa la jerarquía: ( ) van primero, luego [ ], luego { }. ¿Cuál está más adentro?';
+    setTimeout(()=>{
+      document.querySelectorAll('#b1a-opts .ob').forEach(x=>x.classList.remove('dx','eml'));
+    },2200);
+  }
+}
+function chkB1b(){
+  const v=parseFloat(document.getElementById('inp-b1b').value);
+  const{b1b_a:a,b1b_b:b,b1b_c:c,b1b_d:d}=V;
+  const ans=a+b-c+d;
+  const fb=document.getElementById('fb-b1b');
+  if(!isNaN(v)&&v===ans){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto: ${a} + ${b} − ${c} + ${d} = ${ans}. Los signos no cambian con +.`;
+    document.getElementById('inp-b1b').disabled=true;
+    document.getElementById('b1c-card').style.display='block';
+    b1bOk=true;
+  } else {
+    fb.className='fb er'; fb.textContent=`Recuerda: el signo + no cambia nada. Suma directamente: ${a} + ${b} − ${c} + ${d}`;
+  }
+}
+function chkB1c(){
+  const v=parseFloat(document.getElementById('inp-b1c').value);
+  const{b1c_a:a,b1c_b:b,b1c_c:c,b1c_d:d}=V;
+  const ans=a-b+c-d;
+  const fb=document.getElementById('fb-b1c');
+  if(!isNaN(v)&&v===ans){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto: ${a} − ${b} + ${c} − ${d} = ${ans}. El signo − invirtió todo.`;
+    document.getElementById('inp-b1c').disabled=true;
+    document.getElementById('btn-b1').disabled=false;
+    b1cOk=true;
+  } else {
+    fb.className='fb er'; fb.textContent=`Clave: −(${b}−${c}+${d}) → cada signo cambia: −${b}+${c}−${d}`;
+  }
+}
+
+// ── B2 ─────────────────────────────────────────────────────────────
+function cargB2(){
+  const x=V.xval;
+  document.getElementById('b2-xval').textContent=x;
+  document.getElementById('b2a-xref').textContent=x;
+  const ea=B2A_BANK[V.b2ai];
+  document.getElementById('b2a-expr').textContent=ea.label(x);
+  document.getElementById('h-b2a').textContent=ea.hint(x);
+}
+function chkB2a(){
+  const x=V.xval, ea=B2A_BANK[V.b2ai];
+  const v=parseFloat(document.getElementById('inp-b2a').value);
+  const ans=ea.fn(x);
+  const fb=document.getElementById('fb-b2a');
+  if(!isNaN(v)&&v===ans){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto: ${ea.label(x)} con x=${x} = ${ans}`;
+    document.getElementById('inp-b2a').disabled=true;
+    document.getElementById('b2b-card').style.display='block';
+    const eb=B2B_BANK[V.b2bi];
+    document.getElementById('b2b-xref').textContent=x;
+    document.getElementById('b2b-expr').textContent=eb.label(x);
+    document.getElementById('h-b2b').textContent=eb.hint(x);
+    b2aOk=true;
+  } else {
+    fb.className='fb er'; fb.textContent=`Revisa. Usa la pista paso a paso si lo necesitas.`;
+  }
+}
+function chkB2b(){
+  const x=V.xval, eb=B2B_BANK[V.b2bi];
+  const v=parseFloat(document.getElementById('inp-b2b').value);
+  const ans=eb.fn(x);
+  const fb=document.getElementById('fb-b2b');
+  if(!isNaN(v)&&v===ans){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto. Resultado = ${ans}`;
+    document.getElementById('inp-b2b').disabled=true;
+    document.getElementById('btn-b2').disabled=false;
+    b2bOk=true;
+  } else {
+    fb.className='fb er'; fb.textContent=`Revisa el orden: paréntesis → corchete → llave. Usa la pista.`;
+  }
+}
+
+// ── B3 ─────────────────────────────────────────────────────────────
+function cargB3(){
+  const b=B3_BANK[V.b3i];
+  document.getElementById('b3-expr-disp').textContent=b.expr;
+}
+function chkB3(){
+  const b=B3_BANK[V.b3i];
+  const v=parseFloat(document.getElementById('inp-b3').value);
+  const fb=document.getElementById('fb-b3');
+  if(!isNaN(v)&&Math.abs(v-b.ans)<0.01){
+    fb.className='fb ok';
+    fb.innerHTML=`✓ Correcto. ${b.proc}. La convención izquierda→derecha da ${b.ans}.`;
+    document.getElementById('inp-b3').disabled=true;
+    document.getElementById('b3-var-card').style.display='block';
+    document.getElementById('b3-var-expr').textContent=b.varExpr;
+    b3Ok=true;
+  } else {
+    fb.className='fb er'; fb.textContent=`Recuerda: primero el paréntesis, luego ÷ y × de izquierda a derecha.`;
+  }
+}
+function chkB3v(){
+  const b=B3_BANK[V.b3i];
+  const v=parseFloat(document.getElementById('inp-b3v').value);
+  const fb=document.getElementById('fb-b3v');
+  if(!isNaN(v)&&Math.abs(v-b.varAns)<0.01){
+    fb.className='fb ok';
+    fb.innerHTML=`✓ Correcto. ${b.procVar}. Los corchetes <em>sí</em> cambian el resultado.`;
+    document.getElementById('inp-b3v').disabled=true;
+    document.getElementById('b3-txt-card').style.display='block';
+    b3vOk=true;
+    document.getElementById('btn-b3').disabled=false;
+  } else {
+    fb.className='fb er'; fb.textContent=`Con corchetes explícitos el agrupamiento cambia. Revisa qué queda adentro del corchete.`;
+  }
+}
+
+// ── B4 ─────────────────────────────────────────────────────────────
+function cargB4(){
+  const gen=B4_BANK[V.b4i](V.b4v);
+  V.b4gen=gen;
+  document.getElementById('b4-ctx-txt').innerHTML=gen.ctx;
+  document.getElementById('b4-expr-disp').textContent=gen.exprStr;
+  const d=document.getElementById('b4-opts-mc');
+  d.innerHTML='';
+  gen.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='ob'; btn.textContent=o;
+    btn.onclick=()=>mcB4(btn,i,gen);
+    d.appendChild(btn);
+  });
+}
+function mcB4(btn,i,gen){
+  document.querySelectorAll('#b4-opts-mc .ob').forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById('fb-b4mc');
+  if(i===gen.ansOpts){
+    btn.classList.add('eok');
+    fb.className='fb ok'; fb.textContent='✓ Correcto. Ese es el signo más externo.';
+    document.getElementById('b4-calc-card').style.display='block';
+    document.getElementById('b4-expr-sust').textContent=gen.sustStr;
+    document.getElementById('h-b4').textContent=gen.hint();
+    b4mcOk=true;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er'; fb.textContent='Observa la expresión: ¿qué signo de agrupación abarca todo lo demás?';
+    setTimeout(()=>{
+      document.querySelectorAll('#b4-opts-mc .ob').forEach(x=>x.classList.remove('dx','eml'));
+    },2200);
+  }
+}
+function chkB4(){
+  const gen=V.b4gen;
+  const v=parseFloat(document.getElementById('inp-b4').value);
+  const ans=gen.fn();
+  const fb=document.getElementById('fb-b4');
+  if(!isNaN(v)&&Math.abs(v-ans)<0.5){
+    fb.className='fb ok'; fb.textContent=`✓ Correcto. Resultado = ${ans}.`;
+    document.getElementById('inp-b4').disabled=true;
+    document.getElementById('b4-interp-card').style.display='block';
+    b4calcOk=true;
+    document.getElementById('btn-b4').disabled=false;
+  } else {
+    fb.className='fb er'; fb.textContent=`Usa la pista para el procedimiento paso a paso.`;
+  }
+}
+
+// ── FICHA ──────────────────────────────────────────────────────────
+function checkFicha(){
+  document.getElementById('btn-b5').disabled=!document.getElementById('check-ficha').checked;
+}
+
+// ── QUIZ ───────────────────────────────────────────────────────────
+function cargQuiz(){
+  quizGuardados=0; QR=[null,null,null,null];
+  document.getElementById('quiz-cnt').textContent='0';
+  // Q1
+  const q1=Q1_BANK[V.q1i];
+  QB[0]=q1;
+  document.getElementById('q1-txt').innerHTML=q1.preg;
+  const d=document.getElementById('q1-opts');
+  d.innerHTML='';
+  q1.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='ob'; btn.innerHTML=o;
+    btn.onclick=()=>selQ1(i,btn);
+    d.appendChild(btn);
+  });
+  // Q2
+  const q2=Q2_BANK[V.q2i]; QB[1]=q2;
+  const x2=V.q2x; QM[1]=q2.fn(x2);
+  document.getElementById('q2-xval').textContent=x2;
+  document.getElementById('q2-expr').textContent=q2.label(x2);
+  // Q3
+  const q3=Q3_BANK[V.q3i]; QB[2]=q3;
+  QM[2]=q3.fn(q3.xv);
+  document.getElementById('q3-xval').textContent=q3.xv;
+  document.getElementById('q3-expr').textContent=q3.label;
+}
+
+let q1Sel=-1;
+function selQ1(i,btn){
+  q1Sel=i;
+  document.querySelectorAll('#q1-opts .ob').forEach(x=>x.classList.remove('eok'));
+  btn.classList.add('eok');
+  document.getElementById('btn-q1').style.display='inline-block';
+}
+
+function guardarQ(n){
+  if(n===1){
+    if(q1Sel<0) return;
+    QR[0]=q1Sel;
+    document.querySelectorAll('#q1-opts .ob').forEach(x=>{x.disabled=true;x.style.pointerEvents='none'});
+    document.getElementById('btn-q1').style.display='none';
+    document.getElementById('q1-sel').style.display='block';
+  } else if(n===2){
+    const v=document.getElementById('inp-q2').value;
+    if(!v.trim()) return;
+    QR[1]=parseFloat(v);
+    document.getElementById('inp-q2').disabled=true;
+    document.getElementById('btn-q2').disabled=true;
+    document.getElementById('conf-q2').style.display='block';
+  } else if(n===3){
+    const v=document.getElementById('inp-q3').value;
+    if(!v.trim()) return;
+    QR[2]=parseFloat(v);
+    document.getElementById('inp-q3').disabled=true;
+    document.getElementById('btn-q3').disabled=true;
+    document.getElementById('conf-q3').style.display='block';
+  } else if(n===4){
+    const v=document.getElementById('inp-q4').value.trim();
+    if(!v) return;
+    QR[3]=v;
+    document.getElementById('inp-q4').disabled=true;
+    document.getElementById('btn-q4').disabled=true;
+    document.getElementById('conf-q4').style.display='block';
+  }
+  quizGuardados++;
+  document.getElementById('quiz-cnt').textContent=quizGuardados;
+  if(quizGuardados>=4) document.getElementById('btn-quiz').disabled=false;
+}
+
+// ── SÍNTESIS ──────────────────────────────────────────────────────
+function chkSint(){
+  const w1=document.getElementById('r-sint-1').value.trim().split(/\s+/).filter(w=>w.length>0).length;
+  const w2=document.getElementById('r-sint-2').value.trim().split(/\s+/).filter(w=>w.length>0).length;
+  document.getElementById('cnt-sint1').textContent=w1+' palabras';
+  document.getElementById('cnt-sint2').textContent=w2+' palabras';
+  document.getElementById('btn-sint').disabled=!(w1>=35&&w2>=20);
+}
+
+// ── RESULTADOS ────────────────────────────────────────────────────
+function mostrarRes(){
+  // Evaluar Q1
+  const q1=QB[0]; const q1ok=(QR[0]===q1.ans);
+  QM[0]=q1.ans;
+  // Evaluar Q2
+  const q2=QB[1]; const x2=V.q2x;
+  const q2ok=(QR[1]!==null&&Math.abs(QR[1]-QM[1])<0.05);
+  // Evaluar Q3
+  const q3=QB[2];
+  const q3ok=(QR[2]!==null&&Math.abs(QR[2]-QM[2])<0.1);
+  // Evaluar Q4 texto
+  const txt4=QR[3]||'';
+  const ev4=evaluarTexto(txt4,25);
+
+  let correctas=0;
+  if(q1ok) correctas++;
+  if(q2ok) correctas++;
+  if(q3ok) correctas++;
+  if(ev4.score>=0.75) correctas++;
+
+  const meta=correctas>=3;
+  const mc=document.getElementById('marc-card');
+  mc.style.background=meta?'#1b6b35':'var(--mo)';
+  document.getElementById('marc-ico').textContent=meta?'🏆':'📊';
+  document.getElementById('marc-pts').textContent=`${correctas} / 4`;
+  document.getElementById('marc-lbl').innerHTML=meta
+    ?'✓ Meta alcanzada. Muestra al Prof. Cruz.'
+    :`${3-correctas} más para la meta. Puedes reintentar.`;
+  document.getElementById('wrap-reintento').style.display=meta?'none':'block';
+
+  // Detalle
+  const items=[
+    {lbl:'Q1 — Opción múltiple',tipo:'MC',ok:q1ok,resp:q1ok?'Respuesta correcta':q1.opts[QR[0]]||'—',
+     proc:`Respuesta correcta: ${q1.opts[q1.ans]}<br>${q1.fb}`},
+    {lbl:`Q2 — Triple anidación (x=${x2})`,tipo:'Cálculo',ok:q2ok,resp:QR[1]!==null?QR[1]:'—',esp:QM[1],
+     proc:`${q2.label(x2)} con x=${x2}<br>Procedimiento: ${q2.proc(x2)}<br>Respuesta: <span class="ans-ok">${QM[1]}</span>`},
+    {lbl:`Q3 — Con fracción (x=${q3.xv})`,tipo:'Cálculo',ok:q3ok,resp:QR[2]!==null?QR[2]:'—',esp:QM[2],
+     proc:`${q3.label} con x=${q3.xv}<br>Procedimiento: ${q3.proc(q3.xv)}<br>Respuesta: <span class="ans-ok">${QM[2]}</span>`},
+    {lbl:'Q4 — Explicación escrita',tipo:'Texto',ok:ev4.score>=0.75,resp:txt4||'—',esp:'Coherencia+vocabulario',
+     proc:`Evaluación: <span class="txt-badge ${ev4.cls}">${ev4.lbl}</span>`}
+  ];
+
+  let html='';
+  items.forEach((it,i)=>{
+    html+=`<div class="q-item">
+      <div class="q-head ${it.ok?'q-head-ok':'q-head-er'}">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:16px;font-weight:800">${it.ok?'✅':'❌'} Ej. ${i+1}</span>
+          <span style="font-size:10px;background:var(--mo);color:#fff;border-radius:5px;padding:2px 7px;font-weight:700">${it.tipo}</span>
+        </div>
+        <span style="font-weight:700;font-size:14px">${it.ok?'Correcto':'Incorrecto'}</span>
+      </div>
+      <div class="q-body">
+        <p style="font-size:13px;font-weight:700;margin-bottom:6px">${it.lbl}</p>
+        <div>
+          <span class="chip-resp ${it.ok?'chip-ok':'chip-er'}">Tu resp.: ${it.resp}</span>
+          ${it.esp!==undefined?`<span class="chip-resp chip-eu">Correcto: ${it.esp}</span>`:''}
+        </div>
+        <div class="proc-box"><h4>Procedimiento / Clave</h4>${it.proc}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('detalle-quiz').innerHTML=html;
+
+  document.getElementById('res-sint1').textContent=document.getElementById('r-sint-1').value.trim()||'(no respondida)';
+  document.getElementById('res-sint2').textContent=document.getElementById('r-sint-2').value.trim()||'(no respondida)';
+
+  // Tira docente
+  const fe=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  const ho=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const chips=[q1ok,q2ok,q3ok,ev4.score>=0.75].map((ok,i)=>`<span class="pq ${ok?'pq-ok':'pq-er'}">E${i+1}${ok?'✓':'✗'}</span>`).join(' ');
+  const cod=`S5-${correctas}/4-INT${intento}`;
+  document.getElementById('prof-strip').innerHTML=`
+    <div class="mini-title">── REGISTRO DOCENTE TSM III S05 ──</div>
+    <div style="font-size:15px;font-weight:700">${nombre}</div>
+    <div style="font-size:13px;opacity:.7">${fe} ${ho} · Intento ${intento}</div>
+    <div style="font-size:24px;font-weight:900;margin:6px 0">${correctas}/4 &nbsp;${meta?'✓ META':'✗ sin meta'}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">${chips}</div>
+    <div style="font-size:12px;opacity:.6;font-family:'Courier New',monospace">${cod}</div>`;
+
+  const txt=`════════════════════════════\nSIGNOS DE AGRUPACIÓN · TSM III · G658\n════════════════════════════\nAlumno : ${nombre}\nFecha  : ${fe} ${ho}\nIntento: ${intento}\n${correctas}/4 ${meta?'✓ META':'✗ sin meta'}\n\nE1(MC):${q1ok?'✓':'✗'} E2(cálc):${q2ok?'✓':'✗'} E3(frac):${q3ok?'✓':'✗'} E4(txt):${ev4.score>=0.75?'✓':'✗'}\n\nReflexión:\n${document.getElementById('r-sint-1').value.trim()}\n════════════════════════════\n${cod}\n════════════════════════════`;
+  document.getElementById('copy-area').textContent=txt;
+  window._rt=txt;
+}
+
+function copiarRes(){
+  const t=window._rt||'';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(t).then(()=>{
+      document.getElementById('fb-copia').textContent='✓ Copiado — pégalo en Classroom';
+      document.getElementById('btn-copiar').textContent='✓ Copiado';
+    });
+  } else {
+    const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');document.getElementById('fb-copia').textContent='✓ Copiado';}
+    catch{document.getElementById('copy-area').style.display='block';}
+    document.body.removeChild(ta);
+  }
+}
+
+function reiniciar(){
+  intento++;
+  quizGuardados=0; QR=[null,null,null,null]; q1Sel=-1;
+  b1aOk=b1bOk=b1cOk=b2aOk=b2bOk=b0mcOk=b3Ok=b3vOk=b4mcOk=b4calcOk=false;
+  b3Fase=0; b4Fase=0;
+  // Reset UI
+  ['inp-b1b','inp-b1c','inp-b2a','inp-b2b','inp-b3','inp-b3v','inp-b4'].forEach(id=>{
+    const el=document.getElementById(id); if(el){el.value='';el.disabled=false;}
+  });
+  ['fb-b1a','fb-b1b','fb-b1c','fb-b2a','fb-b2b','fb-b3','fb-b3v','fb-b4mc','fb-b4','fb-b0mc'].forEach(id=>{
+    const el=document.getElementById(id); if(el){el.className='fb';}
+  });
+  ['b1b-card','b1c-card','b2b-card','b3-var-card','b3-txt-card','b4-calc-card','b4-interp-card'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  ['btn-b1','btn-b2','btn-b3','btn-b4','btn-b5','btn-quiz'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.disabled=true;
+  });
+  document.getElementById('btn-b0').disabled=true;
+  document.getElementById('check-ficha').checked=false;
+  ['r-b0-1','r-b2-anl','r-b3-txt','r-b4-int','r-sint-1','r-sint-2','inp-q4'].forEach(id=>{
+    const el=document.getElementById(id); if(el){el.value='';el.disabled=false;}
+  });
+  generar();
+  ir('s2',1);
+}
+
+// ── MC B0 ──────────────────────────────────────────────────────────
+function mcB0(btn,tipo){
+  document.querySelectorAll('#b0-mc-card .ob').forEach(x=>x.classList.add('dx'));
+  const fb=document.getElementById('fb-b0mc');
+  if(tipo==='c'){
+    btn.classList.add('eok');
+    fb.className='fb ok'; fb.textContent='✓ Exacto. Sin conocer la jerarquía y la asociatividad de izquierda a derecha, cualquier expresión como esa será ambigua.';
+    b0mcOk=true;
+    document.getElementById('btn-b0').disabled=false;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er'; fb.textContent='No es suficiente. ¿Qué pasa cuando hay dos operaciones del mismo nivel como × y ÷?';
+    setTimeout(()=>{
+      document.querySelectorAll('#b0-mc-card .ob').forEach(x=>x.classList.remove('dx','eml'));
+    },2200);
+  }
+}
+
+// ── ACCESO DOCENTE ────────────────────────────────────────────────
+let _t=0, _tt=0;
+function tapSym(){
+  const now=Date.now();
+  if(now-_tt>3000) _t=0;
+  _tt=now; _t++;
+  if(_t>=5){_t=0;abrirPin();}
+}
+function abrirPin(){
+  document.getElementById('pin-modal').classList.add('show');
+  document.getElementById('pin-inp').value='';
+  document.getElementById('pin-fb').textContent='';
+  setTimeout(()=>document.getElementById('pin-inp').focus(),100);
+}
+function cerrarPin(){ document.getElementById('pin-modal').classList.remove('show'); }
+function chkPin(v){
+  if(v==='890'){
+    cerrarPin();
+    document.body.classList.add('teacher-mode');
+    abrirProf();
+  } else if(v.length>=3){
+    document.getElementById('pin-fb').textContent='Código incorrecto.';
+  }
+}
+function abrirProf(){
+  document.getElementById('prof-overlay').style.display='block';
+  document.getElementById('btn-xp').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function cerrarProf(){
+  document.getElementById('prof-overlay').style.display='none';
+  document.getElementById('btn-xp').style.display='none';
+  document.body.style.overflow='';
+}
+function profSimular(){
+  document.getElementById('prof-sim-wrap').style.display='block';
+}
+function profEntrar(){
+  const nm=document.getElementById('prof-sim-nom').value.trim().toUpperCase()||'DOCENTE DEMO';
+  cerrarProf();
+  document.getElementById('inp-nombre').value=nm;
+  iniciar();
+}
+function profVerMuestra(){
+  cerrarProf();
+  // Rellenar datos de muestra
+  nombre='MUESTRA DOCENTE';
+  document.getElementById('chip-txt').textContent=nombre;
+  generar();
+  // Pre-llenar respuestas con valores correctos
+  const x=V.xval;
+  QR[0]=Q1_BANK[V.q1i].ans;
+  QR[1]=Q2_BANK[V.q2i].fn(V.q2x);
+  QR[2]=Q3_BANK[V.q3i].fn(Q3_BANK[V.q3i].xv);
+  QR[3]='El paréntesis cambia el resultado porque al eliminar con signo negativo todos los signos se invierten. Por ejemplo en el precio de un producto con descuento si no agrupo bien el descuento puede sumarse en vez de restarse.';
+  QB[0]=Q1_BANK[V.q1i];
+  QB[1]=Q2_BANK[V.q2i]; QM[1]=QB[1].fn(V.q2x);
+  QB[2]=Q3_BANK[V.q3i]; QM[2]=QB[2].fn(QB[2].xv);
+  document.getElementById('r-sint-1').value='En mi vida diaria el orden importa cuando calculo el cambio en la tienda. Si pago con 50 pesos y compro algo de 30 más una bolsa de 3 pesos, la operación 50 − (30 + 3) da 17 pero si hago 50 − 30 + 3 da 23, un resultado diferente.';
+  document.getElementById('r-sint-2').value='Necesitaría aplicar primero las potencias como 3 al cuadrado antes de multiplicar y dividir para poder resolver correctamente esa expresión combinada.';
+  document.getElementById('hdr').style.display='block';
+  ir('s10',9);
+}
+</script>
+</body>
+</html>
