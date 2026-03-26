@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>S06 · Jerarquía de Operaciones · TSM III · G658</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mo:#5c1a8e;--mo2:#8b3fc8;--mo3:#f0e6fa;
+  --az:#1a3a6b;--az2:#2563a8;--az3:#e6f0fb;
+  --ve:#1b6b35;--ve2:#27a74f;--ve3:#e6f7ed;
+  --ro:#b82020;--ro3:#fce8e8;
+  --am:#c06000;--am3:#fff2e0;
+  --or:#c44b00;--or3:#fff0e8;
+  --gr:#f0f2f8;--gr2:#dde2ee;--bl:#fff;
+  --tx:#131828;--sh:0 2px 14px rgba(0,0,0,.11);--r:12px
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--gr);color:var(--tx);font-size:15px;min-height:100vh;
+  -webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:200;background:var(--mo);padding:8px 15px 6px;display:none}
+#hdr-tag{color:rgba(255,255,255,.55);font-size:11px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+#hdr-tit{color:#fff;font-size:14px;font-weight:800;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+#hdr-chip{background:rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;float:right;margin-top:-18px}
+#bwt{background:rgba(255,255,255,.15);height:5px}
+#bwf{background:linear-gradient(90deg,#d4a8ff,#fff);height:5px;width:0%;transition:width .5s}
+#bwn{color:rgba(255,255,255,.6);font-size:11px;text-align:right;margin-top:2px}
+#hdr-nombre{color:rgba(255,255,255,.75);font-size:11px;text-align:center;margin-top:2px;font-style:italic}
+
+/* BARRA TECLADO FLOTANTE */
+#sym-bar{
+  display:none;position:fixed;top:66px;left:0;right:0;z-index:500;
+  background:#1a1a2e;border-bottom:2px solid var(--mo2);
+  padding:6px 10px 8px;flex-direction:column;gap:4px;
+  box-shadow:0 4px 16px rgba(0,0,0,.35);
+}
+#sym-bar.vis{display:flex;}
+.sym-lbl{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
+.sym-lbl strong{color:#d4a8ff;}
+.sym-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.sym-btn{background:#2d2d4a;color:#fff;border:1.5px solid #4a4a7a;border-radius:7px;
+  padding:6px 10px;font-size:14px;font-family:'Nunito';font-weight:800;cursor:pointer;min-width:38px;
+  text-align:center;line-height:1;transition:background .12s;}
+.sym-btn:active{background:var(--mo2);}
+.sym-btn.neg{background:#8b1a1a;}
+.sym-btn.clr{background:#555;min-width:50px;}
+.sym-ejemplo{font-size:10px;color:rgba(255,255,255,.5);align-self:center;padding:0 4px;}
+
+/* SECCIONES */
+.sec{display:none;max-width:600px;margin:0 auto;padding:14px 12px 60px;animation:fi .35s ease}
+.sec.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* TARJETAS */
+.card{background:var(--bl);border-radius:var(--r);padding:17px 15px;box-shadow:var(--sh);margin-bottom:12px}
+.cmo{background:var(--mo);color:#fff}
+.cmo2{background:var(--mo3);border-left:4px solid var(--mo2)}
+.caz{background:var(--az3);border-left:4px solid var(--az2)}
+.cve{background:var(--ve3);border-left:4px solid var(--ve2)}
+.cam{background:var(--am3);border-left:4px solid var(--am)}
+.cgr{background:var(--gr2)}
+.crojo{background:var(--ro3);border-left:4px solid var(--ro)}
+.cor{background:var(--or3);border-left:4px solid var(--or)}
+
+/* TIPOGRAFÍA */
+h3{font-size:16px;font-weight:800;margin-bottom:7px;color:var(--mo)}
+h4{font-size:14px;font-weight:700;margin-bottom:5px}
+p{line-height:1.65;margin-bottom:7px}
+.tit{font-size:22px;font-weight:900;color:var(--mo);margin-bottom:3px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.tag{display:inline-block;background:var(--mo);color:#fff;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700;margin-bottom:7px;letter-spacing:.5px}
+.sep{height:1px;background:var(--gr2);margin:12px 0}
+.nc{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--mo);color:#fff;font-weight:800;font-size:12px;margin-right:6px;flex-shrink:0}
+
+/* ══ EXPRESIONES MATEMÁTICAS PROFESIONALES ══ */
+/* Fracciones verticales */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;margin:0 3px;font-size:.92em}
+.frac .num{border-bottom:2.5px solid currentColor;padding:1px 6px;text-align:center;min-width:14px;font-weight:700}
+.frac .den{padding:1px 6px;text-align:center;font-weight:700}
+
+/* Caja de expresión oscura (enunciados) */
+.frm{background:var(--mo);color:#fff;border-radius:10px;padding:12px 16px;font-size:16px;font-weight:700;
+  text-align:center;margin:8px 0;display:flex;align-items:center;justify-content:center;
+  gap:6px;flex-wrap:wrap;line-height:2.4}
+.frm .frac .num{color:#fff;border-color:#fff}
+.frm .frac .den{color:#fff}
+.frm-az{background:var(--az2)}
+.frm-ve{background:var(--ve2)}
+
+/* Caja de expresión clara (paso a paso) */
+.expr-box{background:var(--gr);border:1.5px solid var(--gr2);border-radius:9px;padding:12px 14px;
+  font-size:16px;font-weight:700;font-family:'Nunito',sans-serif;
+  text-align:center;margin:8px 0;line-height:2.4;word-break:break-word}
+
+/* Vista previa de la respuesta del alumno */
+.inp-preview{font-family:'Nunito',monospace;font-size:.9rem;font-weight:800;
+  background:var(--gr);border-radius:6px;padding:5px 10px;margin-top:4px;min-height:28px;
+  display:block;color:var(--mo);border:1px dashed var(--mo3);letter-spacing:.3px}
+
+/* INPUTS */
+input[type=text],textarea{width:100%;border:2px solid var(--gr2);border-radius:10px;padding:10px 12px;font-size:15px;font-family:'Nunito',sans-serif;background:var(--gr);transition:border .2s;-webkit-appearance:none;-webkit-user-select:text!important;user-select:text!important}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--mo2);background:#fff}
+input[type=text].err,textarea.err{border-color:var(--ro)!important;background:var(--ro3)!important;animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}33%{transform:translateX(-6px)}66%{transform:translateX(6px)}}
+input[type=text]:disabled,textarea:disabled{background:var(--gr2);color:#777}
+textarea{resize:vertical;min-height:80px}
+
+/* BOTONES */
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:9px;transition:transform .15s;font-family:'Nunito',sans-serif}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--mo);color:#fff;box-shadow:0 4px 14px rgba(92,26,142,.3)}
+.bp:disabled{background:#c4a0e0;box-shadow:none;cursor:not-allowed;transform:none}
+.baz{background:var(--az2);color:#fff}
+.bve{background:var(--ve2);color:#fff}
+.bsm{display:inline-block;width:auto;padding:7px 13px;font-size:13px}
+
+/* OPCIONES MC */
+.ob{display:block;width:100%;text-align:left;background:var(--bl);border:2px solid var(--gr2);border-radius:10px;padding:11px 13px;margin-bottom:7px;cursor:pointer;font-size:14px;font-family:'Nunito',sans-serif;transition:border .15s;line-height:1.6}
+.ob:hover{border-color:var(--mo2);background:var(--mo3)}
+.ob.eok{border-color:var(--ve2);background:var(--ve3);color:var(--ve);pointer-events:none;font-weight:700}
+.ob.eml{border-color:var(--ro);background:var(--ro3);color:var(--ro);pointer-events:none}
+.ob.dx{opacity:.45;pointer-events:none}
+
+/* FEEDBACK */
+.fb{border-radius:10px;padding:11px 13px;margin-top:7px;font-size:14px;display:none;line-height:1.55}
+.fb.ok{display:block;background:var(--ve3);border-left:4px solid var(--ve2);color:#1a5c30}
+.fb.er{display:block;background:var(--ro3);border-left:4px solid var(--ro);color:#8a1515}
+.fb.in{display:block;background:var(--mo3);border-left:4px solid var(--mo2);color:#4a1a7a}
+.fb.warn{display:block;background:var(--am3);border-left:4px solid var(--am);color:#7a4000}
+
+/* PISTAS — sin respuesta, solo ejemplo análogo */
+.pb{background:none;border:1px dashed var(--am);color:#7a4000;border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;margin-top:5px;font-family:'Nunito',sans-serif}
+.pbox{display:none;background:var(--am3);border-radius:8px;padding:10px 12px;margin-top:5px;font-size:13px;color:#7a4000;line-height:1.85}
+.pbox .pej{background:#fff;border-radius:6px;padding:6px 10px;margin-top:6px;font-size:14px;font-weight:700;text-align:center;border-left:3px solid var(--am)}
+
+/* CONTADOR PALABRAS */
+.cnt-txt{font-size:12px;color:#aaa;text-align:right;margin-top:3px}
+
+/* TABLA JERARQUÍA */
+.tabla-jer{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.tabla-jer th{background:var(--mo);color:#fff;padding:7px 9px;text-align:center;font-size:12px;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px}
+.tabla-jer td{padding:7px 9px;border:1.5px solid var(--gr2);text-align:center;vertical-align:middle;font-size:13px}
+.tabla-jer td:first-child{font-weight:800;background:var(--mo3);color:var(--mo)}
+
+/* PANEL ERROR */
+#err-panel{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:3px solid var(--ro);border-radius:16px 16px 0 0;padding:14px 15px 22px;z-index:400;box-shadow:0 -4px 20px rgba(0,0,0,.18);max-height:55vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s}
+#err-panel.show{transform:translateY(0)}
+#err-panel-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#err-panel-title{font-weight:800;color:var(--ro);font-size:15px}
+#err-close{background:none;border:none;font-size:20px;cursor:pointer;color:#999;padding:0 4px}
+.err-item{display:flex;align-items:center;gap:10px;padding:10px 11px;border:1.5px solid var(--gr2);border-radius:10px;margin-bottom:7px;cursor:pointer;background:var(--gr)}
+.err-item:active{background:var(--ro3)}
+.err-item-ico{color:var(--ro);font-size:16px;flex-shrink:0}
+.err-item-txt{flex:1}
+.err-item-label{font-size:13px;font-weight:700;display:block}
+.err-item-desc{font-size:11px;color:#888;display:block}
+
+/* PIN MODAL */
+#pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:8000;align-items:center;justify-content:center}
+#pin-modal.show{display:flex}
+#pin-box{background:#fff;border-radius:16px;padding:26px 22px;max-width:290px;width:90%;text-align:center}
+#pin-inp{border:2px solid var(--gr2);border-radius:10px;padding:10px;font-size:22px;text-align:center;letter-spacing:10px;width:100%;margin:10px 0;font-family:'Nunito',sans-serif;-webkit-appearance:none}
+#pin-inp:focus{outline:none;border-color:var(--az2)}
+
+/* PANEL DOCENTE */
+#prof-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,30,.95);z-index:9000;overflow-y:auto}
+#prof-panel{max-width:640px;margin:14px auto;padding:12px}
+.pcrd{background:#fff;border-radius:14px;padding:15px 14px;margin-bottom:12px}
+.prof-head{background:linear-gradient(135deg,var(--az),var(--mo));color:#fff;border-radius:14px;padding:18px;margin-bottom:12px;text-align:center}
+#btn-xp{position:fixed;top:12px;right:12px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);color:#fff;font-size:18px;cursor:pointer;border-radius:50%;width:38px;height:38px;z-index:9001;font-family:'Nunito',sans-serif}
+.dbtn{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;margin:3px}
+.dbtn:hover{background:rgba(255,255,255,.25)}
+#prof-bar{display:none;position:fixed;bottom:10px;right:10px;z-index:400;background:rgba(26,58,107,.92);border-radius:12px;padding:7px 10px;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+#prof-bar.show{display:block}
+.pbar-btn{display:block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;margin:3px 0;width:100%;text-align:left}
+
+/* CANVAS */
+.canvas-wrap{border:2px dashed var(--mo2);border-radius:12px;background:#fff;overflow:hidden;margin:8px 0;touch-action:none;position:relative}
+canvas{display:block;width:100%;height:230px;cursor:crosshair}
+.canvas-tools{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;align-items:center}
+.tool-btn{border:2px solid var(--gr2);background:var(--gr);border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+.tool-btn.act{border-color:var(--mo2);background:var(--mo3);color:var(--mo)}
+.color-dot{width:26px;height:26px;border-radius:50%;border:3px solid transparent;cursor:pointer;flex-shrink:0}
+.color-dot.act{border-color:var(--mo)}
+
+/* RESUMEN / RESULTADOS */
+.grade-box{text-align:center;padding:22px 16px;border-radius:12px;margin-bottom:12px}
+.res-aviso{background:var(--mo3);border:1.5px solid var(--mo2);border-radius:10px;padding:10px 13px;margin-bottom:10px;font-size:12px;color:var(--mo);line-height:1.7}
+.txt-badge{display:inline-block;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:4px}
+.txt-full{background:var(--ve3);color:var(--ve)}
+.txt-ok{background:var(--az3);color:var(--az2)}
+.txt-low{background:var(--am3);color:var(--am)}
+.txt-zero{background:var(--ro3);color:var(--ro)}
+
+/* Tarjeta de resultado individual */
+.res-item{border-radius:12px;border:2px solid var(--gr2);margin-bottom:10px;overflow:hidden}
+.res-item-head{padding:9px 13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px}
+.res-item-body{padding:11px 13px;font-size:13px}
+.res-badge{border-radius:18px;padding:3px 10px;font-size:12px;font-weight:700}
+.r-ok{background:var(--ve);color:#fff}
+.r-er{background:var(--ro);color:#fff}
+.r-warn{background:var(--am);color:#fff}
+
+/* Bloque comparación alumno vs esperado */
+.cmp-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.cmp-cell{flex:1;min-width:120px;background:#fff;border-radius:8px;padding:8px 10px;border:1.5px solid #ddd}
+.cmp-cell-lbl{font-size:10px;font-weight:800;color:#888;margin-bottom:3px;text-transform:uppercase;display:block}
+.cmp-cell-val{font-size:15px;font-weight:800;line-height:1.7}
+.cmp-cell.esperada{border-color:rgba(39,167,79,.3)}
+.cmp-cell.esperada .cmp-cell-val{color:var(--ve)}
+
+/* Expresión del enunciado en resumen */
+.res-expr{background:var(--gr);border-radius:8px;padding:8px 12px;font-size:14px;font-weight:700;text-align:center;margin:6px 0;line-height:2.2}
+.res-texto{background:#f8f8f8;border-radius:8px;padding:8px 10px;font-size:12px;color:#333;line-height:1.65;border:1px solid #eee;max-height:90px;overflow-y:auto;margin-top:6px}
+
+/* AVISO AUTO-AVANCE */
+.auto-aviso{background:var(--am3);border:1.5px solid var(--am);border-radius:8px;padding:7px 11px;font-size:12px;color:#7a4000;margin-top:5px;display:none}
+
+/* COPIAR RESUMEN */
+#copy-ta{width:100%;border:1.5px solid var(--gr2);border-radius:8px;padding:9px;font-size:11px;font-family:monospace;background:var(--gr);min-height:60px;resize:none;color:#555;margin-top:8px}
+
+/* CANVAS RESULTADO */
+.canvas-res{border:1.5px solid var(--gr2);border-radius:8px;max-width:100%;display:block;margin-top:6px}
+
+/* IMPRIMIR */
+@media print{
+  #hdr,#err-panel,#pin-modal,#prof-overlay,#prof-bar,#sym-bar,.btn,#btn-imprimir-wrap{display:none!important}
+  body{background:#fff}
+  .sec{display:block!important;padding:0}
+  #s-res{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER STICKY -->
+<div id="hdr">
+  <div id="hdr-tag">TSM III · G658 · S06</div>
+  <div id="hdr-chip">S06</div>
+  <div id="hdr-tit">Jerarquía de Operaciones · PEMDAS</div>
+  <div id="bwt"><div id="bwf"></div></div>
+  <div id="bwn">Bloque <span id="bwc">0</span> de 7</div>
+  <div id="hdr-nombre"></div>
+</div>
+
+<!-- BARRA TECLADO FLOTANTE (aparece solo al enfocar un campo) -->
+<div id="sym-bar">
+  <div class="sym-lbl">
+    ✏️ Escribe tu expresión · Ejemplo: <strong id="sym-ej">3^2 − 4×(2+1)</strong>
+  </div>
+  <div class="sym-row">
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('^')">^</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('(')"> ( </button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns(')')"> ) </button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('[')">[ </button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns(']')">&nbsp;]</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('{')">{ </button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('}')">&nbsp;}</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('+')">+</button>
+    <button class="sym-btn neg" onmousedown="return false" onclick="symIns('−')">−</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('×')">×</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('÷')">÷</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('√')">√</button>
+    <button class="sym-btn" onmousedown="return false" onclick="symIns('.')">.</button>
+    <button class="sym-btn clr" onmousedown="return false" onclick="symBorrar()">⌫</button>
+  </div>
+</div>
+
+<!-- PANEL ERROR -->
+<div id="err-panel">
+  <div id="err-panel-hdr">
+    <span id="err-panel-title">⚠ Campos pendientes</span>
+    <button id="err-close" onclick="cerrarErrPanel()">✕</button>
+  </div>
+  <div id="err-panel-body"></div>
+</div>
+
+<!-- PIN MODAL -->
+<div id="pin-modal">
+  <div id="pin-box">
+    <div style="font-size:32px">🔑</div>
+    <h3 style="color:var(--az);margin:8px 0 3px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px">Panel docente</h3>
+    <p style="font-size:13px;color:#666">Código de acceso</p>
+    <input type="password" id="pin-inp" maxlength="6" placeholder="••••••" autocomplete="off">
+    <div id="pin-fb" style="font-size:13px;color:var(--ro);min-height:15px;margin-top:4px"></div>
+    <button class="btn baz" style="margin-top:8px" onclick="chkPin()">Entrar</button>
+    <button class="btn" style="background:var(--gr2);color:var(--tx);margin-top:5px;padding:10px" onclick="cerrarPin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- PANEL DOCENTE -->
+<div id="prof-overlay">
+  <button id="btn-xp" onclick="cerrarProf()">✕</button>
+  <div id="prof-panel">
+    <div class="prof-head">
+      <div style="font-size:34px">👨‍🏫</div>
+      <h2 style="margin:7px 0 3px;color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px">Panel · Prof. Adrián Cruz</h2>
+      <div style="font-size:13px;opacity:.8">TSM III · S06 · Jerarquía de Operaciones · G658</div>
+    </div>
+    <div class="pcrd">
+      <h3>Navegación</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">
+        <button class="dbtn" onclick="profIr('s0',0)">🏠 Portada</button>
+        <button class="dbtn" onclick="profIr('s1',1)">1·Bienvenida</button>
+        <button class="dbtn" onclick="profIr('s2',2)">2·Activación</button>
+        <button class="dbtn" onclick="profIr('s3',3)">3·Jerarquía</button>
+        <button class="dbtn" onclick="profIr('s4',4)">4·Ejercicios</button>
+        <button class="dbtn" onclick="profIr('s5',5)">5·Tienditas</button>
+        <button class="dbtn" onclick="profIr('s6',6)">6·Desafío</button>
+        <button class="dbtn" onclick="profIr('s-res',7)">7·Resultados</button>
+      </div>
+    </div>
+    <div class="pcrd">
+      <h3>Acciones</h3>
+      <div style="display:grid;gap:8px;grid-template-columns:1fr 1fr;margin-top:8px">
+        <button class="btn baz" style="margin:0;font-size:13px" onclick="profSimular()">🧑‍🎓 Modo demo</button>
+        <button class="btn bp" style="margin:0;font-size:13px" onclick="profMostrarResumen()">📊 Ver resumen</button>
+        <button class="btn bve" style="margin:0;font-size:13px" onclick="profToggleBar()">🧰 Barra flotante</button>
+        <button class="btn" style="margin:0;font-size:13px;background:var(--am3);color:var(--am)" onclick="cerrarProf()">✕ Cerrar</button>
+      </div>
+    </div>
+    <div class="pcrd">
+      <h3>📐 Información de la actividad</h3>
+      <div style="font-size:12px;color:#555;line-height:2;margin-top:6px">
+        <strong>Bancos:</strong> 6 variantes por elemento aleatorio — colisión &lt;1% con 150 alumnos<br>
+        <strong>Intentos máx.:</strong> 3 por ejercicio numérico — al 3° avanza automáticamente<br>
+        <strong>Pistas:</strong> muestran ejemplos análogos, NO la respuesta del alumno<br>
+        <strong>Teclado flotante:</strong> aparece al enfocar cualquier campo · símbolos mínimos necesarios<br>
+        <strong>Fracciones:</strong> formato vertical CSS en todas las expresiones<br>
+        <strong>Vista previa:</strong> acepta 3^3 o 3³ · validación normalizada<br>
+        <strong>Avance:</strong> sin bloqueo; errores se registran con calificación reducida<br>
+        <strong>Resumen:</strong> muestra respuesta del alumno + respuesta esperada · permite solicitar revisión<br>
+        <strong>PIN docente:</strong> <strong>890</strong> · activar en nombre del profesor<br>
+        <strong>Anti-copia:</strong> paste/copy bloqueados en todos los campos
+      </div>
+    </div>
+    <div class="pcrd">
+      <h3>📊 Desglose de calificación /10</h3>
+      <div style="font-size:12px;color:#555;line-height:2;margin-top:6px">
+        Bloque 1 · Activación: 2 pts (conjetura 0.5 + MC 0.5 + resultado 1)<br>
+        Bloque 2 · Árbol de evaluación: 2 pts (dibujo 1 + descripción 1)<br>
+        Bloque 3 · Ejercicios A/B/C: 3 pts (1 por ejercicio correcto)<br>
+        Bloque 4 · Tienditas CDMX: 2 pts (expresión 0.3 + procedimiento 0.3 + resultado 0.6 + Carlos 0.3 + interpretación 0.5)<br>
+        Bloque 5 · Desafío + cierre: 1 pt (MC 0.3 + justificación 0.3 + regla 0.2 + cálculo 0.2)<br>
+        <span style="color:var(--am)">⚠ Ejercicios con 3 intentos agotados se califican con 0 pts (no penalizan otros bloques)</span>
+      </div>
+    </div>
+    <div class="pcrd" style="background:#fef9e7;border:1.5px solid #f9a825">
+      <h3 style="color:#7a4000">⚠ Errores frecuentes en jerarquía</h3>
+      <div style="font-size:12px;color:#5a3000;line-height:1.9;margin-top:4px">
+        1. Resolver de izquierda a derecha sin respetar prioridad<br>
+        2. Confundir (−3)² = 9 con −3² = −9 (el paréntesis sí importa)<br>
+        3. No reconocer que fracción = división → tiene misma prioridad que ×<br>
+        4. Resolver el agrupador más externo antes que el interno<br>
+        5. Olvidar que √ y potencias tienen la misma prioridad (nivel 2°)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BARRA FLOTANTE DOCENTE -->
+<div id="prof-bar">
+  <button class="pbar-btn" onclick="profIr('s0',0)">⏮ Inicio</button>
+  <button class="pbar-btn" onclick="profSiguiente()">⏭ Siguiente bloque</button>
+  <button class="pbar-btn" onclick="profMostrarResumen()">📊 Ver resumen</button>
+  <button class="pbar-btn" style="background:rgba(139,27,27,.5)" onclick="ocultarBar()">✕ Ocultar</button>
+</div>
+
+<!-- ══════ S0: LOGIN ══════ -->
+<div id="s0" class="sec on">
+  <div style="text-align:center;padding:30px 0 16px">
+    <div style="font-size:52px">🧮</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--mo);margin-top:8px;letter-spacing:1.5px">TSM III · Grupo 658</div>
+    <div style="font-size:14px;color:#666;margin-top:3px">Sesión 6 · Jerarquía de Operaciones · PEMDAS</div>
+    <div style="font-size:12px;color:#aaa;margin-top:6px">
+      <span id="prof-link" onclick="abrirPin()" style="cursor:pointer;user-select:none;-webkit-user-select:none">Prof. Adrián Cruz</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>¿Cómo te llamas?</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:9px">Escribe comenzando por tus <strong>apellidos</strong>, luego nombre(s):</p>
+    <input type="text" id="inp-nombre" placeholder="APELLIDO1 APELLIDO2 NOMBRE(S)"
+      autocorrect="off" autocapitalize="characters"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="this.value=this.value.toUpperCase()">
+    <p style="font-size:12px;color:#888;margin-top:5px">Ejemplo: GARCÍA LÓPEZ JUAN PABLO</p>
+    <div id="fb-login" style="font-size:13px;color:var(--ro);margin-top:5px;min-height:15px"></div>
+    <button class="btn bp" style="margin-top:10px" onclick="iniciar()">Comenzar actividad →</button>
+  </div>
+  <div class="card cam" style="font-size:13px;line-height:1.7">
+    <strong>⚠️ Importante:</strong> Esta actividad registra tu nombre y todas tus respuestas. Al final obtendrás una calificación global. No se permiten copiar ni pegar en los campos de respuesta.<br><br>
+    <strong>🔄 Reinicio:</strong> Cada vez que recargas la página, la actividad comienza desde cero con ejercicios diferentes. Completa la actividad en una sola sesión.
+  </div>
+</div>
+
+<!-- ══════ S1: BIENVENIDA ══════ -->
+<div id="s1" class="sec">
+  <div class="card cmo">
+    <div style="font-size:13px;opacity:.7;margin-bottom:4px">S06 · G658 · TSM III</div>
+    <div class="tit" style="color:#fff">Jerarquía de Operaciones</div>
+    <div style="font-size:14px;opacity:.85;margin-top:4px">PEMDAS · Reales · Potencias · Raíces · Anidamiento · Modelado</div>
+    <div style="height:1px;background:rgba(255,255,255,.2);margin:10px 0"></div>
+    <p id="msg-bienvenida" style="font-size:14px;line-height:1.7;color:rgba(255,255,255,.9)"></p>
+    <div style="font-size:12px;opacity:.6;margin-top:8px">— Prof. Adrián Cruz</div>
+  </div>
+  <div class="card">
+    <h3>Lo que harás hoy</h3>
+    <div style="display:flex;align-items:flex-start;margin-bottom:9px"><span class="nc">1</span><p>Activación: situación narrativa con trampa de jerarquía.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:9px"><span class="nc">2</span><p>Repaso rápido + árbol de evaluación con dibujo.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:9px"><span class="nc">3</span><p>Tres ejercicios personalizados con potencias, raíces y agrupadores anidados.</p></div>
+    <div style="display:flex;align-items:flex-start;margin-bottom:9px"><span class="nc">4</span><p>Modelado real: cadena de tienditas CDMX — precio base, descuento, IVA y cupón.</p></div>
+    <div style="display:flex;align-items:flex-start"><span class="nc">5</span><p>Desafío de consolidación + cierre reflexivo. <strong>Todo se califica al final.</strong></p></div>
+  </div>
+  <button class="btn bp" onclick="ir('s2',1)">Empezar →</button>
+</div>
+
+<!-- ══════ S2: ACTIVACIÓN ══════ -->
+<div id="s2" class="sec">
+  <div class="tag">BLOQUE 1 · ACTIVACIÓN — 5 min</div>
+  <div class="tit">La trampa del cajero</div>
+  <div class="card" id="act-ctx-card">
+    <div id="act-narrativa" style="font-size:14px;line-height:1.75;margin-bottom:10px"></div>
+    <div class="frm" id="act-expr"></div>
+    <p style="font-size:13px;color:#555;margin-top:8px">El error clásico es operar <strong>de izquierda a derecha</strong> sin respetar la jerarquía.</p>
+  </div>
+  <div class="card">
+    <h4>① Tu conjetura inicial</h4>
+    <p style="font-size:13px;color:#555">Antes de calcular: ¿cuál crees que es el resultado correcto y por qué? Usa palabras como <em>jerarquía, prioridad, agrupador, potencia, raíz</em>.</p>
+    <textarea id="act-conj" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('act-conj','cnt-act')"
+      placeholder="Escribe tu estimación y razonamiento... mín. 15 palabras"></textarea>
+    <div class="cnt-txt" id="cnt-act">0 palabras</div>
+  </div>
+  <div class="card">
+    <h4>② ¿Qué operación se resuelve primero según PEMDAS?</h4>
+    <div id="act-mc-opts"></div>
+    <div class="fb" id="fb-act-mc"></div>
+  </div>
+  <div class="card">
+    <h4>③ Calcula el resultado correcto (paso a paso)</h4>
+    <p style="font-size:13px;color:#555">Muestra cada paso con su resultado parcial:</p>
+    <textarea id="act-proc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('act-proc','cnt-act-proc')"
+      placeholder="Paso 1: ... = ...&#10;Paso 2: ... = ..."></textarea>
+    <div class="cnt-txt" id="cnt-act-proc">0 palabras</div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:10px">Resultado numérico final:</label>
+    <input type="text" inputmode="decimal" id="act-res" data-expo="1"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      placeholder="Número exacto"
+      onfocus="simFocus(this,'ej: −5 · 12.5 · 34')"
+      onblur="simBlur()">
+    <span class="inp-preview" id="prev-act-res">…</span>
+    <div class="fb" id="fb-act-res"></div>
+    <div class="auto-aviso" id="aviso-act">⚠ Después del 3° intento la respuesta avanzará marcada como incorrecta — sin perder puntos en los demás bloques.</div>
+    <button class="pb" onclick="tp('pista-act')">💡 Pista</button>
+    <div class="pbox" id="pista-act"></div>
+  </div>
+  <button class="btn bp" onclick="verificarAct()">Continuar →</button>
+</div>
+
+<!-- ══════ S3: JERARQUÍA + ÁRBOL ══════ -->
+<div id="s3" class="sec">
+  <div class="tag">BLOQUE 2 · REPASO + ÁRBOL DE EVALUACIÓN</div>
+  <div class="tit">El orden no es negociable</div>
+  <div class="card cmo2">
+    <p style="font-size:13px;line-height:1.7">En 6° semestre la jerarquía debe ser automática. Aun así, los errores más comunes en cálculo diferencial e integral vienen de aquí. Repaso rápido:</p>
+    <div style="overflow-x:auto;margin-top:8px">
+      <table class="tabla-jer">
+        <tr><th>Prioridad</th><th>Operación / Símbolo</th><th>Nota clave</th></tr>
+        <tr><td>1° (máxima)</td><td>( ) [ ] { } — agrupadores, de adentro afuera</td><td>{ [ ( ) ] }</td></tr>
+        <tr><td>2°</td><td>Potencias y raíces: a<sup>n</sup> , √</td><td>(&minus;2)<sup>2</sup> ≠ &minus;2<sup>2</sup></td></tr>
+        <tr><td>3°</td><td>&times; y &divide; — izquierda a derecha</td><td>mismo nivel jerárquico</td></tr>
+        <tr><td>4° (mínima)</td><td>+ y &minus; — izquierda a derecha</td><td>mismo nivel jerárquico</td></tr>
+      </table>
+    </div>
+    <div class="sep"></div>
+    <p style="font-size:13px"><strong>Regla crítica con reales negativos:</strong><br>
+    (&minus;3)<sup>2</sup> = 9 &nbsp;·&nbsp; &minus;3<sup>2</sup> = &minus;9. El paréntesis decide quién recibe el exponente.</p>
+  </div>
+  <div class="card">
+    <h4>🌳 Diagrama de pasos — dibuja el tuyo</h4>
+    <p style="font-size:13px;color:#555">Dibuja el orden en que resuelves la expresión de activación. De adentro hacia afuera, con resultados parciales.</p>
+    <div class="frm" id="arbol-expr" style="font-size:14px"></div>
+    <p style="font-size:12px;color:#888;margin-top:4px">🔴 exponentes/raíces · 🔵 × y ÷ · 🟢 + y −</p>
+    <div class="canvas-tools">
+      <button class="tool-btn act" id="tb-lapiz" onclick="setTool('lapiz')">✏️ Lápiz</button>
+      <button class="tool-btn" id="tb-borrar" onclick="setTool('borrar')">🧹 Borrar</button>
+      <div class="color-dot act" style="background:#222" id="cd-negro" onclick="setColor('#222','cd-negro')"></div>
+      <div class="color-dot" style="background:#c00" id="cd-rojo" onclick="setColor('#c00','cd-rojo')"></div>
+      <div class="color-dot" style="background:#1565C0" id="cd-azul" onclick="setColor('#1565C0','cd-azul')"></div>
+      <div class="color-dot" style="background:#1b6b35" id="cd-verde" onclick="setColor('#1b6b35','cd-verde')"></div>
+      <button class="tool-btn" onclick="limpiarCanvas()" style="margin-left:auto;font-size:11px">🗑 Limpiar</button>
+    </div>
+    <div class="canvas-wrap"><canvas id="c-dibujo"></canvas></div>
+    <div id="canvas-msg" style="font-size:12px;color:#aaa;text-align:center;margin-top:4px">Dibuja tu árbol antes de continuar</div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:10px">Explica en tus palabras el orden que seguiste (mín. 15 palabras). Usa: <em>jerarquía, agrupador, potencia, primero, resultado parcial</em>:</label>
+    <textarea id="arbol-desc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('arbol-desc','cnt-arbol')"
+      placeholder="Primero resolví lo que estaba adentro del paréntesis, que era... luego hice la potencia..."></textarea>
+    <div class="cnt-txt" id="cnt-arbol">0 palabras</div>
+  </div>
+  <button class="btn bp" onclick="verificarArbol()">Continuar a ejercicios →</button>
+</div>
+
+<!-- ══════ S4: EJERCICIOS ══════ -->
+<div id="s4" class="sec">
+  <div class="tag">BLOQUE 3 · PRÁCTICA PERSONALIZADA</div>
+  <div class="tit">Tus 3 ejercicios</div>
+  <div class="card cam" style="font-size:13px">Cada alumno recibe combinaciones distintas. Para cada ejercicio escribe el <strong>procedimiento completo</strong> y el <strong>resultado exacto</strong>. Después del <strong>3er intento</strong> la respuesta avanza marcada como incorrecta — los otros bloques no se ven afectados.</div>
+
+  <!-- EJ A -->
+  <div class="card" id="eja-card">
+    <div class="tag" style="background:var(--az2)">Ejercicio A · Jerarquía con reales y signos</div>
+    <div class="frm frm-az" id="eja-expr"></div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:8px">Procedimiento completo (paso a paso):</label>
+    <textarea id="ea-proc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('ea-proc','cnt-ea')"
+      placeholder="Paso 1 — evalúo los agrupadores más internos: ..."></textarea>
+    <div class="cnt-txt" id="cnt-ea">0 palabras</div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:8px">Resultado final:</label>
+    <input type="text" inputmode="decimal" id="ea-res"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      placeholder="Escribe el número exacto"
+      onfocus="simFocus(this,'ej: −12 · 5.75 · 0')"
+      onblur="simBlur()">
+    <span class="inp-preview" id="prev-ea-res">…</span>
+    <div class="fb" id="fb-ea"></div>
+    <div class="auto-aviso" id="aviso-ea"></div>
+    <button class="pb" onclick="tp('pista-ea')">💡 Pista (ejemplo análogo)</button>
+    <div class="pbox" id="pista-ea"></div>
+    <button class="btn bsm bp" style="margin-top:8px" onclick="chkEj('a')">Verificar A</button>
+  </div>
+
+  <!-- EJ B -->
+  <div class="card" id="ejb-card">
+    <div class="tag" style="background:var(--or);color:#fff">Ejercicio B · Potencias y raíces anidadas</div>
+    <div class="frm" style="background:var(--or)" id="ejb-expr"></div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:8px">Procedimiento completo:</label>
+    <textarea id="eb-proc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('eb-proc','cnt-eb')"
+      placeholder="Paso 1 — resuelvo el agrupador: ..."></textarea>
+    <div class="cnt-txt" id="cnt-eb">0 palabras</div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:8px">Resultado final:</label>
+    <input type="text" inputmode="decimal" id="eb-res"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      placeholder="Número exacto o fracción decimal"
+      onfocus="simFocus(this,'ej: 7.5 · −3 · 12')"
+      onblur="simBlur()">
+    <span class="inp-preview" id="prev-eb-res">…</span>
+    <div class="fb" id="fb-eb"></div>
+    <div class="auto-aviso" id="aviso-eb"></div>
+    <button class="pb" onclick="tp('pista-eb')">💡 Pista (ejemplo análogo)</button>
+    <div class="pbox" id="pista-eb"></div>
+    <button class="btn bsm bp" style="margin-top:8px" onclick="chkEj('b')">Verificar B</button>
+  </div>
+
+  <!-- EJ C -->
+  <div class="card" id="ejc-card">
+    <div class="tag" style="background:var(--ro);color:#fff">Ejercicio C · Agrupadores anidados { [ ( ) ] }</div>
+    <div class="frm" style="background:var(--ro)" id="ejc-expr"></div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:8px">Procedimiento (de adentro hacia afuera):</label>
+    <textarea id="ec-proc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('ec-proc','cnt-ec')"
+      placeholder="Paso 1 — paréntesis más interno: ..."></textarea>
+    <div class="cnt-txt" id="cnt-ec">0 palabras</div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:8px">Resultado final:</label>
+    <input type="text" inputmode="decimal" id="ec-res"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      placeholder="Número exacto"
+      onfocus="simFocus(this,'ej: 18 · −7.5 · 4')"
+      onblur="simBlur()">
+    <span class="inp-preview" id="prev-ec-res">…</span>
+    <div class="fb" id="fb-ec"></div>
+    <div class="auto-aviso" id="aviso-ec"></div>
+    <button class="pb" onclick="tp('pista-ec')">💡 Pista (ejemplo análogo)</button>
+    <div class="pbox" id="pista-ec"></div>
+    <button class="btn bsm bp" style="margin-top:8px" onclick="chkEj('c')">Verificar C</button>
+  </div>
+
+  <button class="btn bp" id="btn-s4" onclick="avanzarS4()">Continuar a tienditas →</button>
+</div>
+
+<!-- ══════ S5: TIENDITAS ══════ -->
+<div id="s5" class="sec">
+  <div class="tag">BLOQUE 4 · MODELADO REAL — CDMX</div>
+  <div class="tit">La cadena de tienditas de Don Beto</div>
+  <div class="card cam">
+    <p style="font-size:14px;line-height:1.7">Don Beto usa siempre la misma lógica para el precio final de sus productos:</p>
+    <div class="frm" style="flex-direction:column;align-items:center;gap:4px;line-height:1.8;font-size:14px">
+      <span style="font-size:13px;opacity:.8">Precio final =</span>
+      <span>P<sub>base</sub> &times; (1 &minus; d)</span>
+      <span>+</span>
+      <span>P<sub>base</sub> &times; (1 &minus; d) &times; 0.16</span>
+      <span>&minus; cup&oacute;n</span>
+    </div>
+    <p style="font-size:13px;margin-top:6px"><strong>d</strong> = descuento en decimal &nbsp;·&nbsp; <strong>0.16</strong> = IVA sobre precio descontado</p>
+  </div>
+  <div class="card" id="ti-card">
+    <div class="tag" style="background:var(--az2)">Tu caso personal</div>
+    <div id="ti-enunciado" style="font-size:14px;line-height:1.8;margin-bottom:10px"></div>
+    <h4>① Expresión aritmética completa (con tus valores, sin simplificar):</h4>
+    <textarea id="ti-expr" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('ti-expr','cnt-ti')"
+      placeholder="Ej: 200 × (1 − 0.15) + 200 × (1 − 0.15) × 0.16 − 30"></textarea>
+    <div class="cnt-txt" id="cnt-ti">0 palabras</div>
+    <h4 style="margin-top:10px">② Simplificación paso a paso (usa jerarquía correcta):</h4>
+    <textarea id="ti-proc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('ti-proc','cnt-ti2')"
+      placeholder="Paso 1: (1−d) = ...&#10;Paso 2: × precio = ...&#10;Paso 3: IVA = ...&#10;Paso 4: − cupón = ..."></textarea>
+    <div class="cnt-txt" id="cnt-ti2">0 palabras</div>
+    <h4 style="margin-top:10px">③ Precio final correcto (2 decimales):</h4>
+    <input type="text" inputmode="decimal" id="ti-res"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      placeholder="Ej: 213.50"
+      onfocus="simFocus(this,'ej: 156.80 · 48.24 · 212.35')"
+      onblur="simBlur()">
+    <span class="inp-preview" id="prev-ti-res">…</span>
+    <div class="fb" id="fb-ti"></div>
+    <div class="auto-aviso" id="aviso-ti"></div>
+    <button class="pb" onclick="tp('pista-ti')">💡 Pista (ejemplo análogo)</button>
+    <div class="pbox" id="pista-ti"></div>
+    <div class="sep"></div>
+    <h4>④ ¿Qué resultado da quien opera de izquierda a derecha? (error de Carlos)</h4>
+    <input type="text" inputmode="decimal" id="ti-carlos"
+      onpaste="return false" oncopy="return false" oncut="return false"
+      placeholder="Resultado incorrecto"
+      onfocus="simFocus(this,'ej: simula operar sin jerarquía')"
+      onblur="simBlur()">
+    <div class="fb" id="fb-carlos"></div>
+    <div class="sep"></div>
+    <h4>⑤ Diferencia e impacto económico:</h4>
+    <textarea id="ti-interp" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('ti-interp','cnt-ti3')"
+      placeholder="El resultado correcto es $... El error de Carlos da $... La diferencia es $..."></textarea>
+    <div class="cnt-txt" id="cnt-ti3">0 palabras</div>
+  </div>
+  <button class="btn bp" onclick="verificarTiendita()">Continuar al desafío →</button>
+</div>
+
+<!-- ══════ S6: DESAFÍO + CIERRE ══════ -->
+<div id="s6" class="sec">
+  <div class="tag">BLOQUE 5 · DESAFÍO DE CONSOLIDACIÓN</div>
+  <div class="tit">Expresiones que mienten</div>
+  <div class="card cmo2">
+    <p style="font-size:13px;line-height:1.7">Cuatro expresiones <em>parecen equivalentes</em> pero solo una conserva el valor correcto bajo la jerarquía estándar. Identifica cuál y justifica evaluando las 4.</p>
+  </div>
+  <div class="card" id="des-card">
+    <div id="des-enunciado" style="font-size:14px;line-height:1.75;margin-bottom:10px"></div>
+    <div class="sep"></div>
+    <h4>¿Cuál expresión da el valor objetivo?</h4>
+    <div id="des-opciones"></div>
+    <div class="fb" id="fb-des"></div>
+    <label style="font-size:12px;font-weight:700;color:var(--mo);display:block;margin-top:12px">Justificación: evalúa las 4 opciones:</label>
+    <textarea id="des-just" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('des-just','cnt-des')"
+      placeholder="Opción A da... porque...&#10;Opción B da... porque...&#10;La correcta es ... porque..."></textarea>
+    <div class="cnt-txt" id="cnt-des">0 palabras</div>
+  </div>
+  <div class="card cve">
+    <div class="tag" style="background:var(--ve2)">✏️ Cierre — síntesis y conexión</div>
+    <h3 style="color:var(--ve)">¿Qué llevas de hoy?</h3>
+    <label style="font-size:12px;font-weight:700;color:var(--ve);display:block;margin-bottom:6px">① Escribe una regla propia con un ejemplo de la CDMX diferente a la tiendita:</label>
+    <textarea id="cierre-regla" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('cierre-regla','cnt-cierre')"
+      placeholder="Mi regla: ...&#10;Ejemplo de CDMX: ..."></textarea>
+    <div class="cnt-txt" id="cnt-cierre">0 palabras</div>
+    <label style="font-size:12px;font-weight:700;color:var(--ve);display:block;margin-top:12px">② ¿En qué situación de cálculo diferencial o integral la jerarquía puede causar un error grave?</label>
+    <textarea id="cierre-calc" onpaste="return false" oncopy="return false" oncut="return false"
+      oninput="cntWords('cierre-calc','cnt-cierre2')"
+      placeholder="Por ejemplo en derivadas cuando..."></textarea>
+    <div class="cnt-txt" id="cnt-cierre2">0 palabras</div>
+  </div>
+  <button class="btn bve" onclick="finalizarActividad()">📊 Ver calificación y resultados</button>
+</div>
+
+<!-- ══════ S-RES: RESULTADOS ══════ -->
+<div id="s-res" class="sec">
+  <div class="card cmo" style="text-align:center;padding:20px 16px">
+    <div style="font-size:36px;margin-bottom:5px">📋</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:900;color:#fff;letter-spacing:1.5px" id="res-titulo">Actividad completada</div>
+    <div id="res-nombre-badge" style="font-size:14px;color:rgba(255,255,255,.8);margin-top:6px"></div>
+  </div>
+
+  <div class="grade-box" id="grade-box" style="background:var(--mo3);border:2px solid var(--mo2)">
+    <div style="font-size:52px;font-weight:900;color:var(--mo)" id="grade-num">—</div>
+    <div style="font-size:14px;color:#555;margin-top:4px;font-weight:700" id="grade-label">Calificación global</div>
+    <div style="font-size:12px;color:#888;margin-top:3px">Considera todos los bloques · Escala 0–10</div>
+  </div>
+
+  <div class="res-aviso">
+    📌 <strong>Si ves discrepancias entre tu respuesta y la esperada:</strong> Muestra este resumen al Prof. Adrián Cruz para solicitar revisión manual. Tu respuesta quedó registrada exactamente como la escribiste.
+  </div>
+
+  <div class="card" id="res-dibujo-card" style="display:none">
+    <h4>🌳 Tu árbol de evaluación</h4>
+    <img id="res-dibujo-img" class="canvas-res" alt="Árbol dibujado">
+    <p id="res-dibujo-desc" style="font-size:13px;color:#555;margin-top:6px"></p>
+  </div>
+
+  <div id="res-bloques"></div>
+
+  <div id="btn-imprimir-wrap" class="card" style="margin-top:10px">
+    <h4 style="margin-bottom:8px">📄 Guardar / Imprimir</h4>
+    <button class="btn baz" onclick="imprimirRes()">🖨️ Guardar como PDF / Imprimir</button>
+    <p style="font-size:12px;color:#777;margin-top:6px;line-height:1.6">En el cuadro de impresión elige <strong>"Guardar como PDF"</strong>. Compatible con Chrome, Safari y Firefox.</p>
+    <div class="sep"></div>
+    <button class="btn" style="background:var(--gr2);color:var(--tx);" onclick="copiarResumen()">📋 Copiar resumen de texto</button>
+    <textarea id="copy-ta" readonly onclick="this.select()"></textarea>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ANTI-COPY / ANTI-PASTE GLOBAL
+// ══════════════════════════════════════════════════════
+document.addEventListener('copy',function(e){
+  if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();}
+  else{e.preventDefault();if(e.clipboardData)e.clipboardData.setData('text/plain','[Actividad protegida S06]');}
+});
+document.addEventListener('paste',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){e.preventDefault();}
+});
+document.addEventListener('cut',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){e.preventDefault();}
+});
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('selectstart',function(e){
+  if(e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA')e.preventDefault();
+});
+
+// ══════════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════════════
+var nombre='';
+var V={};
+var secActual=0;
+var totalBloques=7;
+var profModo=false;
+var profBarVisible=false;
+var canvasDibujado=false;
+var drawTool='lapiz', drawColor='#222', drawing=false;
+var symTarget=null;
+
+var intentos={act:0, a:0, b:0, c:0, ti:0};
+var MAX_INT=3;
+
+var R={
+  actConj:0, actMC:false, actRes:false,
+  arbolDraw:false, arbolDesc:0,
+  ejA:{ok:false,forzado:false}, ejB:{ok:false,forzado:false}, ejC:{ok:false,forzado:false},
+  tiExpr:0, tiProc:0, tiRes:false, tiCarlos:false, tiInterp:0,
+  desMC:false, desJust:0,
+  cierreRegla:0, cierreCalc:0
+};
+var actRespCorr=0;
+var actMCResp='';
+var actIntOk=false;
+var tiIntOk=false;
+var desMCResp=-1;
+var ejData={a:null,b:null,c:null};
+
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+// Fracciones verticales HTML
+function fr(n,d){
+  return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>';
+}
+function sup(n){return '<sup>'+n+'</sup>';}
+
+// ══════════════════════════════════════════════════════
+// TECLADO FLOTANTE CONTEXTUAL
+// ══════════════════════════════════════════════════════
+function simFocus(el, ejemplo){
+  symTarget = el;
+  var bar = document.getElementById('sym-bar');
+  var ej  = document.getElementById('sym-ej');
+  if(bar) bar.classList.add('vis');
+  if(ej && ejemplo) ej.textContent = ejemplo;
+  // Desplazar la barra si el header está visible
+  var hdr = document.getElementById('hdr');
+  var top = 0;
+  if(hdr && hdr.style.display !== 'none') top = hdr.offsetHeight;
+  if(bar) bar.style.top = top + 'px';
+}
+function simBlur(){
+  setTimeout(function(){
+    var bar = document.getElementById('sym-bar');
+    if(bar && !bar.contains(document.activeElement)){
+      bar.classList.remove('vis');
+      symTarget = null;
+    }
+  }, 200);
+}
+function symIns(s){
+  var el = symTarget;
+  if(!el) return;
+  var st = (el.selectionStart !== undefined) ? el.selectionStart : el.value.length;
+  var en = (el.selectionEnd   !== undefined) ? el.selectionEnd   : st;
+  el.value = el.value.substring(0, st) + s + el.value.substring(en);
+  var pos = st + s.length;
+  try{ el.setSelectionRange(pos, pos); } catch(x){}
+  el.dispatchEvent(new Event('input'));
+  try{ el.focus(); } catch(x){}
+  actualizarPreview(el);
+}
+function symBorrar(){
+  var el = symTarget;
+  if(!el) return;
+  var s = el.value;
+  var pos = (el.selectionStart !== undefined) ? el.selectionStart : s.length;
+  if(pos > 0){
+    el.value = s.substring(0, pos-1) + s.substring(pos);
+    try{ el.setSelectionRange(pos-1, pos-1); } catch(x){}
+  }
+  el.dispatchEvent(new Event('input'));
+  try{ el.focus(); } catch(x){}
+  actualizarPreview(el);
+}
+
+// ══════════════════════════════════════════════════════
+// VISTA PREVIA NORMALIZADA
+// Acepta: 3^2 o 3² → muestra 3 con superíndice 2
+// Acepta: a/b → fracción vertical
+// ══════════════════════════════════════════════════════
+function exprToHTML(s){
+  if(!s) return '…';
+  // Normalizar caracteres especiales de teclado
+  var r = s;
+  r = r.replace(/×/g,'·').replace(/÷/g,'/').replace(/−/g,'-');
+  // Paso 1: exponentes x^(n) o x^n → superíndice
+  r = r.replace(/\^(\([^)]+\)|\d+)/g, function(m, p1){
+    return '<sup>'+p1.replace(/[()]/g,'')+'</sup>';
+  });
+  // Paso 2: fracciones a/b → vertical (solo si a y b son tokens simples)
+  r = r.replace(/([a-zA-Z0-9]+(?:<sup>[^<]+<\/sup>)?)\/([−\-]?[a-zA-Z0-9]+)/g,
+    function(m, num, den){
+      return '<span class="frac" style="font-size:.85em"><span class="num">'+num+'</span><span class="den">'+den+'</span></span>';
+    });
+  // Paso 3: √ seguido de dígito o paréntesis → con indicación
+  r = r.replace(/√(\d+)/g,'√<span style="text-decoration:overline;padding:0 1px">$1</span>');
+  return r || '…';
+}
+
+function actualizarPreview(el){
+  if(!el) return;
+  var prevId = 'prev-' + el.id;
+  var prev = document.getElementById(prevId);
+  if(prev) prev.innerHTML = exprToHTML(el.value);
+}
+
+// Normalizar expresión para comparar: quitar espacios, convertir − a -, ^2 y ² como equivalentes
+function normExpr(s){
+  if(!s) return '';
+  var r = s.trim().toLowerCase();
+  r = r.replace(/\s+/g,'');
+  r = r.replace(/²/g,'^2').replace(/³/g,'^3').replace(/⁴/g,'^4');
+  r = r.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+  return r;
+}
+
+// ══════════════════════════════════════════════════════
+// BANCOS DE DATOS (idénticos a v2 — solo se cambia cómo se renderizan)
+// ══════════════════════════════════════════════════════
+
+var BANCO_ACT=[
+  {
+    ctx:'<strong>Sofía</strong> trabaja en una tienda de conveniencia en Iztapalapa. Su ingreso semanal se calcula así:',
+    exprFn:function(v){return '850 + 3 &times; '+v.a+' &minus; '+fr(v.b*4,'4')+' + 50'+sup(2)+' &minus; &#8730;<span style="text-decoration:overline">196</span>';},
+    respFn:function(v){return 850+3*v.a-(v.b*4/4)+2500-14;},
+    pistFn:function(){return '<p>Ejemplo análogo con números diferentes:</p>'
+      +'<div class="pej">100 + 2 &times; 5 &minus; '+fr(12,'4')+' + 3'+sup(2)+' &minus; &#8730;<span style="text-decoration:overline">9</span></div>'
+      +'<p style="margin-top:6px;font-size:12px">Pasos: <b>1)</b> 3<sup>2</sup>=9 · <b>2)</b> √9=3 · <b>3)</b> 12÷4=3 · <b>4)</b> 2×5=10 · <b>5)</b> suma izq→der: 100+10−3+9−3 = 113</p>';},
+    mcCorr:1,
+    mcOptsFn:function(v){return ['850 + 3 (suma primero, izquierda a derecha)','50'+sup(2)+'= 2500 y &#8730;<span style="text-decoration:overline">196</span> = 14 (potencias/raíces primero)','3 &times; '+v.a+' — multiplicación antes de suma',fr(v.b,'4')+' — división antes de suma'];}
+  },
+  {
+    ctx:'<strong>Don Memo</strong> maneja un taxi en Ecatepec. Calcula su ganancia diaria neta con:',
+    exprFn:function(v){return fr('('+v.a+' + '+v.b+') &times; 8','10')+' + 3'+sup(2)+' &times; '+v.c+' &minus; &#8730;<span style="text-decoration:overline">'+v.d2+'</span>';},
+    respFn:function(v){return (v.a+v.b)*8/10+9*v.c-Math.sqrt(v.d2);},
+    pistFn:function(){return '<p>Ejemplo análogo:</p>'
+      +'<div class="pej">'+fr('(5 + 3) &times; 2','4')+' + 2'+sup(2)+' &times; 3 &minus; &#8730;<span style="text-decoration:overline">16</span></div>'
+      +'<p style="margin-top:6px;font-size:12px"><b>1)</b> Paréntesis más interno → <b>2)</b> Fracción completa → <b>3)</b> 2²=4 → <b>4)</b> √16=4 → <b>5)</b> multiplicar → <b>6)</b> sumar y restar</p>';},
+    mcCorr:0,
+    mcOptsFn:function(v){return ['El agrupador ('+v.a+'+'+v.b+') — paréntesis más interno primero','3'+sup(2)+'= 9 — potencia antes que producto',fr('('+v.a+'+'+v.b+')&times;8','10')+' — fracción completa primero','La raíz &#8730; — raíces primero siempre'];}
+  },
+  {
+    ctx:'<strong>Lupita</strong> vende frutas en el Mercado de Jamaica. Su ingreso real por día es:',
+    exprFn:function(v){return v.a+' &times; ('+v.b+' &minus; 4) + 2'+sup(3)+' &times; '+v.c+' &minus; '+fr(75,3);},
+    respFn:function(v){return v.a*(v.b-4)+8*v.c-25;},
+    pistFn:function(){return '<p>Ejemplo análogo:</p>'
+      +'<div class="pej">3 &times; (6 &minus; 2) + 2'+sup(2)+' &times; 5 &minus; '+fr(20,4)+'</div>'
+      +'<p style="margin-top:6px;font-size:12px"><b>1)</b> (6−2)=4 · <b>2)</b> 3×4=12 · <b>3)</b> 2²=4 · <b>4)</b> 4×5=20 · <b>5)</b> 20÷4=5 · <b>6)</b> 12+20−5=27</p>';},
+    mcCorr:0,
+    mcOptsFn:function(v){return ['('+v.b+'&minus;4) — paréntesis más interno','2'+sup(3)+' — potencia antes que producto',v.a+' &times; ... — multiplicación de izq a der',fr(75,3)+' — divisiones primero siempre'];}
+  },
+  {
+    ctx:'<strong>El Profe Martínez</strong> del CCH calcula su bono mensual así:',
+    exprFn:function(v){return '{['+v.a+' + ('+v.b+' &times; 2)] &minus; &#8730;<span style="text-decoration:overline">'+v.d2+'</span>} &times; 3';},
+    respFn:function(v){return (v.a+(v.b*2)-Math.sqrt(v.d2))*3;},
+    pistFn:function(){return '<p>Ejemplo análogo con { [ ( ) ] }:</p>'
+      +'<div class="pej">{[4 + (3 &times; 2)] &minus; &#8730;<span style="text-decoration:overline">9</span>} &times; 2</div>'
+      +'<p style="margin-top:6px;font-size:12px"><b>1)</b> Más interno (3×2)=6 · <b>2)</b> Corchete: 4+6=10 · <b>3)</b> √9=3 → 10−3=7 · <b>4)</b> Llave: ×2=14</p>';},
+    mcCorr:1,
+    mcOptsFn:function(v){return ['La llave { } — agrupador más externo primero','('+v.b+'&times;2) — paréntesis más interno primero','&#8730;<span style="text-decoration:overline">'+v.d2+'</span> — raíces antes que todo',v.a+'+... — de izquierda a derecha'];}
+  },
+  {
+    ctx:'<strong>Ana</strong> trabaja en una farmacia de Tlatelolco. Calcula el precio final de un medicamento así:',
+    exprFn:function(v){return v.a+' &minus; ('+fr(v.b*v.r,v.r)+' + '+v.e+') + 4'+sup(2)+' &divide; 8';},
+    respFn:function(v){return v.a-(v.b+v.e)+2;},
+    pistFn:function(){return '<p>Ejemplo análogo:</p>'
+      +'<div class="pej">20 &minus; ('+fr(12,3)+' + 2) + 3'+sup(2)+' &divide; 3</div>'
+      +'<p style="margin-top:6px;font-size:12px"><b>1)</b> 12÷3=4 · <b>2)</b> Paréntesis: 4+2=6 · <b>3)</b> 3²=9 · <b>4)</b> 9÷3=3 · <b>5)</b> 20−6+3=17</p>';},
+    mcCorr:0,
+    mcOptsFn:function(v){return ['El paréntesis ('+fr(v.b*v.r,v.r)+'+'+v.e+') — más interno','4'+sup(2)+'=16 — potencias primero',fr(v.b*v.r,v.r)+' — fracciones primero',v.a+'&minus;... — de izquierda a derecha'];}
+  },
+  {
+    ctx:'<strong>Rodrigo</strong> trabaja en un call center en Naucalpan. Su pago semanal neto se calcula con:',
+    exprFn:function(v){return '2'+sup(4)+' &times; '+v.c+' + {'+v.a+' &minus; ['+fr(v.b*2,2)+' + &#8730;<span style="text-decoration:overline">'+v.d2+'</span>]} &times; 5';},
+    respFn:function(v){return 16*v.c+(v.a-(v.b+Math.sqrt(v.d2)))*5;},
+    pistFn:function(){return '<p>Ejemplo análogo:</p>'
+      +'<div class="pej">2'+sup(3)+' &times; 2 + {5 &minus; ['+fr(6,2)+' + &#8730;<span style="text-decoration:overline">9</span>]} &times; 3</div>'
+      +'<p style="margin-top:6px;font-size:12px"><b>1)</b> 6÷2=3 · <b>2)</b> √9=3 · <b>3)</b> Corchete: 3+3=6 · <b>4)</b> Llave: 5−6=−1 · <b>5)</b> ×3=−3 · <b>6)</b> 2³=8 · <b>7)</b> 8×2=16 · <b>8)</b> 16+(−3)=13</p>';},
+    mcCorr:1,
+    mcOptsFn:function(v){return ['2'+sup(4)+'=16 — potencias antes que todo','2'+sup(4)+'=16 y '+fr(v.b*2,2)+'='+v.b+' — potencias y fracciones (mismo nivel 2°)','La llave { } — más externo primero','16&times;'+v.c+' — multiplicación de izq a der'];}
+  }
+];
+
+var BANCO_A=[
+  {exprFn:function(v){return '(&minus;'+v.p+')<sup>2</sup> + '+v.q+' &times; '+v.r+' &minus; &#8730;<span style="text-decoration:overline">'+v.s+'</span>';},
+   respFn:function(v){return v.p*v.p+v.q*v.r-Math.sqrt(v.s);},
+   pistFn:function(v){return '<p>Ejemplo análogo (valores distintos):</p>'
+     +'<div class="pej">(&minus;3)<sup>2</sup> + 2 &times; 4 &minus; &#8730;<span style="text-decoration:overline">9</span></div>'
+     +'<p style="font-size:12px;margin-top:5px">Nota: (−3)² = 9, no −9. Luego √9=3 y 2×4=8. Suma: 9+8−3=14</p>';}},
+  {exprFn:function(v){return '2<sup>'+v.n+'</sup> &minus; '+v.q+' &times; ('+v.r+' &minus; '+v.p+') + &#8730;<span style="text-decoration:overline">'+v.s+'</span>';},
+   respFn:function(v){return Math.pow(2,v.n)-v.q*(v.r-v.p)+Math.sqrt(v.s);},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">2<sup>3</sup> &minus; 3 &times; (5 &minus; 2) + &#8730;<span style="text-decoration:overline">4</span></div>'
+     +'<p style="font-size:12px;margin-top:5px">1) (5−2)=3 · 2) 2³=8 · 3) √4=2 · 4) 3×3=9 · 5) 8−9+2=1</p>';}},
+  {exprFn:function(v){return '&minus;'+v.p+'<sup>2</sup> + ('+v.q+' &divide; '+v.r+')<sup>2</sup> &minus; 1';},
+   respFn:function(v){return -(v.p*v.p)+Math.pow(v.q/v.r,2)-1;},
+   pistFn:function(){return '<p>Ejemplo análogo — ojo con el signo:</p>'
+     +'<div class="pej">&minus;2<sup>2</sup> + (6 &divide; 3)<sup>2</sup> &minus; 1</div>'
+     +'<p style="font-size:12px;margin-top:5px">−2² = −4 (sin paréntesis, solo 2 se eleva). (6÷3)²=2²=4. Resultado: −4+4−1=−1</p>';}},
+  {exprFn:function(v){return v.a+' &times; 3<sup>2</sup> &minus; ('+v.b+' + '+v.p+') &divide; '+v.r+' + 2';},
+   respFn:function(v){return v.a*9-(v.b+v.p)/v.r+2;},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">4 &times; 3<sup>2</sup> &minus; (8 + 2) &divide; 5 + 2</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) (8+2)=10 · 2) 3²=9 · 3) 4×9=36 · 4) 10÷5=2 · 5) 36−2+2=36</p>';}},
+  {exprFn:function(v){return fr(v.a+'<sup>'+v.n+'</sup> + '+v.b,v.p)+' &minus; &#8730;<span style="text-decoration:overline">'+v.s+'</span>';},
+   respFn:function(v){return (Math.pow(v.a,v.n)+v.b)/v.p - Math.sqrt(v.s);},
+   pistFn:function(){return '<p>Ejemplo análogo (fracción vertical = numerador ÷ denominador):</p>'
+     +'<div class="pej">'+fr('2<sup>3</sup> + 4','3')+' &minus; &#8730;<span style="text-decoration:overline">4</span></div>'
+     +'<p style="font-size:12px;margin-top:5px">1) Numerador: 2³=8, 8+4=12 · 2) 12÷3=4 · 3) √4=2 · 4) 4−2=2</p>';}},
+  {exprFn:function(v){return '(&minus;'+v.p+')<sup>3</sup> + '+v.a+' &times; '+v.q+' &minus; 2<sup>'+v.n+'</sup>';},
+   respFn:function(v){return -Math.pow(v.p,3)+v.a*v.q-Math.pow(2,v.n);},
+   pistFn:function(){return '<p>Ejemplo análogo (cubo de negativo):</p>'
+     +'<div class="pej">(&minus;2)<sup>3</sup> + 5 &times; 3 &minus; 2<sup>2</sup></div>'
+     +'<p style="font-size:12px;margin-top:5px">(−2)³=−8 (negativo, exponente impar). 5×3=15. 2²=4. −8+15−4=3</p>';}}
+];
+
+var BANCO_B=[
+  {exprFn:function(v){return '&#8730;<span style="text-decoration:overline">['+v.a+'<sup>2</sup> + '+v.b+'<sup>2</sup>]</span>';},
+   respFn:function(v){return Math.sqrt(v.a*v.a+v.b*v.b);},
+   pistFn:function(){return '<p>Ejemplo análogo (Pitágoras):</p>'
+     +'<div class="pej">&#8730;<span style="text-decoration:overline">[3<sup>2</sup> + 4<sup>2</sup>]</span></div>'
+     +'<p style="font-size:12px;margin-top:5px">3²=9 · 4²=16 · 9+16=25 · √25=5</p>';}},
+  {exprFn:function(v){return fr('3<sup>'+v.n+'</sup> + '+v.b,'2<sup>2</sup> &minus; '+v.p);},
+   respFn:function(v){return (Math.pow(3,v.n)+v.b)/(4-v.p);},
+   pistFn:function(){return '<p>Ejemplo análogo (fracción con potencias en ambas partes):</p>'
+     +'<div class="pej">'+fr('2<sup>3</sup> + 4','3<sup>2</sup> &minus; 5')+'</div>'
+     +'<p style="font-size:12px;margin-top:5px">Num: 2³=8, 8+4=12. Den: 3²=9, 9−5=4. 12÷4=3</p>';}},
+  {exprFn:function(v){return '2<sup>'+v.n+'</sup> &times; &#8730;<span style="text-decoration:overline">'+v.s+'</span> &minus; '+v.p+'<sup>2</sup> &divide; '+v.r;},
+   respFn:function(v){return Math.pow(2,v.n)*Math.sqrt(v.s)-v.p*v.p/v.r;},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">2<sup>2</sup> &times; &#8730;<span style="text-decoration:overline">9</span> &minus; 3<sup>2</sup> &divide; 3</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) 2²=4 · 2) √9=3 · 3) 3²=9 · 4) 4×3=12 y 9÷3=3 · 5) 12−3=9</p>';}},
+  {exprFn:function(v){return '(&#8730;<span style="text-decoration:overline">'+v.s+'</span>)<sup>2</sup> &minus; '+v.a+'<sup>2</sup> + &#8730;<span style="text-decoration:overline">('+v.q+' &times; '+v.r+')</span>';},
+   respFn:function(v){return v.s-v.a*v.a+Math.sqrt(v.q*v.r);},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">(&#8730;<span style="text-decoration:overline">9</span>)<sup>2</sup> &minus; 2<sup>2</sup> + &#8730;<span style="text-decoration:overline">(4 &times; 4)</span></div>'
+     +'<p style="font-size:12px;margin-top:5px">(√9)²=(3)²=9. 2²=4. √(16)=4. 9−4+4=9</p>';}},
+  {exprFn:function(v){return '{'+v.a+' &times; ['+v.b+'<sup>2</sup> &minus; &#8730;<span style="text-decoration:overline">'+v.s+'</span>] + '+v.p+'}';},
+   respFn:function(v){return v.a*(v.b*v.b-Math.sqrt(v.s))+v.p;},
+   pistFn:function(){return '<p>Ejemplo análogo (agrupadores anidados con potencias):</p>'
+     +'<div class="pej">{2 &times; [3<sup>2</sup> &minus; &#8730;<span style="text-decoration:overline">4</span>] + 5}</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) 3²=9 · 2) √4=2 · 3) Corchete: 9−2=7 · 4) 2×7=14 · 5) Llave: 14+5=19</p>';}},
+  {exprFn:function(v){return fr('&#8730;<span style="text-decoration:overline">('+v.a+'<sup>2</sup>+'+v.b+'<sup>2</sup>)</span>','&#8730;<span style="text-decoration:overline">'+v.s+'</span>')+' + '+v.p;},
+   respFn:function(v){return Math.sqrt(v.a*v.a+v.b*v.b)/Math.sqrt(v.s)+v.p;},
+   pistFn:function(){return '<p>Ejemplo análogo (fracción con raíces):</p>'
+     +'<div class="pej">'+fr('&#8730;<span style="text-decoration:overline">(3<sup>2</sup>+4<sup>2</sup>)</span>','&#8730;<span style="text-decoration:overline">25</span>')+' + 2</div>'
+     +'<p style="font-size:12px;margin-top:5px">Num: √(9+16)=√25=5. Den: √25=5. 5÷5=1. 1+2=3</p>';}}
+];
+
+var BANCO_C=[
+  {exprFn:function(v){return '{'+v.a+' &times; ['+v.b+' + ('+v.p+'<sup>2</sup> &minus; 1)] &divide; '+v.r+'}';},
+   respFn:function(v){return v.a*(v.b+(v.p*v.p-1))/v.r;},
+   pistFn:function(){return '<p>Ejemplo análogo (tres niveles de agrupadores):</p>'
+     +'<div class="pej">{3 &times; [4 + (2<sup>2</sup> &minus; 1)] &divide; 5}</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) Paréntesis: 2²=4, 4−1=3 · 2) Corchete: 4+3=7 · 3) Llave: 3×7÷5=21÷5=4.2</p>';}},
+  {exprFn:function(v){return '{['+v.a+' &times; ('+v.b+' + '+v.q+')<sup>2</sup>] &minus; '+v.r+'<sup>2</sup>} &divide; '+v.p;},
+   respFn:function(v){return (v.a*Math.pow(v.b+v.q,2)-v.r*v.r)/v.p;},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">{[2 &times; (3 + 1)<sup>2</sup>] &minus; 2<sup>2</sup>} &divide; 4</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) (3+1)=4 · 2) 4²=16 · 3) Corchete: 2×16=32 · 4) 2²=4 → 32−4=28 · 5) 28÷4=7</p>';}},
+  {exprFn:function(v){return v.a+' &times; {['+v.b+' &times; ('+v.p+' &minus; 1)]<sup>2</sup> &minus; '+v.s+'}';},
+   respFn:function(v){return v.a*(Math.pow(v.b*(v.p-1),2)-v.s);},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">2 &times; {[3 &times; (4 &minus; 1)]<sup>2</sup> &minus; 25}</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) (4−1)=3 · 2) Corchete: 3×3=9 · 3) 9²=81 · 4) Llave: 81−25=56 · 5) 2×56=112</p>';}},
+  {exprFn:function(v){return '{&#8730;<span style="text-decoration:overline">[('+v.a+' &minus; '+v.b+')<sup>2</sup> + '+v.s+']</span> + '+v.p+'<sup>2</sup>}';},
+   respFn:function(v){return Math.sqrt(Math.pow(v.a-v.b,2)+v.s)+v.p*v.p;},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">{&#8730;<span style="text-decoration:overline">[(5 &minus; 2)<sup>2</sup> + 7]</span> + 2<sup>2</sup>}</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) (5−2)=3 · 2) 3²=9 · 3) Corchete: 9+7=16 · 4) √16=4 · 5) 2²=4 · 6) 4+4=8</p>';}},
+  {exprFn:function(v){return fr('{'+v.a+' &times; ['+v.b+' &minus; ('+v.p+' + 1)]}',''+v.r+' + '+v.q);},
+   respFn:function(v){return (v.a*(v.b-(v.p+1)))/(v.r+v.q);},
+   pistFn:function(){return '<p>Ejemplo análogo (fracción con agrupadores):</p>'
+     +'<div class="pej">'+fr('{4 &times; [6 &minus; (2 + 1)]}','3 + 2')+'</div>'
+     +'<p style="font-size:12px;margin-top:5px">Num: (2+1)=3; [6−3]=3; 4×3=12. Den: 3+2=5. 12÷5=2.4</p>';}},
+  {exprFn:function(v){return '3 &times; {['+v.a+' &minus; ('+v.b+'<sup>2</sup> + '+v.p+')] &times; '+v.r+' + &#8730;<span style="text-decoration:overline">'+v.s+'</span>}';},
+   respFn:function(v){return 3*((v.a-(v.b*v.b+v.p))*v.r+Math.sqrt(v.s));},
+   pistFn:function(){return '<p>Ejemplo análogo:</p>'
+     +'<div class="pej">3 &times; {[10 &minus; (2<sup>2</sup> + 1)] &times; 2 + &#8730;<span style="text-decoration:overline">9</span>}</div>'
+     +'<p style="font-size:12px;margin-top:5px">1) (2²+1)=5 · 2) Corchete: 10−5=5 · 3) ×2=10 · 4) √9=3 · 5) Llave: 10+3=13 · 6) ×3=39</p>';}}
+];
+
+var BANCO_TI=[
+  {prod:'refresco de 600 ml',zona:'Tepito'},
+  {prod:'paquete de galletas',zona:'Tacubaya'},
+  {prod:'botella de agua 1 L',zona:'Xochimilco'},
+  {prod:'barra de chocolate',zona:'Iztapalapa'},
+  {prod:'bolsa de papas',zona:'Tlalpan'},
+  {prod:'jabón de barra',zona:'Azcapotzalco'},
+  {prod:'café soluble 100g',zona:'Coyoacán'},
+  {prod:'detergente 500g',zona:'Venustiano Carranza'}
+];
+
+var BANCO_DES=[
+  {
+    meta:16,
+    enun:'El área de un panel solar (en unidades) se expresa como <strong>3 &times; 4 + 2<sup>2</sup> = 16</strong>. Se re-escribe de 4 formas. ¿Cuál conserva el valor 16?',
+    opts:[
+      {lbl:'(3 &times; 4) + 2<sup>2</sup>',val:16},
+      {lbl:'3 &times; (4 + 2)<sup>2</sup>',val:108},
+      {lbl:'(3 &times; 4 + 2)<sup>2</sup>',val:196},
+      {lbl:'(3 + 4) &times; 2<sup>2</sup>',val:28}
+    ],corr:0
+  },
+  {
+    meta:19,
+    enun:'El costo de transporte (en pesos) es <strong>2 &times; 3<sup>2</sup> + 18 &divide; 3 &minus; 5 = 19</strong>. ¿Qué re-escritura mantiene ese valor?',
+    opts:[
+      {lbl:'2 &times; 9 + 6 &minus; 5',val:19},
+      {lbl:'(2 &times; 3)<sup>2</sup> + 18 &divide; 3 &minus; 5',val:37},
+      {lbl:'2 &times; 3<sup>2</sup> + 18 &divide; (3 &minus; 5)',val:7},
+      {lbl:'2 &times; (3<sup>2</sup> + 18) &divide; 3 &minus; 5',val:13}
+    ],corr:0
+  },
+  {
+    meta:19,
+    enun:'En una receta de laboratorio: <strong>&#8730;<span style="text-decoration:overline">(4<sup>2</sup>+3<sup>2</sup>)</span> + 2 &times; 5 &minus; 1 = 19</strong>. ¿Cuál re-escritura da el mismo valor?',
+    opts:[
+      {lbl:'5 + 10 &minus; 1',val:14},
+      {lbl:'&#8730;<span style="text-decoration:overline">25</span> + 10 &minus; 1',val:14},
+      {lbl:'&#8730;<span style="text-decoration:overline">(16+9)</span> + 2 &times; 5 &minus; 1',val:19},
+      {lbl:'(&#8730;<span style="text-decoration:overline">4</span>)<sup>2</sup> + (&#8730;<span style="text-decoration:overline">9</span>)<sup>2</sup> + 2 &times; 5 &minus; 1',val:20}
+    ],corr:2
+  },
+  {
+    meta:9,
+    enun:'Un alumno reescribió <strong>{3&times;[2+(5&minus;1)<sup>2</sup>]&divide;6} = 9</strong> de 4 formas. ¿Cuál da el mismo resultado?',
+    opts:[
+      {lbl:'3 &times; [2 + 4<sup>2</sup>] &divide; 6',val:9},
+      {lbl:'3 &times; [2 + (4)<sup>2</sup> &divide; 6]',val:14},
+      {lbl:'{3 &times; 2 + 16} &divide; 6',val:3.67},
+      {lbl:'(3 &times; 18) &divide; 6',val:9}
+    ],corr:0
+  }
+];
+
+var KW=['jerarquía','operación','agrupador','paréntesis','corchete','llave','potencia','raíz','prioridad',
+        'primero','segundo','después','antes','resultado','evalúo','calculo','multiplico','divido','suma',
+        'resta','exponente','nivel','interno','externo','orden','izquierda','derecha','fracción','numerador',
+        'denominador','correcta','incorrecto','diferencia','impacto'];
+var KW_CALC=['derivada','integral','función','límite','expresión','regla','cadena','producto','cociente','compuesta'];
+
+// ══════════════════════════════════════════════════════
+// GENERACIÓN DE VALORES
+// ══════════════════════════════════════════════════════
+function generar(){
+  var p=pick([2,3,4,5]);
+  var q=pick([3,4,5,6]);
+  var r=pick([2,3,4,5]);
+  var a=pick([6,7,8,9,10,12]);
+  var b=pick([8,9,10,12,15]);
+  var n=pick([3,4,5]);
+  var sqrts=[4,9,16,25,36,49,64];
+  var s=pick(sqrts);
+  var d2=pick([9,16,25,36,49]);
+  var e=pick([4,5,6,7,8]);
+  var c2=pick([3,4,5,6,7,8]);
+  V={p:p,q:q,r:r,a:a,b:b,n:n,s:s,d2:d2,e:e,c:c2};
+  V.iact=rnd(0,5); V.ieja=rnd(0,5); V.iejb=rnd(0,5);
+  V.iejc=rnd(0,5); V.iti=rnd(0,7); V.ides=rnd(0,3);
+  V.tiBase=[20,24,14,32,22,16,48,55][V.iti];
+  V.tiDesc=pick([0.05,0.10,0.12,0.15,0.20,0.25]);
+  V.tiCupon=pick([2,3,4,5,6,8,10]);
+  var pDesc=V.tiBase*(1-V.tiDesc);
+  V.tiRespCorr=Math.round((pDesc+pDesc*0.16-V.tiCupon)*100)/100;
+}
+
+// ══════════════════════════════════════════════════════
+// UTILIDADES
+// ══════════════════════════════════════════════════════
+function tp(id){var e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block';}
+
+function cntWords(tid,cid){
+  var el=document.getElementById(tid);
+  if(!el)return;
+  var w=el.value.trim().split(/\s+/).filter(function(x){return x.length>0;}).length;
+  var cnt=document.getElementById(cid);
+  if(cnt)cnt.textContent=w+' palabra'+(w===1?'':'s');
+}
+
+function evaluarTexto(txt,min,kws){
+  var kws2=kws||KW;
+  var ws=txt.trim().split(/\s+/).filter(function(w){return w.length>0;});
+  var n=ws.length, tl=txt.toLowerCase();
+  var kw=kws2.filter(function(k){return tl.includes(k);}).length;
+  if(n<min)return{score:0,cls:'txt-zero',lbl:'Insuficiente ('+n+'/'+min+' palabras mín.)'};
+  if(kw>=4)return{score:1,cls:'txt-full',lbl:'Completo ✓'};
+  if(kw>=2)return{score:0.75,cls:'txt-ok',lbl:'Aceptable · incluye vocabulario del tema'};
+  return{score:0.5,cls:'txt-low',lbl:'Básico — usa más términos del tema'};
+}
+
+// ══════════════════════════════════════════════════════
+// CANVAS DIBUJO
+// ══════════════════════════════════════════════════════
+function initCanvas(){
+  var c=document.getElementById('c-dibujo');
+  if(!c)return;
+  var dpr=window.devicePixelRatio||1;
+  c.width=c.offsetWidth*dpr;
+  c.height=230*dpr;
+  var ctx=c.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,c.offsetWidth,230);
+  ctx.strokeStyle='#eee';ctx.lineWidth=0.5;
+  for(var y=30;y<230;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.offsetWidth,y);ctx.stroke();}
+  function getPos(e,isTch){
+    var r=c.getBoundingClientRect();
+    var src=isTch?e.touches[0]:e;
+    return{x:(src.clientX-r.left),y:(src.clientY-r.top)};
+  }
+  function doDraw(x,y){
+    var ctx2=c.getContext('2d');
+    if(drawTool==='borrar'){ctx2.clearRect(x-10,y-10,20,20);ctx2.fillStyle='#fff';ctx2.fillRect(x-10,y-10,20,20);return;}
+    ctx2.strokeStyle=drawColor;ctx2.lineWidth=2.5;ctx2.lineCap='round';ctx2.lineJoin='round';
+    ctx2.lineTo(x,y);ctx2.stroke();ctx2.beginPath();ctx2.moveTo(x,y);
+  }
+  c.addEventListener('touchstart',function(e){e.preventDefault();var p=getPos(e,true);drawing=true;c.getContext('2d').beginPath();c.getContext('2d').moveTo(p.x,p.y);},{passive:false});
+  c.addEventListener('touchmove',function(e){e.preventDefault();if(!drawing)return;var p=getPos(e,true);doDraw(p.x,p.y);},{passive:false});
+  c.addEventListener('touchend',function(e){e.preventDefault();drawing=false;marcarDibujo();},{passive:false});
+  c.addEventListener('mousedown',function(e){var p=getPos(e,false);drawing=true;c.getContext('2d').beginPath();c.getContext('2d').moveTo(p.x,p.y);});
+  c.addEventListener('mousemove',function(e){if(!drawing)return;var p=getPos(e,false);doDraw(p.x,p.y);});
+  c.addEventListener('mouseup',function(){drawing=false;marcarDibujo();});
+}
+function marcarDibujo(){
+  canvasDibujado=true;
+  var m=document.getElementById('canvas-msg');
+  if(m){m.textContent='✓ Dibujo registrado';m.style.color='#1b6b35';}
+}
+function setTool(t){drawTool=t;document.getElementById('tb-lapiz').classList.toggle('act',t==='lapiz');document.getElementById('tb-borrar').classList.toggle('act',t==='borrar');}
+function setColor(c,id){
+  drawColor=c;setTool('lapiz');
+  var dots=document.querySelectorAll('.color-dot');
+  for(var i=0;i<dots.length;i++)dots[i].classList.remove('act');
+  var el=document.getElementById(id);if(el)el.classList.add('act');
+}
+function limpiarCanvas(){
+  var c=document.getElementById('c-dibujo');
+  var ctx=c.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);
+  canvasDibujado=false;
+  var m=document.getElementById('canvas-msg');
+  if(m){m.textContent='Dibuja tu árbol antes de continuar';m.style.color='#aaa';}
+}
+
+// ══════════════════════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════════════════════
+function ir(id,paso){
+  var secs=document.querySelectorAll('.sec');
+  for(var i=0;i<secs.length;i++)secs[i].classList.remove('on');
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('bwf').style.width=(paso/totalBloques*100)+'%';
+  document.getElementById('bwc').textContent=paso;
+  secActual=paso;
+  if(id==='s2')cargAct();
+  if(id==='s3')cargArbol();
+  if(id==='s4')cargEj();
+  if(id==='s5')cargTi();
+  if(id==='s6')cargDes();
+  if(id==='s-res')mostrarRes();
+}
+
+// ══════════════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════════════
+function iniciar(){
+  nombre=document.getElementById('inp-nombre').value.trim().toUpperCase();
+  var fb=document.getElementById('fb-login');
+  if(nombre.length<5){fb.textContent='Escribe tu nombre completo comenzando por apellidos.';return;}
+  if(nombre.split(' ').length<2){fb.textContent='Escribe al menos dos palabras (apellido y nombre).';return;}
+  fb.textContent='';
+  generar();
+  document.getElementById('hdr').style.display='block';
+  document.getElementById('hdr-nombre').textContent=nombre;
+  document.getElementById('msg-bienvenida').innerHTML=
+    'Hola, <strong>'+nombre.split(' ')[0]+'</strong>. '
+    +'Trabajamos jerarquía de operaciones — suena básico, pero los errores en cálculo diferencial e integral casi siempre vienen de aquí. '
+    +'<strong>Todas tus respuestas se calificarán al final.</strong>';
+  ir('s1',0);
+  // Activar teclado flotante en todos los inputs/textareas
+  setTimeout(activarBarraEnCampos, 200);
+}
+
+function activarBarraEnCampos(){
+  var campos = document.querySelectorAll('input[type=text], textarea');
+  for(var i=0;i<campos.length;i++){
+    (function(el){
+      el.addEventListener('input', function(){actualizarPreview(el);});
+    })(campos[i]);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ACTIVACIÓN
+// ══════════════════════════════════════════════════════
+function cargAct(){
+  var b=BANCO_ACT[V.iact];
+  document.getElementById('act-narrativa').innerHTML=b.ctx;
+  document.getElementById('act-expr').innerHTML=b.exprFn(V);
+  actRespCorr=Math.round(b.respFn(V)*100)/100;
+  var opts=b.mcOptsFn(V);
+  var cont=document.getElementById('act-mc-opts');
+  cont.innerHTML='';
+  for(var i=0;i<opts.length;i++){
+    var btn=document.createElement('button');
+    btn.className='ob';
+    btn.innerHTML=opts[i];
+    btn.setAttribute('data-idx',i);
+    btn.addEventListener('click',(function(bi,idx){return function(){elegirActMC(bi,idx,b.mcCorr);};})(btn,i));
+    cont.appendChild(btn);
+  }
+  actMCResp='';
+  intentos.act=0;
+  document.getElementById('pista-act').innerHTML=b.pistFn(V);
+}
+
+function elegirActMC(btn,idx,corr){
+  actMCResp=idx;
+  var obs=btn.parentElement.querySelectorAll('.ob');
+  for(var i=0;i<obs.length;i++){obs[i].classList.remove('eok','eml');obs[i].classList.add('dx');}
+  btn.classList.remove('dx');
+  var fb=document.getElementById('fb-act-mc');
+  if(idx===corr){
+    btn.classList.add('eok');
+    fb.className='fb ok';fb.innerHTML='✓ Correcto. Esa es la operación con mayor jerarquía.';R.actMC=true;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er';fb.innerHTML='✗ Recuerda PEMDAS: agrupadores → potencias/raíces → × y ÷ → + y −.';
+  }
+  fb.style.display='block';
+}
+
+function verificarAct(){
+  var conj=document.getElementById('act-conj');
+  var proc=document.getElementById('act-proc');
+  var res =document.getElementById('act-res');
+  var errs=[];
+
+  var evalConj=evaluarTexto(conj.value,15,KW);
+  R.actConj=evalConj.score;
+  if(evalConj.score===0){conj.classList.add('err');errs.push({id:'act-conj',lbl:'Tu conjetura inicial',desc:'Mínimo 15 palabras con vocabulario del tema'});}
+  else conj.classList.remove('err');
+
+  if(actMCResp===''&&actMCResp!==0)errs.push({id:'act-mc-opts',lbl:'Pregunta de opción múltiple',desc:'Selecciona una opción'});
+
+  var evalProc=evaluarTexto(proc.value,10,KW);
+  if(evalProc.score===0){proc.classList.add('err');errs.push({id:'act-proc',lbl:'Procedimiento',desc:'Mínimo 10 palabras describiendo los pasos'});}
+  else proc.classList.remove('err');
+
+  var valR=parseFloat(res.value.replace(',','.'));
+  var fb=document.getElementById('fb-act-res');
+  var avis=document.getElementById('aviso-act');
+  if(isNaN(valR)){
+    res.classList.add('err');
+    errs.push({id:'act-res',lbl:'Resultado numérico',desc:'Escribe el número exacto'});
+  } else {
+    intentos.act++;
+    if(Math.abs(valR-actRespCorr)<0.15){
+      res.classList.remove('err');
+      fb.className='fb ok';fb.innerHTML='✓ Resultado correcto: '+actRespCorr;fb.style.display='block';
+      R.actRes=true;actIntOk=true;
+    } else {
+      res.classList.add('err');
+      var queda=MAX_INT-intentos.act;
+      fb.className='fb er';
+      if(queda>0){
+        fb.innerHTML='✗ No es correcto. Intento '+intentos.act+' de '+MAX_INT+'.';
+        avis.style.display='block';
+        errs.push({id:'act-res',lbl:'Resultado incorrecto',desc:'Revisa el orden PEMDAS'});
+      } else {
+        fb.innerHTML='⚠ 3 intentos agotados. La respuesta correcta era: <strong>'+actRespCorr+'</strong>. Se registró como incorrecta.';
+        R.actRes=false;actIntOk=true;avis.style.display='none';
+      }
+      fb.style.display='block';
+    }
+  }
+
+  // Avanzar si terminó el resultado (ok o agotó intentos), aunque haya errores en otros campos
+  if(actIntOk){
+    if(errs.filter(function(e){return e.id!=='act-res';}).length){mostrarErrPanel(errs);return;}
+    setTimeout(function(){ir('s3',2);},700);
+    return;
+  }
+  if(errs.length)mostrarErrPanel(errs);
+}
+
+// ══════════════════════════════════════════════════════
+// ÁRBOL
+// ══════════════════════════════════════════════════════
+function cargArbol(){
+  var b=BANCO_ACT[V.iact];
+  document.getElementById('arbol-expr').innerHTML=b.exprFn(V);
+  setTimeout(initCanvas,80);
+}
+
+function verificarArbol(){
+  var desc=document.getElementById('arbol-desc');
+  var errs=[];
+  if(!canvasDibujado)errs.push({id:'c-dibujo',lbl:'Dibujo del árbol',desc:'Dibuja algo en el lienzo'});
+  var ev=evaluarTexto(desc.value,15,KW);
+  R.arbolDraw=canvasDibujado;R.arbolDesc=ev.score;
+  if(ev.score===0){desc.classList.add('err');errs.push({id:'arbol-desc',lbl:'Descripción del árbol',desc:'Mínimo 15 palabras con vocabulario temático'});}
+  else desc.classList.remove('err');
+  if(errs.length){mostrarErrPanel(errs);return;}
+  ir('s4',3);
+}
+
+// ══════════════════════════════════════════════════════
+// EJERCICIOS A/B/C
+// ══════════════════════════════════════════════════════
+function cargEj(){
+  ejData.a=BANCO_A[V.ieja];
+  ejData.b=BANCO_B[V.iejb];
+  ejData.c=BANCO_C[V.iejc];
+  document.getElementById('eja-expr').innerHTML=ejData.a.exprFn(V);
+  document.getElementById('ejb-expr').innerHTML=ejData.b.exprFn(V);
+  document.getElementById('ejc-expr').innerHTML=ejData.c.exprFn(V);
+  document.getElementById('pista-ea').innerHTML=ejData.a.pistFn(V);
+  document.getElementById('pista-eb').innerHTML=ejData.b.pistFn(V);
+  document.getElementById('pista-ec').innerHTML=ejData.c.pistFn(V);
+}
+
+function chkEj(cual){
+  var ej={'a':ejData.a,'b':ejData.b,'c':ejData.c}[cual];
+  var resEl=document.getElementById('e'+cual+'-res');
+  var procEl=document.getElementById('e'+cual+'-proc');
+  var fbEl=document.getElementById('fb-e'+cual);
+  var aviEl=document.getElementById('aviso-e'+cual);
+
+  var errs=[];
+  var evalP=evaluarTexto(procEl.value,10,KW);
+  if(evalP.score===0){procEl.classList.add('err');errs.push({id:'e'+cual+'-proc',lbl:'Procedimiento Ej.'+cual.toUpperCase(),desc:'Mínimo 10 palabras'});}
+  else procEl.classList.remove('err');
+
+  var valR=parseFloat(resEl.value.replace(',','.'));
+  var respCorr=Math.round(ej.respFn(V)*100)/100;
+  if(isNaN(valR)){
+    resEl.classList.add('err');
+    errs.push({id:'e'+cual+'-res',lbl:'Resultado Ej.'+cual.toUpperCase(),desc:'Escribe el número'});
+    fbEl.className='fb er';fbEl.innerHTML='Escribe un valor numérico.';fbEl.style.display='block';
+    mostrarErrPanel(errs);return;
+  }
+
+  intentos[cual]=(intentos[cual]||0)+1;
+  if(Math.abs(valR-respCorr)<0.15){
+    resEl.classList.remove('err');
+    fbEl.className='fb ok';fbEl.innerHTML='✓ Correcto. Resultado = '+respCorr;fbEl.style.display='block';
+    R['ej'+cual.toUpperCase()]={ok:true,forzado:false};
+    if(aviEl)aviEl.style.display='none';
+  } else {
+    resEl.classList.add('err');
+    var queda=MAX_INT-intentos[cual];
+    if(queda>0){
+      fbEl.className='fb er';fbEl.innerHTML='✗ No es correcto. Intento '+intentos[cual]+' de '+MAX_INT+'.';fbEl.style.display='block';
+      if(aviEl)aviEl.innerHTML='⚠ Al 3° intento avanzará automáticamente marcado como incorrecto.';
+      if(aviEl)aviEl.style.display='block';
+      errs.push({id:'e'+cual+'-res',lbl:'Resultado incorrecto',desc:'Revisa la jerarquía'});
+    } else {
+      fbEl.className='fb warn';fbEl.innerHTML='⚠ 3 intentos agotados. La respuesta correcta era: <strong>'+respCorr+'</strong>. Se registró como incorrecta.';fbEl.style.display='block';
+      R['ej'+cual.toUpperCase()]={ok:false,forzado:true};
+      resEl.disabled=true;resEl.classList.remove('err');
+      if(aviEl)aviEl.style.display='none';
+    }
+    if(errs.length&&queda>0)mostrarErrPanel(errs);
+  }
+}
+
+function avanzarS4(){
+  var procs=['ea-proc','eb-proc','ec-proc'];
+  var errs=[];
+  for(var i=0;i<procs.length;i++){
+    var el=document.getElementById(procs[i]);
+    if(evaluarTexto(el.value,10,KW).score===0){
+      el.classList.add('err');errs.push({id:procs[i],lbl:'Procedimiento '+procs[i].charAt(1).toUpperCase(),desc:'Mínimo 10 palabras'});
+    } else el.classList.remove('err');
+  }
+  if(errs.length){mostrarErrPanel(errs);return;}
+  ir('s5',4);
+}
+
+// ══════════════════════════════════════════════════════
+// TIENDITAS
+// ══════════════════════════════════════════════════════
+function cargTi(){
+  var ti=BANCO_TI[V.iti];
+  var descPct=Math.round(V.tiDesc*100);
+  var html='<p>Don Beto vende <strong>'+ti.prod+'</strong> en su tiendita de <strong>'+ti.zona+'</strong>.</p>';
+  html+='<ul style="margin-left:18px;font-size:14px;line-height:2">';
+  html+='<li>Precio base: <strong>$'+V.tiBase+'.00</strong></li>';
+  html+='<li>Descuento: <strong>'+descPct+'%</strong> (= '+V.tiDesc+' en decimal)</li>';
+  html+='<li>IVA: <strong>16%</strong> sobre el precio ya descontado</li>';
+  html+='<li>Cup&oacute;n de descuento final: <strong>$'+V.tiCupon+'.00</strong></li>';
+  html+='</ul>';
+  html+='<p style="margin-top:8px;font-size:13px">Fórmula: <strong>P&times;(1&minus;d) + P&times;(1&minus;d)&times;0.16 &minus; cupón</strong></p>';
+  document.getElementById('ti-enunciado').innerHTML=html;
+
+  // Pista: ejemplo análogo con valores completamente diferentes
+  var pistaTi='<p>Ejemplo análogo con <strong>valores distintos a los tuyos</strong>:</p>'
+    +'<div class="pej">Precio: $100 · Descuento: 10% (=0.10) · IVA: 16% · Cupón: $5</div>'
+    +'<p style="font-size:12px;margin-top:5px">'
+    +'<b>1)</b> (1−0.10)=0.90 · '
+    +'<b>2)</b> 100×0.90=$90 (precio descontado) · '
+    +'<b>3)</b> 90×0.16=$14.40 (IVA) · '
+    +'<b>4)</b> 90+14.40−5=$99.40</p>';
+  document.getElementById('pista-ti').innerHTML=pistaTi;
+}
+
+function verificarTiendita(){
+  var expr   =document.getElementById('ti-expr');
+  var proc   =document.getElementById('ti-proc');
+  var res    =document.getElementById('ti-res');
+  var carlos =document.getElementById('ti-carlos');
+  var interp =document.getElementById('ti-interp');
+  var errs=[];
+
+  var evExpr=evaluarTexto(expr.value,8,KW);R.tiExpr=evExpr.score;
+  if(evExpr.score===0){expr.classList.add('err');errs.push({id:'ti-expr',lbl:'Expresión del caso',desc:'Escribe la expresión completa'});}
+  else expr.classList.remove('err');
+
+  var evProc=evaluarTexto(proc.value,15,KW);R.tiProc=evProc.score;
+  if(evProc.score===0){proc.classList.add('err');errs.push({id:'ti-proc',lbl:'Procedimiento',desc:'Mínimo 15 palabras'});}
+  else proc.classList.remove('err');
+
+  var valR=parseFloat(res.value.replace(',','.'));
+  var fbTi=document.getElementById('fb-ti');
+  var aviTi=document.getElementById('aviso-ti');
+  if(isNaN(valR)){
+    res.classList.add('err');errs.push({id:'ti-res',lbl:'Precio final',desc:'Escribe el número'});
+    fbTi.className='fb er';fbTi.innerHTML='Escribe el precio final.';fbTi.style.display='block';
+  } else {
+    intentos.ti=(intentos.ti||0)+1;
+    if(Math.abs(valR-V.tiRespCorr)<0.5){
+      res.classList.remove('err');
+      fbTi.className='fb ok';fbTi.innerHTML='✓ Precio correcto: $'+V.tiRespCorr.toFixed(2);fbTi.style.display='block';
+      R.tiRes=true;tiIntOk=true;
+    } else {
+      var queda=MAX_INT-intentos.ti;
+      if(queda>0){
+        res.classList.add('err');
+        fbTi.className='fb er';fbTi.innerHTML='✗ No es correcto. Intento '+intentos.ti+' de '+MAX_INT+'.';fbTi.style.display='block';
+        aviTi.innerHTML='⚠ Al 3° intento avanzará automáticamente.';aviTi.style.display='block';
+        errs.push({id:'ti-res',lbl:'Precio incorrecto',desc:'Revisa: calcula (1−d) primero'});
+      } else {
+        fbTi.className='fb warn';fbTi.innerHTML='⚠ 3 intentos agotados. Precio correcto: <strong>$'+V.tiRespCorr.toFixed(2)+'</strong>. Se registró como incorrecta.';
+        fbTi.style.display='block';R.tiRes=false;tiIntOk=true;res.disabled=true;aviTi.style.display='none';
+      }
+    }
+  }
+
+  var valCarlos=parseFloat(carlos.value.replace(',','.'));
+  var fbC=document.getElementById('fb-carlos');
+  if(isNaN(valCarlos)){
+    carlos.classList.add('err');errs.push({id:'ti-carlos',lbl:'Resultado de Carlos',desc:'Simula el error de izq a der'});
+    fbC.className='fb er';fbC.innerHTML='Escribe el resultado erróneo.';fbC.style.display='block';
+  } else if(Math.abs(valCarlos-V.tiRespCorr)>0.3){
+    carlos.classList.remove('err');
+    fbC.className='fb ok';fbC.innerHTML='✓ Diferente al correcto ($'+V.tiRespCorr.toFixed(2)+').';fbC.style.display='block';
+    R.tiCarlos=true;
+  } else {
+    carlos.classList.add('err');
+    fbC.className='fb er';fbC.innerHTML='✗ El error de Carlos debe producir un resultado diferente. Simula operar sin respetar jerarquía.';fbC.style.display='block';
+    errs.push({id:'ti-carlos',lbl:'Resultado de Carlos',desc:'Debe diferir del resultado correcto'});
+  }
+
+  var evInterp=evaluarTexto(interp.value,20,KW);R.tiInterp=evInterp.score;
+  if(evInterp.score===0){interp.classList.add('err');errs.push({id:'ti-interp',lbl:'Interpretación económica',desc:'Mínimo 20 palabras con cifras concretas'});}
+  else interp.classList.remove('err');
+
+  if(tiIntOk){
+    var errsRestantes=errs.filter(function(e){return e.id!=='ti-res';});
+    if(errsRestantes.length){mostrarErrPanel(errs);return;}
+    setTimeout(function(){ir('s6',5);},700);
+    return;
+  }
+  if(errs.length)mostrarErrPanel(errs);
+}
+
+// ══════════════════════════════════════════════════════
+// DESAFÍO
+// ══════════════════════════════════════════════════════
+function cargDes(){
+  var d=BANCO_DES[V.ides];
+  document.getElementById('des-enunciado').innerHTML='<p>'+d.enun+'</p>';
+  var cont=document.getElementById('des-opciones');cont.innerHTML='';
+  var letras=['A','B','C','D'];
+  for(var i=0;i<d.opts.length;i++){
+    var op=d.opts[i];
+    var btn=document.createElement('button');
+    btn.className='ob';
+    btn.innerHTML=letras[i]+') '+op.lbl+'&nbsp;&nbsp;<span style="background:var(--az3);color:var(--az2);border-radius:8px;padding:1px 7px;font-size:13px;font-weight:800">&rarr; '+op.val+'</span>';
+    btn.setAttribute('data-idx',i);
+    btn.addEventListener('click',(function(bi,idx){return function(){elegirDes(bi,idx,d.corr);};})(btn,i));
+    cont.appendChild(btn);
+  }
+  desMCResp=-1;
+}
+
+function elegirDes(btn,idx,corr){
+  desMCResp=idx;
+  var obs=btn.parentElement.querySelectorAll('.ob');
+  for(var i=0;i<obs.length;i++){obs[i].classList.remove('eok','eml');obs[i].classList.add('dx');}
+  btn.classList.remove('dx');
+  var fb=document.getElementById('fb-des');
+  if(idx===corr){
+    btn.classList.add('eok');
+    fb.className='fb ok';fb.innerHTML='✓ Correcto. Esa re-escritura conserva la jerarquía original.';R.desMC=true;
+  } else {
+    btn.classList.add('eml');
+    fb.className='fb er';fb.innerHTML='✗ Esa expresión altera el resultado. La correcta es la opción '+'ABCD'[corr]+'.';
+  }
+  fb.style.display='block';
+}
+
+function finalizarActividad(){
+  var just   =document.getElementById('des-just');
+  var regla  =document.getElementById('cierre-regla');
+  var calc   =document.getElementById('cierre-calc');
+  var errs=[];
+  if(desMCResp<0)errs.push({id:'des-opciones',lbl:'Desafío — opción',desc:'Selecciona una opción'});
+  var evJust =evaluarTexto(just.value,25,KW); R.desJust=evJust.score;
+  if(evJust.score===0){just.classList.add('err');errs.push({id:'des-just',lbl:'Justificación desafío',desc:'Mínimo 25 palabras'});}
+  else just.classList.remove('err');
+  var evRegla=evaluarTexto(regla.value,20,KW); R.cierreRegla=evRegla.score;
+  if(evRegla.score===0){regla.classList.add('err');errs.push({id:'cierre-regla',lbl:'Tu regla propia',desc:'Mínimo 20 palabras'});}
+  else regla.classList.remove('err');
+  var evCalc =evaluarTexto(calc.value,15,KW_CALC); R.cierreCalc=evCalc.score;
+  if(evCalc.score===0){calc.classList.add('err');errs.push({id:'cierre-calc',lbl:'Conexión con Cálculo',desc:'Mínimo 15 palabras con: derivada, integral...'});}
+  else calc.classList.remove('err');
+  if(errs.length){mostrarErrPanel(errs);return;}
+  ir('s-res',7);
+}
+
+// ══════════════════════════════════════════════════════
+// RESULTADOS Y CALIFICACIÓN
+// ══════════════════════════════════════════════════════
+function mostrarRes(){
+  var pts=0;
+  pts+=R.actConj*0.5;
+  if(R.actMC)pts+=0.5;
+  if(R.actRes)pts+=1;
+  if(R.arbolDraw)pts+=1;
+  pts+=R.arbolDesc*1;
+  if(R.ejA&&R.ejA.ok)pts+=1;
+  if(R.ejB&&R.ejB.ok)pts+=1;
+  if(R.ejC&&R.ejC.ok)pts+=1;
+  pts+=R.tiExpr*0.3;
+  pts+=R.tiProc*0.3;
+  if(R.tiRes)pts+=0.6;
+  if(R.tiCarlos)pts+=0.3;
+  pts+=R.tiInterp*0.5;
+  if(R.desMC)pts+=0.3;
+  pts+=R.desJust*0.3;
+  pts+=R.cierreRegla*0.2;
+  pts+=R.cierreCalc*0.2;
+  pts=Math.min(Math.round(pts*10)/10,10);
+
+  var gnum=document.getElementById('grade-num');
+  var glbl=document.getElementById('grade-label');
+  var gbox=document.getElementById('grade-box');
+  gnum.textContent=pts.toFixed(1);
+  if(pts>=9){glbl.textContent='Excelente dominio ✓';gbox.style.background='#e6f7ed';gbox.style.borderColor='#27a74f';gnum.style.color='#1b6b35';}
+  else if(pts>=7){glbl.textContent='Buen manejo — refuerza el modelado';gbox.style.background='#e6f0fb';gbox.style.borderColor='#2563a8';gnum.style.color='#1a3a6b';}
+  else if(pts>=6){glbl.textContent='Suficiente — revisa jerarquía y modelado';gbox.style.background='#fff2e0';gbox.style.borderColor='#c06000';gnum.style.color='#c06000';}
+  else{glbl.textContent='Necesitas consolidar la jerarquía';gbox.style.background='#fce8e8';gbox.style.borderColor='#b82020';gnum.style.color='#b82020';}
+
+  document.getElementById('res-nombre-badge').textContent=nombre+' · S06 G658';
+
+  // Dibujo árbol
+  var cEl=document.getElementById('c-dibujo');
+  if(canvasDibujado&&cEl){
+    var dcard=document.getElementById('res-dibujo-card');dcard.style.display='block';
+    var img=document.getElementById('res-dibujo-img');
+    try{img.src=cEl.toDataURL('image/png');}catch(x){}
+    var descV=document.getElementById('arbol-desc');
+    document.getElementById('res-dibujo-desc').textContent=descV?descV.value:'';
+  }
+
+  // ── Helpers para tarjetas de resultado ──────────────
+  var html='';
+
+  // Tarjeta numérica: muestra expresión, tu respuesta, respuesta esperada
+  function tarjeta(bloque, titulo, ok, alumnoVal, esperadaVal, exprHTML, nota){
+    var bg=ok?'#e6f7ed':'#fce8e8';
+    var bord=ok?'#27a74f':'#b82020';
+    var icon=ok?'✅':'❌';
+    var etiq=ok?'Correcto':'Incorrecto';
+    var etiqCss=ok?'background:#27a74f;color:#fff':'background:#b82020;color:#fff';
+    if(nota&&!ok){bg='#fff2e0';bord='#c06000';icon='⚠';etiq='3 intentos agotados';etiqCss='background:#c06000;color:#fff';}
+    html+='<div style="background:'+bg+';border:2px solid '+bord+';border-radius:12px;padding:13px 14px;margin-bottom:10px">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">';
+    html+='<span style="font-size:11px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:.5px">'+bloque+'</span>';
+    html+='<span style="'+etiqCss+';border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700">'+icon+' '+etiq+'</span>';
+    html+='</div>';
+    html+='<div style="font-size:14px;font-weight:700;margin-bottom:7px">'+titulo+'</div>';
+    if(exprHTML){
+      html+='<div style="background:#fff;border-radius:8px;padding:8px 12px;font-size:15px;font-weight:700;text-align:center;margin-bottom:8px;line-height:2.2;border:1.5px solid '+bord+'25">'+exprHTML+'</div>';
+    }
+    if(alumnoVal!==null&&alumnoVal!==undefined&&alumnoVal!==''){
+      html+='<div style="display:flex;gap:8px;flex-wrap:wrap">';
+      html+='<div style="flex:1;min-width:120px;background:#fff;border-radius:8px;padding:8px 10px;border:1.5px solid #ddd">';
+      html+='<div style="font-size:10px;font-weight:800;color:#888;margin-bottom:3px;text-transform:uppercase">Tu respuesta</div>';
+      html+='<div style="font-size:16px;font-weight:900;color:'+bord+'">'+escHtml(String(alumnoVal))+'</div>';
+      html+='</div>';
+      if(esperadaVal!==null&&esperadaVal!==undefined&&esperadaVal!==''){
+        html+='<div style="flex:1;min-width:120px;background:#fff;border-radius:8px;padding:8px 10px;border:1.5px solid #27a74f40">';
+        html+='<div style="font-size:10px;font-weight:800;color:#888;margin-bottom:3px;text-transform:uppercase">Respuesta esperada</div>';
+        html+='<div style="font-size:16px;font-weight:900;color:#1b6b35">'+esperadaVal+'</div>';
+        html+='</div>';
+      }
+      html+='</div>';
+    }
+    if(nota)html+='<p style="font-size:12px;color:#c06000;margin-top:6px;font-weight:700">'+nota+'</p>';
+    html+='</div>';
+  }
+
+  // Tarjeta de texto libre
+  function tarjetaTxt(bloque, titulo, score, cls, lbl, txtAlumno, sugerencia){
+    var bg, bord, icon;
+    if(score>=0.75){bg='#e6f7ed';bord='#27a74f';icon='✅';}
+    else if(score>=0.5){bg='#fff2e0';bord='#c06000';icon='⚠';}
+    else{bg='#fce8e8';bord='#b82020';icon='❌';}
+    html+='<div style="background:'+bg+';border:2px solid '+bord+';border-radius:12px;padding:13px 14px;margin-bottom:10px">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
+    html+='<span style="font-size:11px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:.5px">'+bloque+'</span>';
+    html+='<span class="txt-badge '+cls+'">'+icon+' '+lbl+'</span>';
+    html+='</div>';
+    html+='<div style="font-size:14px;font-weight:700;margin-bottom:7px">'+titulo+'</div>';
+    html+='<div style="background:#fff;border-radius:8px;padding:8px 10px;font-size:13px;color:#333;line-height:1.65;border:1px solid '+bord+'30;max-height:90px;overflow-y:auto">'+escHtml(txtAlumno||'(sin respuesta)')+'</div>';
+    if(score<0.75&&sugerencia)html+='<p style="font-size:11px;color:'+(score>=0.5?'#c06000':'#b82020')+';margin-top:5px">💡 Términos sugeridos: <em>'+sugerencia+'</em></p>';
+    html+='</div>';
+  }
+
+  function secHeader(txt){
+    html+='<div style="font-size:12px;font-weight:800;color:var(--mo);letter-spacing:1px;text-transform:uppercase;margin:16px 0 7px;padding-left:4px">'+txt+'</div>';
+  }
+
+  // ── BLOQUE 1: ACTIVACIÓN ──
+  secHeader('Bloque 1 · Activación');
+  var actConEl=document.getElementById('act-conj');
+  var actEv=evaluarTexto(actConEl?actConEl.value:'',15,KW);
+  tarjetaTxt('B1 · Conjetura','Tu razonamiento inicial',actEv.score,actEv.cls,actEv.lbl,
+    actConEl?actConEl.value:'','jerarquía, potencia, agrupador, prioridad');
+  tarjeta('B1 · Pregunta clave','¿Qué operación va primero?',R.actMC,
+    R.actMC?'Correcta':'Incorrecta',null,null,null);
+  tarjeta('B1 · Resultado numérico','Cálculo de la expresión de activación',R.actRes,
+    document.getElementById('act-res')?document.getElementById('act-res').value:'—',
+    ''+actRespCorr,
+    BANCO_ACT[V.iact].exprFn(V),null);
+
+  // ── BLOQUE 2: ÁRBOL ──
+  secHeader('Bloque 2 · Diagrama de pasos');
+  tarjeta('B2 · Diagrama dibujado','Representación visual del orden de operaciones',
+    canvasDibujado,canvasDibujado?'Dibujado ✓':'No dibujado',null,null,
+    canvasDibujado?null:'No se registró ningún trazo.');
+  var arbolDescEl=document.getElementById('arbol-desc');
+  var arbolEv=evaluarTexto(arbolDescEl?arbolDescEl.value:'',15,KW);
+  tarjetaTxt('B2 · Explicación escrita','Descripción del orden seguido',arbolEv.score,arbolEv.cls,arbolEv.lbl,
+    arbolDescEl?arbolDescEl.value:'','jerarquía, agrupador, potencia, primero, resultado parcial');
+
+  // ── BLOQUE 3: EJERCICIOS ──
+  secHeader('Bloque 3 · Ejercicios individuales');
+  var ejTs=['A','B','C'];
+  var ejRs=[R.ejA,R.ejB,R.ejC];
+  var resEls=[document.getElementById('ea-res'),document.getElementById('eb-res'),document.getElementById('ec-res')];
+  var procEls=[document.getElementById('ea-proc'),document.getElementById('eb-proc'),document.getElementById('ec-proc')];
+  var exprEls=[document.getElementById('eja-expr'),document.getElementById('ejb-expr'),document.getElementById('ejc-expr')];
+  var corrEjs=[
+    ejData.a?Math.round(ejData.a.respFn(V)*100)/100:'—',
+    ejData.b?Math.round(ejData.b.respFn(V)*100)/100:'—',
+    ejData.c?Math.round(ejData.c.respFn(V)*100)/100:'—'
+  ];
+  var ejNombres=['Jerarquía con reales y signos','Potencias y raíces anidadas','Agrupadores anidados { [ ( ) ] }'];
+  for(var i=0;i<3;i++){
+    var ejOk=ejRs[i]&&ejRs[i].ok;
+    var forzado=ejRs[i]&&ejRs[i].forzado;
+    tarjeta('B3 · Ejercicio '+ejTs[i],ejNombres[i],ejOk,
+      resEls[i]?resEls[i].value:'—',
+      ''+corrEjs[i],
+      exprEls[i]?exprEls[i].innerHTML:'',
+      forzado?'3 intentos agotados — si crees que es un error de validación, muestra este resumen al Prof. Cruz.':null);
+    var evProc=evaluarTexto(procEls[i]?procEls[i].value:'',10,KW);
+    tarjetaTxt('B3 · Procedimiento '+ejTs[i],'Pasos escritos',evProc.score,evProc.cls,evProc.lbl,
+      procEls[i]?procEls[i].value:'','primero, luego, resultado, operación, paso');
+  }
+
+  // ── BLOQUE 4: TIENDITAS ──
+  secHeader('Bloque 4 · Tienditas CDMX');
+  var tiNota=BANCO_TI[V.iti].prod+' en '+BANCO_TI[V.iti].zona
+    +' · base $'+V.tiBase+' · desc. '+Math.round(V.tiDesc*100)+'% · cupón $'+V.tiCupon;
+  tarjetaTxt('B4 · Expresión','Expresión aritmética escrita',
+    evaluarTexto(document.getElementById('ti-expr')?document.getElementById('ti-expr').value:'',8,KW).score,
+    evaluarTexto(document.getElementById('ti-expr')?document.getElementById('ti-expr').value:'',8,KW).cls,
+    evaluarTexto(document.getElementById('ti-expr')?document.getElementById('ti-expr').value:'',8,KW).lbl,
+    document.getElementById('ti-expr')?document.getElementById('ti-expr').value:'','precio, descuento, IVA, cupón');
+  tarjeta('B4 · Precio final correcto',tiNota,R.tiRes,
+    document.getElementById('ti-res')?document.getElementById('ti-res').value:'—',
+    '$'+V.tiRespCorr.toFixed(2),null,
+    (!R.tiRes&&intentos.ti>=MAX_INT)?'3 intentos agotados — si crees que es correcto, muéstraselo al Prof. Cruz.':null);
+  tarjeta('B4 · Error de Carlos','Simulación del cálculo sin jerarquía',R.tiCarlos,
+    document.getElementById('ti-carlos')?document.getElementById('ti-carlos').value:'—',
+    'Diferente a $'+V.tiRespCorr.toFixed(2),null,
+    R.tiCarlos?null:'El resultado de Carlos debe diferir del correcto.');
+  var tiInterpEl=document.getElementById('ti-interp');
+  var tiInterpEv=evaluarTexto(tiInterpEl?tiInterpEl.value:'',20,KW);
+  tarjetaTxt('B4 · Interpretación económica','Impacto del error en pesos concretos',
+    tiInterpEv.score,tiInterpEv.cls,tiInterpEv.lbl,
+    tiInterpEl?tiInterpEl.value:'','diferencia, impacto, correcto, incorrecto, jerarquía');
+
+  // ── BLOQUE 5: DESAFÍO ──
+  secHeader('Bloque 5 · Desafío y cierre');
+  tarjeta('B5 · Desafío MC',
+    'Expresión equivalente que conserva el valor '+BANCO_DES[V.ides].meta,
+    R.desMC,R.desMC?'Opción correcta':'Opción incorrecta',
+    'Opción '+'ABCD'[BANCO_DES[V.ides].corr]+' — valor '+BANCO_DES[V.ides].meta,null,null);
+  var desJustEl=document.getElementById('des-just');
+  var desJustEv=evaluarTexto(desJustEl?desJustEl.value:'',25,KW);
+  tarjetaTxt('B5 · Justificación','Evaluación de las 4 opciones',
+    desJustEv.score,desJustEv.cls,desJustEv.lbl,
+    desJustEl?desJustEl.value:'','jerarquía, agrupador, potencia, resultado');
+  var crEl=document.getElementById('cierre-regla');
+  var ccEl=document.getElementById('cierre-calc');
+  var crEv=evaluarTexto(crEl?crEl.value:'',20,KW);
+  var ccEv=evaluarTexto(ccEl?ccEl.value:'',15,KW_CALC);
+  tarjetaTxt('Cierre · Tu regla propia','Regla con ejemplo de la CDMX',
+    crEv.score,crEv.cls,crEv.lbl,crEl?crEl.value:'','jerarquía, paréntesis, prioridad');
+  tarjetaTxt('Cierre · Conexión con Cálculo','Situación en derivadas o integrales',
+    ccEv.score,ccEv.cls,ccEv.lbl,ccEl?ccEl.value:'','derivada, integral, función, expresión');
+
+  document.getElementById('res-bloques').innerHTML=html;
+
+  // Texto para copiar
+  var txt='═══════════════════════════════\n';
+  txt+='S06 · Jerarquía de Operaciones · G658\n';
+  txt+='Alumno: '+nombre+'\n';
+  txt+='Calificación: '+pts.toFixed(1)+'/10\n';
+  txt+='═══════════════════════════════\n';
+  txt+='B1 Activación: MC='+(R.actMC?'OK':'X')+' · Res='+(R.actRes?'OK':'X')+'\n';
+  txt+='B2 Árbol: Dibujo='+(canvasDibujado?'Sí':'No')+'\n';
+  txt+='B3 Ejercicios: A='+(R.ejA&&R.ejA.ok?'OK':'X')+' B='+(R.ejB&&R.ejB.ok?'OK':'X')+' C='+(R.ejC&&R.ejC.ok?'OK':'X')+'\n';
+  txt+='B4 Tiendita: Res='+(R.tiRes?'$'+V.tiRespCorr.toFixed(2)+' OK':'X')+'\n';
+  txt+='B5 Desafío: '+(R.desMC?'OK':'X')+'\n';
+  document.getElementById('copy-ta').value=txt;
+}
+
+function escHtml(s){return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'—';}
+
+// ══════════════════════════════════════════════════════
+// IMPRIMIR
+// ══════════════════════════════════════════════════════
+function imprimirRes(){
+  window.scrollTo(0,0);
+  setTimeout(function(){window.print();},200);
+}
+function copiarResumen(){
+  var txt=document.getElementById('copy-ta').value;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){alert('✓ Copiado');}).catch(function(){document.getElementById('copy-ta').select();});
+  } else {
+    document.getElementById('copy-ta').select();
+    try{document.execCommand('copy');alert('✓ Copiado');}catch(x){}
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// PANEL DOCENTE
+// ══════════════════════════════════════════════════════
+document.getElementById('prof-link').addEventListener('click',function(){abrirPin();});
+
+function abrirPin(){
+  document.getElementById('pin-modal').classList.add('show');
+  document.getElementById('pin-inp').value='';
+  document.getElementById('pin-fb').textContent='';
+  setTimeout(function(){try{document.getElementById('pin-inp').focus();}catch(x){}},100);
+}
+function cerrarPin(){document.getElementById('pin-modal').classList.remove('show');}
+function chkPin(){
+  var v=document.getElementById('pin-inp').value;
+  if(v==='890'){
+    cerrarPin();
+    document.getElementById('prof-overlay').style.display='block';
+    document.getElementById('btn-xp').style.display='block';
+    profModo=true;
+  } else if(v.length>=3){
+    document.getElementById('pin-fb').textContent='Código incorrecto.';
+  }
+}
+document.getElementById('pin-inp').addEventListener('input',function(){if(this.value.length>=3)chkPin();});
+document.getElementById('pin-inp').addEventListener('keydown',function(e){if(e.key==='Enter')chkPin();});
+
+function cerrarProf(){
+  document.getElementById('prof-overlay').style.display='none';
+  document.getElementById('btn-xp').style.display='none';
+}
+function profIr(id,paso){
+  cerrarProf();
+  if(id==='s0'){
+    var secs=document.querySelectorAll('.sec');
+    for(var i=0;i<secs.length;i++)secs[i].classList.remove('on');
+    document.getElementById('s0').classList.add('on');
+    return;
+  }
+  if(nombre==='')nombre='DEMO DOCENTE';
+  if(!V.iact&&V.iact!==0)generar();
+  ir(id,paso);
+}
+function profSimular(){
+  cerrarProf();nombre='DEMO DOCENTE';generar();
+  document.getElementById('hdr').style.display='block';
+  document.getElementById('hdr-nombre').textContent=nombre;
+  document.getElementById('msg-bienvenida').innerHTML='Modo demostración docente.';
+  ir('s1',0);setTimeout(activarBarraEnCampos,200);
+}
+function profMostrarResumen(){
+  cerrarProf();
+  if(nombre==='')nombre='DEMO DOCENTE';
+  if(!V.iact&&V.iact!==0)generar();
+  if(!ejData.a)cargEj();
+  ir('s-res',7);
+}
+function profToggleBar(){
+  cerrarProf();profBarVisible=!profBarVisible;
+  document.getElementById('prof-bar').classList.toggle('show',profBarVisible);
+}
+function ocultarBar(){profBarVisible=false;document.getElementById('prof-bar').classList.remove('show');}
+var bloqueActual=0;
+var BLOQUES_SEQ=['s0','s1','s2','s3','s4','s5','s6','s-res'];
+var PASOS_SEQ=[0,0,1,2,3,4,5,7];
+function profSiguiente(){
+  bloqueActual=Math.min(bloqueActual+1,BLOQUES_SEQ.length-1);
+  profIr(BLOQUES_SEQ[bloqueActual],PASOS_SEQ[bloqueActual]);
+}
+
+// ══════════════════════════════════════════════════════
+// PANEL DE ERRORES
+// ══════════════════════════════════════════════════════
+function mostrarErrPanel(errs){
+  var panel=document.getElementById('err-panel');
+  var body=document.getElementById('err-panel-body');
+  if(!errs||!errs.length){cerrarErrPanel();return;}
+  var html='<p style="font-size:12px;color:#888;margin-bottom:8px">Toca un campo para ir directo:</p>';
+  for(var i=0;i<errs.length;i++){
+    var e=errs[i];
+    html+='<div class="err-item" data-eid="'+e.id+'"><span class="err-item-ico">&#10144;</span><span class="err-item-txt"><span class="err-item-label">'+(i+1)+'. '+e.lbl+'</span><span class="err-item-desc">'+e.desc+'</span></span><span style="color:#bbb;font-size:16px">&#8595;</span></div>';
+  }
+  body.innerHTML=html;
+  var items=body.querySelectorAll('.err-item[data-eid]');
+  for(var j=0;j<items.length;j++){
+    (function(item){item.addEventListener('click',function(){irAError(item.getAttribute('data-eid'));});})(items[j]);
+  }
+  document.getElementById('err-panel-title').textContent='⚠ '+errs.length+' campo'+(errs.length===1?'':'s')+' pendiente'+(errs.length===1?'':'s');
+  panel.classList.add('show');
+}
+function cerrarErrPanel(){document.getElementById('err-panel').classList.remove('show');}
+function irAError(eid){
+  cerrarErrPanel();
+  var el=document.getElementById(eid);
+  if(!el)return;
+  setTimeout(function(){
+    window.scrollTo({top:window.scrollY+el.getBoundingClientRect().top-90,behavior:'smooth'});
+    setTimeout(function(){el.classList.add('err');try{if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.focus();}catch(x){}},380);
+  },60);
+}
+
+window.onload=function(){
+  // Canvas se inicializa al llegar a s3 (ver cargArbol)
+};
+</script>
+</body>
+</html>
