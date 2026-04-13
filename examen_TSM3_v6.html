@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Examen · Matemáticas · TSM III</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mo:#5B2D8E;--mo2:#7B3FC0;--mo3:#B88EE8;--mo-f:#f3ecfb;
+  --ver:#1B6B45;--ver2:#52B788;--ver3:#e6f7ed;
+  --roj:#C1121F;--ro3:#fdeaea;
+  --az:#023E8A;--az2:#1565C0;--az3:#e6f0fb;
+  --am:#c06000;--am3:#fff2e0;
+  --tie:#1a0a2e;
+  --gris:#f0f2f8;--gris2:#dde2ee;--grisdk:#666;
+  --sh:0 3px 18px rgba(91,45,142,.12);--r:13px
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--gris);color:var(--tie);min-height:100vh;font-size:15px;
+  -webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text!important;user-select:text!important}
+
+/* HEADER */
+#hdr{position:sticky;top:0;z-index:200;background:var(--mo);padding:8px 15px 5px;display:none}
+#hdr-row{display:flex;align-items:flex-start;justify-content:space-between}
+#hdr-tit{color:#fff;font-size:14px;font-weight:800;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+#hdr-chip{background:rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700}
+#bwrap{background:rgba(255,255,255,.15);height:5px;margin-top:4px;border-radius:3px}
+#bfill{background:linear-gradient(90deg,#d4a8ff,#fff);height:5px;border-radius:3px;width:0%;transition:width .5s}
+#bpct{color:rgba(255,255,255,.55);font-size:10px;text-align:right;margin-top:2px}
+#hdr-prof{color:rgba(255,255,255,.75);font-size:10px;text-align:center;margin-top:3px;
+  cursor:pointer;font-style:italic;padding:2px 0;letter-spacing:.3px;
+  -webkit-user-select:none;user-select:none}
+#hdr-prof:active{opacity:.6}
+
+/* SECCIONES */
+.sec{display:none;max-width:600px;margin:0 auto;padding:14px 12px 70px;animation:fi .35s ease}
+.sec.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* TARJETAS */
+.card{background:#fff;border-radius:var(--r);padding:17px 15px;box-shadow:var(--sh);margin-bottom:12px}
+.cmo{background:var(--mo);color:#fff}
+.cmo2{background:var(--mo-f);border-left:4px solid var(--mo2)}
+.caz{background:var(--az3);border-left:4px solid var(--az2)}
+.cve{background:var(--ver3);border-left:4px solid var(--ver2)}
+.cam{background:var(--am3);border-left:4px solid var(--am)}
+.croj{background:var(--ro3);border-left:4px solid var(--roj)}
+
+/* TIPOGRAFÍA */
+h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--mo3);letter-spacing:1.5px;line-height:1}
+h3{font-size:16px;font-weight:800;margin-bottom:6px;color:var(--mo)}
+h4{font-size:14px;font-weight:700;margin-bottom:5px}
+p{line-height:1.65;margin-bottom:7px}
+.portada-wrap{background:linear-gradient(145deg,#1a0a2e 0%,#0D1B4A 60%,#0A2010 100%);border-radius:18px;
+  padding:28px 20px 24px;color:#fff;margin-bottom:14px;text-align:center;position:relative;overflow:hidden}
+.portada-wrap::before{content:'';position:absolute;top:-40px;right:-40px;width:170px;height:170px;
+  border-radius:50%;background:rgba(91,45,142,.2);pointer-events:none}
+.sub-portada{font-size:.8rem;color:rgba(255,255,255,.6);margin-top:7px;line-height:1.7}
+.sbox{font-size:15px;font-weight:700;background:var(--mo);color:#fff;
+  border-radius:10px;padding:10px 14px;text-align:center;margin:8px 0;display:block;line-height:1.8}
+.sbox.az{background:var(--az2)}
+.nota-lex{display:inline-block;background:rgba(255,255,255,.15);border-radius:5px;
+  padding:1px 6px;font-size:11px;font-weight:400;font-style:italic;margin-left:4px;color:rgba(255,255,255,.85)}
+.nota-inline{font-size:11px;color:var(--grisdk);font-style:italic;display:block;margin-top:3px;margin-bottom:4px}
+
+/* BOTONES */
+.btn{display:block;width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;
+  font-weight:700;cursor:pointer;margin-top:9px;transition:transform .15s;font-family:'Nunito',sans-serif}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--mo);color:#fff;box-shadow:0 4px 14px rgba(91,45,142,.3)}
+.bp:disabled{background:#c4a0e0;box-shadow:none;cursor:not-allowed;transform:none}
+.baz{background:var(--az2);color:#fff}
+.bver{background:var(--ver2);color:#fff}
+.bsm{display:inline-block;width:auto;padding:7px 14px;font-size:13px}
+.bpdf{background:#1a0a2e;color:#fff;font-size:14px}
+
+
+/* MC OPTIONS */
+.opt{display:block;width:100%;text-align:left;background:#fff;border:2.5px solid var(--gris2);
+  border-radius:11px;padding:12px 13px;margin-bottom:8px;cursor:pointer;font-size:14px;
+  font-family:'Nunito',sans-serif;transition:border .12s,background .12s;line-height:1.55}
+.opt.sel{border-color:var(--mo);background:var(--mo-f);font-weight:700;color:var(--mo)}
+.opt-ltr{font-weight:900;color:var(--mo3);margin-right:7px;font-size:15px}
+.opt.sel .opt-ltr{color:var(--mo)}
+
+/* INPUTS */
+input[type=text]{width:100%;border:2px solid var(--gris2);border-radius:10px;padding:10px 12px;
+  font-size:15px;font-family:'Nunito',sans-serif;background:var(--gris);transition:border .2s;-webkit-appearance:none}
+input:focus{outline:none;border-color:var(--mo2);background:#fff}
+
+/* SYMBOL BAR */
+#sym-bar{display:none;background:#1a0a2e;padding:7px 10px 9px;flex-wrap:wrap;gap:5px;
+  border-radius:10px 10px 0 0;border:2px solid var(--mo2);border-bottom:none}
+#sym-bar.vis{display:flex}
+.sym-btn{background:#2d1f4e;color:#fff;border:1.5px solid var(--mo3);border-radius:7px;
+  padding:6px 11px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;min-width:36px;text-align:center}
+.sym-btn:active{background:var(--mo2)}
+.sym-btn.clr{background:#555;min-width:56px}
+
+/* Q-HEADER */
+.q-header{background:var(--mo-f);border-radius:var(--r) var(--r) 0 0;border-left:5px solid var(--mo);
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.q-num{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--mo);letter-spacing:.5px}
+.q-tema{display:inline-block;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:800;
+  color:#fff;margin-left:6px;vertical-align:middle;letter-spacing:.3px}
+.q-of{font-size:11px;color:var(--grisdk)}
+
+/* RESULTS */
+.res-item{border-radius:var(--r);border:2px solid var(--gris2);margin-bottom:10px;overflow:hidden}
+.rh{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;font-size:14px;font-weight:700}
+.rh-ok{background:var(--ver3);color:var(--ver)}
+.rh-er{background:var(--ro3);color:var(--roj)}
+.rb{padding:12px 13px;border-top:1.5px solid var(--gris2)}
+.chip-r{display:inline-block;border-radius:6px;padding:3px 9px;font-size:12px;font-weight:700;margin:2px 2px 2px 0}
+.chip-tu-ok{background:var(--ver3);color:var(--ver)}
+.chip-tu-er{background:var(--ro3);color:var(--roj)}
+.chip-esp{background:var(--am3);color:var(--am)}
+.proc-box{background:var(--gris);border-radius:8px;padding:9px 12px;margin-top:8px;font-size:13px;line-height:1.8;color:#444}
+.cal-big{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--mo);letter-spacing:2px;
+  text-align:center;padding:10px 0 4px}
+.cal-denom{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--mo3)}
+.cal-pts{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--ver);display:block;text-align:center}
+.cal-lbl{text-align:center;font-size:13px;color:var(--grisdk);padding-bottom:6px}
+.sep{height:1px;background:var(--gris2);margin:10px 0}
+
+/* FRACCIÓN VISUAL DENTRO DE SBOX */
+.sfrac{display:inline-flex;flex-direction:column;align-items:center;
+  vertical-align:middle;line-height:1.3;margin:0 4px}
+.sfrac .sn{border-bottom:2.5px solid #fff;padding:3px 10px;text-align:center;font-size:15px}
+.sfrac .sd{padding:3px 10px;text-align:center;font-size:15px}
+.sbox-frac{font-weight:700;background:var(--mo);color:#fff;border-radius:10px;
+  padding:12px 18px;text-align:center;margin:8px 0;display:flex;
+  align-items:center;justify-content:center;font-size:17px;line-height:2.4;flex-wrap:wrap;gap:4px}
+
+/* WATERMARK */
+#wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);
+  font-size:88px;font-family:'Bebas Neue',sans-serif;color:rgba(91,45,142,.035);
+  pointer-events:none;z-index:0;letter-spacing:5px;white-space:nowrap}
+
+/* TEACHER PIN */
+#pin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;
+  align-items:center;justify-content:center}
+#pin-modal.show{display:flex}
+#pin-box{background:#fff;border-radius:16px;padding:22px;width:280px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+#pin-inp{width:100%;border:2px solid var(--gris2);border-radius:10px;padding:10px;
+  font-size:22px;text-align:center;font-family:'Nunito',sans-serif;font-weight:700;
+  margin:10px 0;letter-spacing:6px;-webkit-user-select:text!important}
+#pin-fb{color:var(--roj);font-size:12px;min-height:16px;margin-bottom:4px}
+
+/* TEACHER FLOATING PANEL */
+#fab-toggle{display:none;position:fixed;bottom:14px;right:14px;z-index:960;
+  background:var(--mo);color:#fff;border:2px solid var(--mo3);border-radius:50%;
+  width:44px;height:44px;font-size:19px;cursor:pointer;font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 18px rgba(91,45,142,.5);align-items:center;justify-content:center}
+.teacher-mode #fab-toggle{display:flex}
+#prof-fab{display:none;position:fixed;bottom:68px;right:10px;z-index:950;
+  background:#1a0a2e;border:2px solid var(--mo3);border-radius:14px;
+  padding:12px 13px;width:min(275px,90vw);
+  box-shadow:0 6px 28px rgba(0,0,0,.55)}
+#prof-fab.open{display:block}
+#pfab-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+#pfab-hdr span{color:var(--mo3);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+#pfab-close{background:none;border:none;color:rgba(255,255,255,.45);font-size:16px;
+  cursor:pointer;padding:0 2px;font-family:'Nunito',sans-serif;line-height:1}
+#pfab-close:active{color:#fff}
+#pfab-grid{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+.pfqb{background:#2d1f4e;color:#fff;border:1px solid var(--mo3);border-radius:5px;
+  padding:5px 7px;font-size:11px;font-family:'Nunito',sans-serif;font-weight:700;
+  cursor:pointer;min-width:32px;text-align:center}
+.pfqb:active{background:var(--mo2)}
+#pfab-actions{display:flex;gap:5px}
+.pfab-act{flex:1;border:none;border-radius:8px;padding:8px 4px;font-size:11px;
+  font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;text-align:center}
+.pfab-act.adv{background:var(--mo2);color:#fff}
+.pfab-act.sim{background:var(--ver);color:#fff}
+.pfab-act:active{opacity:.75}
+/* remove old fab-prof — handled by new panel */
+
+@media print{
+  #hdr,#fab-toggle,#prof-fab,#pin-modal,#wm,.btn-noPrint{display:none!important}
+  body{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sec{display:none!important;padding:4px 8px!important;animation:none!important}
+  #s-res{display:block!important}
+  .card{box-shadow:none!important;border:1px solid #ddd!important;break-inside:avoid}
+  .portada-wrap{background:#2a0a5e!important;color:#fff!important}
+  .res-item{break-inside:avoid;page-break-inside:avoid}
+  .sbox-frac,.sfrac{break-inside:avoid}
+  h2{color:#fff!important}
+}
+@media(max-width:420px){
+  h2{font-size:1.6rem}
+  .opt{font-size:13px}
+}
+</style>
+</head>
+<body>
+<div id="wm">EXAMEN</div>
+
+<!-- ── HEADER ── -->
+<div id="hdr">
+  <div id="hdr-row">
+    <div id="hdr-tit">Examen · Matemáticas</div>
+    <div id="hdr-chip">P 0/16</div>
+  </div>
+  <div id="bwrap"><div id="bfill"></div></div>
+  <div id="bpct">0%</div>
+  <div id="hdr-prof" onclick="tapNombre()" title="Acceso docente — clic para abrir panel">Prof. Adrián CruzH</div>
+</div>
+
+<!-- ── PIN MODAL ── -->
+<div id="pin-modal">
+  <div id="pin-box">
+    <div style="font-family:'Bebas Neue';font-size:1.5rem;color:var(--mo);margin-bottom:4px">Panel Docente</div>
+    <p style="font-size:12px;color:#888;margin-bottom:8px">Ingresa el código de acceso</p>
+    <input type="password" id="pin-inp" maxlength="6" oninput="chkPin(this.value)"
+      placeholder="••••" style="-webkit-user-select:text!important;user-select:text!important">
+    <div id="pin-fb"></div>
+    <button class="btn" style="background:var(--gris2);color:var(--tie);font-size:13px;margin-top:6px"
+      onclick="cerrarPin()">Cancelar</button>
+  </div>
+</div>
+
+<!-- ── TEACHER FLOATING PANEL ── -->
+<button id="fab-toggle" onclick="toggleFab()">⚙</button>
+<div id="prof-fab">
+  <div id="pfab-hdr">
+    <span>👨‍🏫 Panel Docente</span>
+    <button id="pfab-close" onclick="toggleFab()">✕</button>
+  </div>
+  <p style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:5px">Ir a pregunta:</p>
+  <div id="pfab-grid"></div>
+  <div id="pfab-actions">
+    <button class="pfab-act adv" onclick="fabAvanzar()">⏭ Avanzar sin validar</button>
+    <button class="pfab-act sim" onclick="profVerRes()">📊 Simular resultados</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     S0 · PORTADA
+═════════════════════════════════════════════════════════ -->
+<div id="s0" class="sec on">
+  <div class="portada-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.7px;text-transform:uppercase">Matemáticas · TSM III</div>
+      <div id="portada-prof" onclick="tapNombre()"
+        style="font-size:.68rem;color:rgba(255,255,255,.65);cursor:pointer;font-style:italic;
+               padding:3px 9px;border:1px solid rgba(255,255,255,.25);border-radius:12px;
+               letter-spacing:.2px;-webkit-user-select:none;user-select:none">
+        Prof. Adrián CruzH
+      </div>
+    </div>
+    <h2>Examen<br>Parcial</h2>
+    <div class="sub-portada">Conjuntos · Números Reales<br>Signos de Agrupación · Jerarquía<br>Sucesiones y Series</div>
+  </div>
+
+  <div class="card cam">
+    <h4>⚠️ Instrucciones importantes</h4>
+    <p style="font-size:13px;line-height:1.9">
+      • El examen tiene <strong>16 preguntas</strong> — calculado para <strong>≈ 60 min</strong>.<br>
+      • Las preguntas aparecen <strong>una a la vez</strong>.<br>
+      • <strong>Solo puedes responder una vez</strong> cada pregunta. No hay retroalimentación durante el examen.<br>
+      • Al terminar verás tus resultados con la respuesta esperada en cada pregunta.<br>
+      • El examen vale <strong>6 puntos</strong>. Trabaja de forma individual y honesta.
+    </p>
+  </div>
+
+  <div class="card">
+    <h4>✏️ Nombre completo</h4>
+    <p style="font-size:12px;color:var(--grisdk);margin-bottom:8px">Escribe: Apellido paterno · Apellido materno · Nombre(s)</p>
+    <input type="text" id="inp-nombre" placeholder="Ej. GARCÍA MARTÍNEZ JUAN" autocomplete="off"
+      style="text-transform:uppercase" oninput="chkNombre()">
+    <div id="fb-nombre" style="font-size:12px;color:var(--roj);margin-top:4px;min-height:16px"></div>
+    <button class="btn bp" id="btn-iniciar" disabled onclick="iniciar()">Comenzar examen →</button>
+  </div>
+
+  <p style="text-align:center;font-size:11px;color:#aaa;margin-top:6px">Prof. Adrián CruzH · Matemáticas · TSM III</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     S-EXAM · PREGUNTA ACTIVA
+═════════════════════════════════════════════════════════ -->
+<div id="s-exam" class="sec">
+  <div class="q-header">
+    <div>
+      <span class="q-num" id="q-numtxt">P1</span>
+      <span class="q-tema" id="q-tematag" style="background:var(--mo)">Conjuntos</span>
+    </div>
+    <span class="q-of" id="q-of">de 16</span>
+  </div>
+
+  <div class="card" id="q-enunc"
+    style="border-radius:0 0 var(--r) var(--r);margin-bottom:10px;border-top:1px solid var(--gris2)"></div>
+
+  <div id="q-opts"></div>
+
+  <!-- input abierto -->
+  <div id="q-input" style="display:none">
+    <div id="sym-bar">
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('{')">&#123;</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('}')">&#125;</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS(', ')">,&nbsp;</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('∈')">∈</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('∉')">∉</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('∪')">∪</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('∩')">∩</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('−')">−</button>
+      <button class="sym-btn" type="button" onmousedown="return false" onclick="insS('∅')">∅</button>
+      <button class="sym-btn clr" type="button" onmousedown="return false"
+        onclick="document.getElementById('inp-resp').value='';chkInp()">✖ Limpiar</button>
+    </div>
+    <div class="card" style="border-radius:0 0 var(--r) var(--r);margin-top:0;border-top:none">
+      <label style="font-size:12px;color:var(--grisdk);display:block;margin-bottom:5px" id="inp-lbl">Tu respuesta:</label>
+      <input type="text" id="inp-resp" inputmode="text" autocomplete="off"
+        autocorrect="off" autocapitalize="off" spellcheck="false"
+        placeholder="" oninput="chkInp()" onpaste="return false">
+      <div style="font-size:11px;color:var(--grisdk);margin-top:5px;line-height:1.55" id="inp-hint"></div>
+    </div>
+  </div>
+
+  <button class="btn bp" id="btn-sig" disabled onclick="siguiente(false)">Guardar y continuar →</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     S-RES · RESULTADOS FINALES
+═════════════════════════════════════════════════════════ -->
+<div id="s-res" class="sec">
+  <div class="portada-wrap">
+    <div style="font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.7px;text-transform:uppercase;margin-bottom:8px">Resultados finales</div>
+    <h2>Examen<br>Completado</h2>
+  </div>
+
+  <div class="card" id="res-cal">
+    <div class="cal-big" id="cal-raw">—<span class="cal-denom">/16</span></div>
+    <div class="cal-pts" id="cal-pts">— / 6 pts</div>
+    <div class="cal-lbl" id="cal-lbl">calculando…</div>
+    <div style="font-size:12px;color:var(--grisdk);text-align:center;margin-top:4px" id="res-nombre"></div>
+  </div>
+
+  <div id="res-detalle"></div>
+
+  <div class="card cam">
+    <h4>📸 Entrega</h4>
+    <p style="font-size:13px;">Toma una captura de pantalla o guarda esta página como PDF con el botón de abajo para entregarla según las instrucciones del Prof. Cruz.</p>
+    <button class="btn bpdf btn-noPrint" onclick="guardarPDF()" style="margin-top:8px">
+      📄 Guardar como PDF
+    </button>
+    <p style="font-size:11px;color:var(--grisdk);margin-top:6px;line-height:1.6">
+      En el diálogo de impresión elige <strong>"Guardar como PDF"</strong> o <strong>"Destino: Guardar como PDF"</strong> (disponible en Android e iOS).
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+                    JAVASCRIPT
+═════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+/* ── ESTADO ── */
+var TOTAL_Q = 16;
+var QS      = [];
+var ANS     = [];
+var CUR     = 0;
+var SEL     = -1;
+var NOMBRE  = '';
+
+/* ── UTILIDADES ES5 ── */
+function rInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(arr){
+  var a=arr.slice(),t,j;
+  for(var i=a.length-1;i>0;i--){
+    j=Math.floor(Math.random()*(i+1));
+    t=a[i];a[i]=a[j];a[j]=t;
+  }
+  return a;
+}
+function has(arr,x){
+  for(var i=0;i<arr.length;i++){ if(arr[i]===x) return true; }
+  return false;
+}
+function range(a,b){ var r=[]; for(var i=a;i<=b;i++) r.push(i); return r; }
+function setStr(arr){
+  if(!arr||arr.length===0) return '\u2205';
+  return '{'+arr.join(', ')+'}';
+}
+
+/* Comparar conjuntos sin importar orden ni espacios */
+function normSet(str){
+  str=String(str||'').replace(/\s+/g,'').replace(/\{/g,'').replace(/\}/g,'').replace(/\u2205/g,'');
+  if(!str) return [];
+  var parts=str.split(',');
+  var res=[];
+  for(var i=0;i<parts.length;i++){
+    var p=parts[i].toLowerCase();
+    if(p!=='') res.push(p);
+  }
+  res.sort();
+  return res;
+}
+function setsEq(s1,s2){
+  var a=normSet(s1), b=normSet(s2);
+  if(a.length!==b.length) return false;
+  for(var i=0;i<a.length;i++){ if(a[i]!==b[i]) return false; }
+  return true;
+}
+
+/* Construir 5 opciones únicas mezcladas */
+function mkOpts(c,d1,d2,d3,d4){
+  var pool=[c];
+  var cands=[d1,d2,d3,d4];
+  for(var i=0;i<cands.length;i++){
+    var v=String(cands[i]);
+    if(v&&v!==c&&!has(pool,v)) pool.push(v);
+  }
+  var ex=1;
+  while(pool.length<5){
+    var fb='Opción '+ex;
+    if(!has(pool,fb)) pool.push(fb);
+    ex++;
+  }
+  pool=pool.slice(0,5);
+  pool=shuffle(pool);
+  var idx=0;
+  for(var k=0;k<pool.length;k++){ if(pool[k]===c){ idx=k; break; } }
+  return {opts:pool, ansIdx:idx};
+}
+
+/* Fracción visual morada — helper global para Q9, Q10, Q11 */
+function sfrac(num,den){
+  return '<span class="sfrac"><span class="sn">'+num+'</span><span class="sd">'+den+'</span></span>';
+}
+
+/* ════════════════════════════════════════════════════════
+   BANCOS DE PREGUNTAS
+═════════════════════════════════════════════════════════ */
+
+/* ── Q1 · PERTENENCIA ── */
+function genQ1(){
+  var banks=[
+    {A:[2,4,6,8,10],nm:'A',desc:'A = { x \u2208 \u2115 | x es n\u00famero <strong>par</strong>, 1 \u2264 x \u2264 10 }'},
+    {A:[1,3,5,7,9], nm:'B',desc:'B = { x \u2208 \u2115 | x es n\u00famero <strong>impar</strong>, 1 \u2264 x \u2264 9 }'},
+    {A:[3,6,9,12],  nm:'C',desc:'C = { x \u2208 \u2115 | x es <strong>m\u00faltiplo de 3</strong>, 3 \u2264 x \u2264 12 }'},
+    {A:[4,8,12,16], nm:'D',desc:'D = { x \u2208 \u2115 | x es <strong>m\u00faltiplo de 4</strong>, 4 \u2264 x \u2264 16 }'},
+    {A:[1,4,9,16],  nm:'E',desc:'E = { x \u2208 \u2115 | x es <strong>cuadrado perfecto</strong>, 1 \u2264 x \u2264 16 }'},
+    {A:[2,3,5,7,11],nm:'F',desc:'F = { x \u2208 \u2115 | x es n\u00famero <strong>primo</strong>, 2 \u2264 x \u2264 11 }'}
+  ];
+  var b=pick(banks);
+  var all=range(1,Math.max.apply(null,b.A)+2);
+  var outA=[];
+  for(var i=0;i<all.length;i++){ if(!has(b.A,all[i])) outA.push(all[i]); }
+  var correct=String(pick(b.A));
+  var wr=shuffle(outA);
+  var o=mkOpts(correct,String(wr[0]),String(wr[1]),String(wr[2]),String(wr[3]));
+  return {
+    tipo:'mc',tema:'Conjuntos',brief:'Pertenencia \u2208',
+    enunc:'<p>Dado el conjunto:</p>'+
+          '<div class="sbox">'+b.desc+'</div>'+
+          '<p class="nota-inline">\u2208 significa "pertenece a"; \u2264 significa "menor o igual que"; \u2265 significar\u00eda "mayor o igual que"</p>'+
+          '<p>\u00bfCu\u00e1l de los siguientes n\u00fameros <strong>pertenece (\u2208)</strong> al conjunto '+b.nm+'?</p>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:correct,
+    proc:'El conjunto '+b.nm+'\u00a0= '+setStr(b.A)+'. El valor <strong>'+correct+'</strong> cumple la condici\u00f3n, por tanto <strong>'+correct+' \u2208 '+b.nm+'</strong>. Los dem\u00e1s no la cumplen (\u2209).'
+  };
+}
+
+/* ── Q2 · EXTENSIÓN (escritura libre) ── */
+function genQ2(){
+  var banks=[
+    {enuncSet:'A = { x | x es n\u00famero par, 2 \u2264 x \u2264 12 }',    ans:'{2, 4, 6, 8, 10, 12}', proc:'Pares de 2 a 12: 2, 4, 6, 8, 10, 12.'},
+    {enuncSet:'B = { x | x es m\u00faltiplo de 3, 3 \u2264 x \u2264 15 }',  ans:'{3, 6, 9, 12, 15}',    proc:'M\u00faltiplos de 3 de 3 a 15: 3, 6, 9, 12, 15.'},
+    {enuncSet:'C = { x | x es n\u00famero impar, 1 \u2264 x \u2264 11 }',   ans:'{1, 3, 5, 7, 9, 11}',  proc:'Impares de 1 a 11: 1, 3, 5, 7, 9, 11.'},
+    {enuncSet:'D = { x | x es m\u00faltiplo de 5, 5 \u2264 x \u2264 30 }',  ans:'{5, 10, 15, 20, 25, 30}',proc:'M\u00faltiplos de 5 de 5 a 30.'},
+    {enuncSet:'E = { x \u2208 \u2115 | 4 \u2264 x \u2264 9 }',              ans:'{4, 5, 6, 7, 8, 9}',    proc:'Naturales de 4 a 9: 4, 5, 6, 7, 8, 9.'},
+    {enuncSet:'F = { x \u2208 \u2115 | x\u00b2 \u2264 25, x > 0 }',        ans:'{1, 2, 3, 4, 5}',       proc:'1\u00b2=1, 2\u00b2=4, 3\u00b2=9, 4\u00b2=16, 5\u00b2=25 \u2264 25. Ya 6\u00b2=36>25, fuera. F\u00a0=\u00a0{1,2,3,4,5}.'}
+  ];
+  var b=pick(banks);
+  return {
+    tipo:'open',tema:'Conjuntos',brief:'Escritura por extensi\u00f3n',
+    enunc:'<p>Escribe el siguiente conjunto <strong>por extensi\u00f3n</strong> (lista todos sus elementos entre llaves):</p>'+
+          '<div class="sbox">'+b.enuncSet+'</div>'+
+          '<p class="nota-inline">\u2264 = "menor o igual que". El orden de los elementos no importa: {2,4} = {4,2}. Espacios de m\u00e1s tampoco afectan.</p>',
+    opts:null, ans:b.ans,
+    proc:b.proc+' Por extensi\u00f3n: <strong>'+b.ans+'</strong>. El orden de los elementos en un conjunto es indiferente.'
+  };
+}
+
+/* ── Q3 · INTERSECCIÓN ── */
+function genQ3(){
+  var pairs=[
+    {A:[1,2,3,4,5],B:[3,4,5,6,7]},{A:[2,4,6,8],B:[4,6,9,10]},
+    {A:[1,3,5,7,9],B:[5,7,10,11]},{A:[1,2,5,8],B:[2,5,7,10]},
+    {A:[3,4,6,9],  B:[4,6,8,10]},{A:[2,5,7,9],B:[5,7,11,12]}
+  ];
+  var p=pick(pairs);
+  var A=p.A, B=p.B;
+  var inter=[], union=A.slice(), AminB=[], BminA=[];
+  for(var i=0;i<A.length;i++){ if(has(B,A[i])) inter.push(A[i]); else AminB.push(A[i]); }
+  for(var j=0;j<B.length;j++){
+    if(!has(A,B[j])){ union.push(B[j]); BminA.push(B[j]); }
+  }
+  inter.sort(function(a,b){return a-b;});
+  union.sort(function(a,b){return a-b;});
+  var correct=setStr(inter);
+  var o=mkOpts(correct,setStr(union),setStr(AminB),setStr(BminA),setStr(A));
+  return {
+    tipo:'mc',tema:'Conjuntos',brief:'Intersecci\u00f3n A \u2229 B',
+    enunc:'<p>Dados los conjuntos:</p>'+
+          '<div class="sbox">A = '+setStr(A)+'</div>'+
+          '<div class="sbox">B = '+setStr(B)+'</div>'+
+          '<p>\u00bfCu\u00e1nto es <strong>A \u2229 B</strong>?</p>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:correct,
+    proc:'<strong>A \u2229 B</strong> contiene los elementos que est\u00e1n en A <em>y</em> en B al mismo tiempo.<br>A \u2229 B = <strong>'+correct+'</strong>.<br>Ojo: A \u222a B = '+setStr(union)+'.'
+  };
+}
+
+/* ── Q4 · UNIÓN ── */
+function genQ4(){
+  var pairs=[
+    {A:[1,2,3],B:[3,4,5]},{A:[2,4,6],B:[1,3,6]},
+    {A:[1,3,7],B:[3,5,9]},{A:[2,5,8],B:[1,5,9]},
+    {A:[1,4,6],B:[4,7,9]},{A:[2,3,8],B:[3,6,10]}
+  ];
+  var p=pick(pairs);
+  var A=p.A, B=p.B;
+  var union=A.slice(), inter=[], AminB=[];
+  for(var j=0;j<B.length;j++){ if(!has(A,B[j])) union.push(B[j]); }
+  for(var i=0;i<A.length;i++){
+    if(has(B,A[i])) inter.push(A[i]); else AminB.push(A[i]);
+  }
+  union.sort(function(a,b){return a-b;});
+  inter.sort(function(a,b){return a-b;});
+  var correct=setStr(union);
+  var o=mkOpts(correct,setStr(inter.length?inter:[0]),setStr(A),setStr(B),setStr(AminB.length?AminB:B));
+  return {
+    tipo:'mc',tema:'Conjuntos',brief:'Uni\u00f3n A \u222a B',
+    enunc:'<p>Dados los conjuntos:</p>'+
+          '<div class="sbox">A = '+setStr(A)+'</div>'+
+          '<div class="sbox">B = '+setStr(B)+'</div>'+
+          '<p>\u00bfCu\u00e1nto es <strong>A \u222a B</strong>?</p>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:correct,
+    proc:'<strong>A \u222a B</strong> contiene todos los elementos de A <em>o</em> de B, sin repetir.<br>A \u222a B = <strong>'+correct+'</strong>.<br>A \u2229 B = '+setStr(inter)+'.'
+  };
+}
+
+/* ── Q5 · DIFERENCIA ── */
+function genQ5(){
+  var pairs=[
+    {A:[1,2,3,4,5],B:[3,4,6]},{A:[2,4,6,8,10],B:[4,6,9]},
+    {A:[1,3,5,7,9], B:[3,5,10]},{A:[1,2,5,7,8],B:[2,7,9]},
+    {A:[3,4,6,7,9], B:[4,6,10]},{A:[1,2,4,6,8],B:[2,4,7]}
+  ];
+  var p=pick(pairs);
+  var A=p.A, B=p.B;
+  var AminB=[], BminA=[], inter=[], union=A.slice();
+  for(var k=0;k<A.length;k++){
+    if(has(B,A[k])) inter.push(A[k]); else AminB.push(A[k]);
+  }
+  for(var m=0;m<B.length;m++){
+    if(!has(A,B[m])){ BminA.push(B[m]); union.push(B[m]); }
+  }
+  AminB.sort(function(a,b){return a-b;});
+  BminA.sort(function(a,b){return a-b;});
+  union.sort(function(a,b){return a-b;});
+  var correct=setStr(AminB);
+  var o=mkOpts(correct,setStr(BminA),setStr(inter),setStr(union),setStr(A));
+  return {
+    tipo:'mc',tema:'Conjuntos',brief:'Diferencia A \u2212 B',
+    enunc:'<p>Dados los conjuntos:</p>'+
+          '<div class="sbox">A = '+setStr(A)+'</div>'+
+          '<div class="sbox">B = '+setStr(B)+'</div>'+
+          '<p>\u00bfCu\u00e1nto es <strong>A \u2212 B</strong>?</p>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:correct,
+    proc:'<strong>A \u2212 B</strong> son los elementos de A que NO est\u00e1n en B.<br>A \u2212 B = <strong>'+correct+'</strong>.<br>Ojo: B \u2212 A = '+setStr(BminA)+' (la diferencia no es conmutativa).'
+  };
+}
+
+/* ── Q6 · COMPLEMENTO ── */
+function genQ6(){
+  var U=range(1,12);
+  var banks=[
+    {A:[2,4,6,8,10,12],comp:[1,3,5,7,9,11]},
+    {A:[1,3,5,7,9,11], comp:[2,4,6,8,10,12]},
+    {A:[1,2,3,4,5,6],  comp:[7,8,9,10,11,12]},
+    {A:[7,8,9,10,11,12],comp:[1,2,3,4,5,6]},
+    {A:[1,4,9],        comp:[2,3,5,6,7,8,10,11,12]},
+    {A:[2,3,5,7,11],   comp:[1,4,6,8,9,10,12]}
+  ];
+  var b=pick(banks);
+  var correct=setStr(b.comp);
+  var fake1=b.comp.slice(0,b.comp.length-1);
+  var fake2=shuffle(b.A).slice(0,Math.min(4,b.A.length)).concat([b.comp[0]]);
+  fake2.sort(function(a,c){return a-c;});
+  var o=mkOpts(correct,setStr(b.A),setStr(U),setStr(fake1),setStr(fake2));
+  return {
+    tipo:'mc',tema:'Conjuntos',brief:'Complemento A\u1d9c',
+    enunc:'<p>Dado <strong>U = '+setStr(U)+'</strong> y el conjunto:</p>'+
+          '<div class="sbox">A = '+setStr(b.A)+'</div>'+
+          '<p>\u00bfCu\u00e1nto es el <strong>complemento A\u1d9c</strong>?</p>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:correct,
+    proc:'<strong>A\u1d9c</strong> = todos los elementos de U que NO est\u00e1n en A.<br>A\u1d9c = <strong>'+correct+'</strong>.<br>Propiedades: A \u222a A\u1d9c = U &nbsp;\u00b7&nbsp; A \u2229 A\u1d9c = \u2205.'
+  };
+}
+
+/* ── Q7 · PROBLEMA VENN ── */
+function genQ7(){
+  var ctxs=[
+    {c:'alumnos del plantel',g1:'estudian <strong>ingl\u00e9s</strong>',g2:'estudian <strong>franc\u00e9s</strong>'},
+    {c:'j\u00f3venes en Iztapalapa',g1:'practican <strong>f\u00fatbol</strong>',g2:'practican <strong>basquetbol</strong>'},
+    {c:'usuarios del metro',g1:'usan l\u00ednea <strong>2</strong>',g2:'usan l\u00ednea <strong>3</strong>'},
+    {c:'alumnos del plantel',g1:'piden comida por <strong>app</strong>',g2:'llevan comida <strong>de casa</strong>'},
+    {c:'vecinos encuestados',g1:'reportan <strong>baches</strong>',g2:'reportan falta de <strong>alumbrado</strong>'},
+    {c:'visitantes del Deportivo',g1:'usan la <strong>alberca</strong>',g2:'usan la <strong>cancha</strong>'}
+  ];
+  var ctx=pick(ctxs);
+  var total=pick([40,45,50,60]);
+  var both=rInt(5,12);
+  var only1=rInt(10,18);
+  var only2=rInt(8,15);
+  var neither=total-only1-only2-both;
+  if(neither<2){ neither=2; total=only1+only2+both+neither; }
+  var n1=only1+both, n2=only2+both;
+  var askType=pick(['only1','only2','neither']);
+  var correct, question;
+  if(askType==='only1'){
+    correct=String(only1);
+    question='\u00bfCu\u00e1ntos '+ctx.c+' '+ctx.g1+' \u00fanicamente (y <strong>no</strong> lo otro)?';
+  } else if(askType==='only2'){
+    correct=String(only2);
+    question='\u00bfCu\u00e1ntos '+ctx.c+' '+ctx.g2+' \u00fanicamente (y <strong>no</strong> lo otro)?';
+  } else {
+    correct=String(neither);
+    question='\u00bfCu\u00e1ntos '+ctx.c+' <strong>no pertenecen a ninguno</strong> de los dos grupos?';
+  }
+  var o=mkOpts(correct,String(n1),String(n2),String(both),String(neither+rInt(2,5)));
+  return {
+    tipo:'mc',tema:'Conjuntos',brief:'Problema de Venn',
+    enunc:'<p>En un grupo de <strong>'+total+' '+ctx.c+'</strong>:</p>'+
+          '<ul style="margin:8px 0 10px 18px;font-size:14px;line-height:2.1">'+
+          '<li>'+n1+' '+ctx.g1+'</li>'+
+          '<li>'+n2+' '+ctx.g2+'</li>'+
+          '<li>'+both+' hacen ambas cosas</li></ul>'+
+          '<p>'+question+'</p>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:correct,
+    proc:'Diagrama de Venn:<br>Solo grupo 1 = '+n1+' \u2212 '+both+' = <strong>'+only1+'</strong><br>'+
+         'Solo grupo 2 = '+n2+' \u2212 '+both+' = <strong>'+only2+'</strong><br>'+
+         'Ninguno = '+total+' \u2212 '+only1+' \u2212 '+only2+' \u2212 '+both+' = <strong>'+neither+'</strong>'
+  };
+}
+
+/* ── Q8 · CLASIFICACIÓN NÚMEROS REALES ── */
+function genQ8(){
+  var banks=[
+    {irr:'\u221a2',rats:['1/2','0.75','\u22123','4'],
+     note:'\u221a2 \u2248 1.41421\u2026 Sus decimales son infinitos y no peri\u00f3dicos. No existe fracci\u00f3n p/q que lo represente exactamente.'},
+    {irr:'\u221a3',rats:['2/3','0.5','\u22125','9'],
+     note:'\u221a3 \u2248 1.73205\u2026 Irracional: decimales infinitos y no peri\u00f3dicos. Las dem\u00e1s opciones son racionales.'},
+    {irr:'\u03c0',  rats:['1/4','0.25','\u22122','100'],
+     note:'\u03c0 \u2248 3.14159\u2026 Irracional por definici\u00f3n. No se puede expresar como fracci\u00f3n exacta.'},
+    {irr:'\u221a5',rats:['1/3','0.6\u0305','\u22127','25'],
+     note:'\u221a5 \u2248 2.2360679\u2026 Irracional. Las dem\u00e1s son racionales (fracciones o decimales peri\u00f3dicos).'},
+    {irr:'\u221a7',rats:['3/4','1.5','\u22124','16'],
+     note:'\u221a7 \u2248 2.6457\u2026 Irracional: no es cuadrado perfecto.'},
+    {irr:'\u221a11',rats:['2/5','0.4','\u22126','36'],
+     note:'\u221a11 \u2248 3.3166\u2026 Irracional. El 36 parece tentador pero \u221a36=6 s\u00ed es racional.'}
+  ];
+  var b=pick(banks);
+  var all=shuffle([b.irr].concat(b.rats));
+  if(!has(all,b.irr)){ all[4]=b.irr; }
+  var ansIdx=0;
+  for(var k=0;k<all.length;k++){ if(all[k]===b.irr){ ansIdx=k; break; } }
+  return {
+    tipo:'mc',tema:'N\u00fameros Reales',brief:'N\u00famero irracional',
+    enunc:'<p>\u00bfCu\u00e1l de los siguientes n\u00fameros es <strong>irracional</strong>?</p>'+
+          '<div class="card caz" style="font-size:12px;padding:8px 12px;margin-top:6px">'+
+          'Irracional: no puede escribirse como fracci\u00f3n p/q (con q\u22600). '+
+          'Sus decimales son <strong>infinitos y no peri\u00f3dicos</strong> (nunca se repiten en bloque).</div>',
+    opts:all, ansIdx:ansIdx, ans:b.irr, proc:b.note
+  };
+}
+
+/* ── Q9 · EXPRESIÓN CON FRACCIONES INLINE (estilo: K − (A/B + C) + P2²/P3) ── */
+function genQ9(){
+  /* K − (A/B + C) + P2²/P3  — A/B y P2²/P3 siempre enteros */
+  var banks=[
+    {K:12,A:36,B:3,C:7,P2:6,P3:4,correct:'2',
+     dist:['9','19','-7','21'],
+     note:'Fracciones: 36/3=12 y 6&sup2;/4=36/4=9. Par&eacute;ntesis: (12+7)=19. Resultado: 12&minus;19+9 = <strong>2</strong>. Error: ignorar par&eacute;ntesis da 16.'},
+    {K:20,A:24,B:6,C:3,P2:4,P3:4,correct:'17',
+     dist:['13','21','7','24'],
+     note:'Fracciones: 24/6=4 y 4&sup2;/4=16/4=4. Par&eacute;ntesis: (4+3)=7. Resultado: 20&minus;7+4 = <strong>17</strong>.'},
+    {K:15,A:45,B:9,C:8,P2:2,P3:2,correct:'4',
+     dist:['2','13','9','10'],
+     note:'Fracciones: 45/9=5 y 2&sup2;/2=4/2=2. Par&eacute;ntesis: (5+8)=13. Resultado: 15&minus;13+2 = <strong>4</strong>.'},
+    {K:18,A:30,B:6,C:4,P2:3,P3:3,correct:'12',
+     dist:['9','21','5','27'],
+     note:'Fracciones: 30/6=5 y 3&sup2;/3=9/3=3. Par&eacute;ntesis: (5+4)=9. Resultado: 18&minus;9+3 = <strong>12</strong>.'},
+    {K:25,A:48,B:8,C:5,P2:6,P3:4,correct:'23',
+     dist:['14','30','19','11'],
+     note:'Fracciones: 48/8=6 y 6&sup2;/4=36/4=9. Par&eacute;ntesis: (6+5)=11. Resultado: 25&minus;11+9 = <strong>23</strong>.'},
+    {K:8,A:21,B:7,C:4,P2:5,P3:5,correct:'6',
+     dist:['1','11','4','14'],
+     note:'Fracciones: 21/7=3 y 5&sup2;/5=25/5=5. Par&eacute;ntesis: (3+4)=7. Resultado: 8&minus;7+5 = <strong>6</strong>.'}
+  ];
+  var b=pick(banks);
+  var expr='<div class="sbox-frac">'+
+    b.K+' &minus; ('+sfrac(b.A,b.B)+' + '+b.C+') + '+sfrac(b.P2+'&sup2;',b.P3)+
+    '</div>';
+  var o=mkOpts(b.correct,b.dist[0],b.dist[1],b.dist[2],b.dist[3]);
+  return {
+    tipo:'mc',tema:'N\u00fameros Reales',brief:'Expresi\u00f3n con fracciones',
+    enunc:'<p>Calcula aplicando la jerarqu\u00eda correcta:</p>'+expr+
+          '<div class="card caz" style="font-size:12px;padding:8px 12px;margin-top:2px">'+
+          '1\u00ba resuelve las <strong>fracciones</strong> \u00b7 '+
+          '2\u00ba resuelve lo que est\u00e1 entre <strong>par\u00e9ntesis</strong> \u00b7 '+
+          '3\u00ba opera de <strong>izquierda a derecha</strong></div>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:b.correct, proc:b.note
+  };
+}
+
+/* ── Q10 · AGRUPACIÓN CON FRACCIÓN (estilo imagen 2) ── */
+function genQ10(){
+  /* Estructura visual: {a × [b − (c+d)]} / (e+f) — todos dan entero */
+  var banks=[
+    /* {6×[14−(3+4)]}/(2+5) = {6×7}/7 = 42/7 = 6 */
+    {a:6,b:14,c:3,d:4,e:2,f:5,correct:'6',
+     dist:['3','9','2','12'],
+     note:'1\u00ba: (3+4)=7. 2\u00ba: [14\u22127]=7. 3\u00ba: {6\xd77}=42. 4\u00ba: (2+5)=7. Resultado: 42/7 = <strong>6</strong>. Error: operar sin grupos \u2192 6\xd714\u22123+4\u00f72+5=90 (incorrecto).'},
+    /* {4×[20−(6+2)]}/(3+3) = {4×12}/6 = 48/6 = 8 */
+    {a:4,b:20,c:6,d:2,e:3,f:3,correct:'8',
+     dist:['4','16','3','12'],
+     note:'1\u00ba: (6+2)=8. 2\u00ba: [20\u22128]=12. 3\u00ba: {4\xd712}=48. 4\u00ba: (3+3)=6. Resultado: 48/6 = <strong>8</strong>.'},
+    /* {5×[18−(4+5)]}/(3+6) = {5×9}/9 = 45/9 = 5 */
+    {a:5,b:18,c:4,d:5,e:3,f:6,correct:'5',
+     dist:['3','9','2','10'],
+     note:'1\u00ba: (4+5)=9. 2\u00ba: [18\u22129]=9. 3\u00ba: {5\xd79}=45. 4\u00ba: (3+6)=9. Resultado: 45/9 = <strong>5</strong>.'},
+    /* {4×[15−(3+6)]}/(2+4) = {4×6}/6 = 24/6 = 4 */
+    {a:4,b:15,c:3,d:6,e:2,f:4,correct:'4',
+     dist:['2','8','10','16'],
+     note:'1\u00ba: (3+6)=9. 2\u00ba: [15\u22129]=6. 3\u00ba: {4\xd76}=24. 4\u00ba: (2+4)=6. Resultado: 24/6 = <strong>4</strong>.'},
+    /* {6×[10−(2+3)]}/(5+5) = {6×5}/10 = 30/10 = 3 */
+    {a:6,b:10,c:2,d:3,e:5,f:5,correct:'3',
+     dist:['1','5','6','9'],
+     note:'1\u00ba: (2+3)=5. 2\u00ba: [10\u22125]=5. 3\u00ba: {6\xd75}=30. 4\u00ba: (5+5)=10. Resultado: 30/10 = <strong>3</strong>.'},
+    /* {9×[16−(5+2)]}/(3+6) = {9×9}/9 = 81/9 = 9 */
+    {a:9,b:16,c:5,d:2,e:3,f:6,correct:'9',
+     dist:['7','4','3','18'],
+     note:'1\u00ba: (5+2)=7. 2\u00ba: [16\u22127]=9. 3\u00ba: {9\xd79}=81. 4\u00ba: (3+6)=9. Resultado: 81/9 = <strong>9</strong>.'}
+  ];
+  var b=pick(banks);
+  var numStr='{'+b.a+' \xd7 ['+b.b+' \u2212 ('+b.c+' + '+b.d+')]}';
+  var denStr='('+b.e+' + '+b.f+')';
+  var enuncExpr='<div class="sbox-frac">'+sfrac(numStr,denStr)+'</div>';
+  var o=mkOpts(b.correct,b.dist[0],b.dist[1],b.dist[2],b.dist[3]);
+  return {
+    tipo:'mc',tema:'Agrupaci\u00f3n',brief:'Fracci\u00f3n con agrupaci\u00f3n',
+    enunc:'<p>Calcula la siguiente expresi\u00f3n respetando los grupos de adentro hacia afuera:</p>'+
+          enuncExpr+
+          '<div class="card caz" style="font-size:12px;padding:8px 12px;margin-top:2px">'+
+          'Orden: 1\u00ba <strong>( )</strong> \u00b7 2\u00ba <strong>[ ]</strong> \u00b7 3\u00ba <strong>{ }</strong> en el numerador \u00b7 4\u00ba <strong>denominador</strong></div>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:b.correct,
+    proc:'Numerador: ('+b.c+'+'+b.d+')='+(b.c+b.d)+' \u2192 ['+b.b+'\u2212'+(b.c+b.d)+']='+
+         (b.b-b.c-b.d)+' \u2192 {'+b.a+'\xd7'+(b.b-b.c-b.d)+'}='+(b.a*(b.b-b.c-b.d))+'<br>'+
+         'Denominador: '+b.e+'+'+b.f+'='+(b.e+b.f)+'<br>'+
+         'Resultado: '+(b.a*(b.b-b.c-b.d))+'/'+(b.e+b.f)+' = <strong>'+b.correct+'</strong>'
+  };
+}
+
+/* ── Q11 · FRACCIÓN CON POTENCIA + RADICAL (Aⁿ+B)/C − √Rv + Ex) ── */
+function genQ11(){
+  /* (A^n + B)/C − √Rv + Ex — todos verificados para dar entero */
+  var banks=[
+    {A:6,pw:2,B:12,C:6,Rv:9,sqRv:3,Ex:8,correct:'13',
+     dist:['3','18','5','10'],
+     note:'Paso 1: 6&sup2;=36; (36+12)/6=48/6=8. Paso 2: &radic;9=3. Resultado: 8&minus;3+8 = <strong>13</strong>. Error: no respetar la fracci&oacute;n como grupo.'},
+    {A:4,pw:2,B:8,C:6,Rv:4,sqRv:2,Ex:5,correct:'7',
+     dist:['3','9','2','11'],
+     note:'Paso 1: 4&sup2;=16; (16+8)/6=24/6=4. Paso 2: &radic;4=2. Resultado: 4&minus;2+5 = <strong>7</strong>.'},
+    {A:3,pw:3,B:9,C:9,Rv:4,sqRv:2,Ex:6,correct:'8',
+     dist:['4','12','2','10'],
+     note:'Paso 1: 3&sup3;=27; (27+9)/9=36/9=4. Paso 2: &radic;4=2. Resultado: 4&minus;2+6 = <strong>8</strong>. Error: confundir 3&sup3;=9 (eso ser&iacute;a 3&sup2;).'},
+    {A:5,pw:2,B:11,C:4,Rv:36,sqRv:6,Ex:9,correct:'12',
+     dist:['6','18','3','15'],
+     note:'Paso 1: 5&sup2;=25; (25+11)/4=36/4=9. Paso 2: &radic;36=6. Resultado: 9&minus;6+9 = <strong>12</strong>.'},
+    {A:6,pw:2,B:3,C:3,Rv:16,sqRv:4,Ex:7,correct:'16',
+     dist:['6','20','10','9'],
+     note:'Paso 1: 6&sup2;=36; (36+3)/3=39/3=13. Paso 2: &radic;16=4. Resultado: 13&minus;4+7 = <strong>16</strong>.'},
+    {A:3,pw:3,B:3,C:6,Rv:25,sqRv:5,Ex:3,correct:'3',
+     dist:['0','8','1','6'],
+     note:'Paso 1: 3&sup3;=27; (27+3)/6=30/6=5. Paso 2: &radic;25=5. Resultado: 5&minus;5+3 = <strong>3</strong>.'}
+  ];
+  var b=pick(banks);
+  var numStr=b.A+'<sup>'+b.pw+'</sup> + '+b.B;
+  var expr='<div class="sbox-frac">'+sfrac(numStr,b.C)+' &minus; &radic;'+b.Rv+' + '+b.Ex+'</div>';
+  var o=mkOpts(b.correct,b.dist[0],b.dist[1],b.dist[2],b.dist[3]);
+  return {
+    tipo:'mc',tema:'Jerarqu\u00eda',brief:'Fracci\u00f3n con potencia y radical',
+    enunc:'<p>Calcula la siguiente expresi\u00f3n aplicando jerarqu\u00eda:</p>'+expr+
+          '<div class="card caz" style="font-size:12px;padding:8px 12px;margin-top:2px">'+
+          '1&ordm; <strong>potencia</strong> en el numerador &nbsp;&middot;&nbsp; '+
+          '2&ordm; <strong>fracci&oacute;n</strong> completa &nbsp;&middot;&nbsp; '+
+          '3&ordm; <strong>ra&iacute;z</strong> cuadrada &nbsp;&middot;&nbsp; '+
+          '4&ordm; <strong>+/&minus;</strong> de izquierda a derecha</div>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:b.correct, proc:b.note
+  };
+}
+
+/* ── Q12 · PROBLEMA CONTEXTUAL: precio con descuento + IVA − cupón ── */
+function genQ12(){
+  var ctxs=[
+    {lugar:'Tepito',prod:'botines de cuero',p1:'precio base',p2:'descuento de temporada'},
+    {lugar:'Xochimilco',prod:'canastas de mimbre',p1:'precio lista',p2:'descuento por volumen'},
+    {lugar:'La Merced',prod:'paquete de semillas',p1:'precio de mostrador',p2:'descuento de mayoreo'},
+    {lugar:'Iztapalapa',prod:'mochila escolar',p1:'precio de etiqueta',p2:'descuento de lunes'},
+    {lugar:'Cuauht\u00e9moc',prod:'audífonos bluetooth',p1:'precio base',p2:'promoción de temporada'},
+    {lugar:'Coyoac\u00e1n',prod:'juego de cocina',p1:'precio regular',p2:'descuento de liquidación'}
+  ];
+  var banks=[
+    /* P=60, d=10%, C=3 → 60×0.90×1.16−3 = 62.64−3 = 59.64 */
+    {P:60,d:0.10,dpct:'10',C:3,correct:'$59.64',
+     ea:'$51.00',eb:'$62.64',ec:'$66.60',ed:'$54.00'},
+    /* P=80, d=20%, C=6 → 80×0.80×1.16−6 = 74.24−6 = 68.24 */
+    {P:80,d:0.20,dpct:'20',C:6,correct:'$68.24',
+     ea:'$58.00',eb:'$74.24',ec:'$86.88',ed:'$64.00'},
+    /* P=50, d=10%, C=4 → 50×0.90×1.16−4 = 52.20−4 = 48.20 */
+    {P:50,d:0.10,dpct:'10',C:4,correct:'$48.20',
+     ea:'$41.00',eb:'$52.20',ec:'$54.80',ed:'$45.00'},
+    /* P=120, d=25%, C=8 → 120×0.75×1.16−8 = 104.40−8 = 96.40 */
+    {P:120,d:0.25,dpct:'25',C:8,correct:'$96.40',
+     ea:'$82.00',eb:'$104.40',ec:'$130.72',ed:'$90.00'},
+    /* P=40, d=25%, C=2 → 40×0.75×1.16−2 = 34.80−2 = 32.80 */
+    {P:40,d:0.25,dpct:'25',C:2,correct:'$32.80',
+     ea:'$28.00',eb:'$34.80',ec:'$44.32',ed:'$30.00'},
+    /* P=100, d=15%, C=6 → 100×0.85×1.16−6 = 98.60−6 = 92.60 */
+    {P:100,d:0.15,dpct:'15',C:6,correct:'$92.60',
+     ea:'$79.00',eb:'$98.60',ec:'$110.40',ed:'$85.00'}
+  ];
+  var b=pick(banks);
+  var c=pick(ctxs);
+  var o=mkOpts(b.correct,b.ea,b.eb,b.ec,b.ed);
+  return {
+    tipo:'mc',tema:'Jerarqu\u00eda',brief:'Problema: descuento + IVA',
+    enunc:'<p>En una tienda de <strong>'+c.lugar+'</strong>, el vendedor ofrece '+
+          '<strong>'+c.prod+'</strong>:</p>'+
+          '<ul style="font-size:14px;line-height:2.1;margin:8px 0 10px 18px">'+
+          '<li>'+c.p1+': <strong>$'+b.P+'.00</strong></li>'+
+          '<li>'+c.p2+': <strong>'+b.dpct+'%</strong> (= '+b.d+' en decimal)</li>'+
+          '<li>IVA: <strong>16%</strong> sobre el precio ya descontado</li>'+
+          '<li>Cup\u00f3n de descuento final: <strong>$'+b.C+'.00</strong></li></ul>'+
+          '<p>Usando la f\u00f3rmula, \u00bfcu\u00e1nto pagas en total?</p>'+
+          '<div class="sbox az" style="font-size:13px;padding:9px 12px">'+
+          'P\u00d7(1\u2212d) + P\u00d7(1\u2212d)\u00d70.16 \u2212 cup\u00f3n</div>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:b.correct,
+    proc:'P\u00d7(1\u2212d) = '+b.P+'\u00d7'+(1-b.d)+' = $'+Math.round(b.P*(1-b.d)*100)/100+'<br>'+
+         'IVA: $'+Math.round(b.P*(1-b.d)*100)/100+'\u00d70.16 = $'+Math.round(b.P*(1-b.d)*0.16*100)/100+'<br>'+
+         'Subtotal: $'+Math.round(b.P*(1-b.d)*1.16*100)/100+'<br>'+
+         'Menos cup\u00f3n: \u2212$'+b.C+'.00<br>'+
+         'Total: <strong>'+b.correct+'</strong><br>'+
+         'Error com\u00fan: aplicar IVA al precio original sin descontar ('+b.ec+'), o no restar el cup\u00f3n ('+b.eb+').'
+  };
+}
+
+/* ── Q13 · SUCESIÓN ARITMÉTICA (n grande, necesita la fórmula) ── */
+function genQ13(){
+  var a1=rInt(3,9), d=rInt(3,7), n=rInt(18,25);
+  var an=a1+(n-1)*d;
+  var ctxs=[
+    'Una escalera del Metro CDMX tiene peldaños de altura creciente. El primer peld\u00e3o est\u00e1 a <strong>'+a1+' cm</strong> del suelo y cada siguiente sube <strong>'+d+' cm</strong> m\u00e1s que el anterior.',
+    'Un programa de <em>Ecobici</em> registra viajes en aumento: el primer d\u00eda hubo <strong>'+a1+' viajes</strong> y cada d\u00eda se suman <strong>'+d+' viajes</strong> m\u00e1s.',
+    'En un mercado de <em>La Merced</em>, el primer puesto abre a las <strong>'+a1+' de la ma\u00f1ana</strong> y cada puesto siguiente abre <strong>'+d+' minutos</strong> despu\u00e9s.',
+    'Una cuota de ahorro en la colonia sube as\u00ed: la primera semana se aportan <strong>$'+a1+'</strong> y cada semana <strong>$'+d+' m\u00e1s</strong> que la anterior.'
+  ];
+  /* Distractores: error de exponente (a1+(n)*d), usar suma en vez de término, restar d */
+  var wrong1=a1+n*d;      // error: usa n en vez de n-1
+  var wrong2=a1+(n-1)*d+d; // error: un peldaño de más
+  var wrong3=a1*Math.pow(d,n-1); // error: usa fórmula geométrica
+  var o=mkOpts(String(an),String(wrong1),String(wrong2),String(n*d),String(a1+n));
+  return {
+    tipo:'numeric',tema:'Sucesiones',brief:'Sucesi\u00f3n aritm\u00e9tica \u2014 t\u00e9rmino n\u00famero '+n,
+    enunc:'<p>'+pick(ctxs)+'</p>'+
+          '<p>Usando la f\u00f3rmula, calcula el <strong>t\u00e9rmino '+n+' (a<sub>'+n+'</sub>)</strong>:</p>'+
+          '<div class="sbox az">a&#8345; = a&#8321; + (n \u2212 1) \u00b7 d</div>'+
+          '<p class="nota-inline">n\u00a0=\u00a0'+n+' es muy grande para contar uno a uno \u2014 usa la f\u00f3rmula.</p>',
+    opts:null, ans:String(an),
+    proc:'Datos: a\u2081\u00a0=\u00a0'+a1+', d\u00a0=\u00a0'+d+', n\u00a0=\u00a0'+n+'<br>'+
+         'a<sub>'+n+'</sub> = '+a1+' + ('+n+' \u2212 1) \u00b7 '+d+'<br>'+
+         '= '+a1+' + '+(n-1)+' \u00b7 '+d+'<br>'+
+         '= '+a1+' + '+((n-1)*d)+'<br>'+
+         '= <strong>'+an+'</strong>'
+  };
+}
+
+/* ── Q14 · SUCESIÓN GEOMÉTRICA — término ── */
+function genQ14(){
+  var b1=rInt(2,5), r=pick([2,3]), n=rInt(4,6);
+  var an=b1*Math.pow(r,n-1);
+  var d1=b1*Math.pow(r,n);
+  var d2=b1+(n-1)*r;
+  var d3=b1*r;
+  var d4=b1*(n-1)*r;
+  var o=mkOpts(String(an),String(d1),String(d2),String(d3),String(d4));
+  return {
+    tipo:'mc',tema:'Sucesiones',brief:'Sucesi\u00f3n geom\u00e9trica \u2014 t\u00e9rmino',
+    enunc:'<p>Dada la sucesi\u00f3n geom\u00e9trica con <strong>a\u2081\u00a0=\u00a0'+b1+'</strong> y <strong>r\u00a0=\u00a0'+r+'</strong>:</p>'+
+          '<p>\u00bfCu\u00e1l es el <strong>t\u00e9rmino '+n+' (a<sub>'+n+'</sub>)</strong>?</p>'+
+          '<div class="sbox az">a&#8345; = a&#8321; \u00b7 r<sup>(n\u22121)</sup></div>',
+    opts:o.opts, ansIdx:o.ansIdx, ans:String(an),
+    proc:'a<sub>'+n+'</sub> = '+b1+' \xd7 '+r+'<sup>'+(n-1)+'</sup> = '+b1+' \xd7 '+Math.pow(r,n-1)+' = <strong>'+an+'</strong>.<br>'+
+         'El exponente es (n\u22121)\u00a0=\u00a0'+(n-1)+'. Error com\u00fan: usar r<sup>n</sup>\u00a0=\u00a0'+Math.pow(r,n)+' (dar\u00eda '+(b1*Math.pow(r,n))+').'
+  };
+}
+
+/* ── Q15 · SERIE ARITMÉTICA — suma ── */
+function genQ15(){
+  var a1=rInt(3,8), d=rInt(2,5), n=rInt(5,9);
+  var an=a1+(n-1)*d;
+  var sn=Math.round(n/2*(a1+an));
+  var ctxs=[
+    'La estaci\u00f3n <strong>Balderas</strong> tuvo '+a1+'\u00a0mil entradas el primer d\u00eda y '+d+'\u00a0mil m\u00e1s cada d\u00eda durante '+n+' d\u00edas.',
+    'Un recolector en <strong>Cuauht\u00e9moc</strong> recoge '+a1+' bolsas el lunes y '+d+' m\u00e1s cada d\u00eda durante '+n+' d\u00edas.',
+    'Ecobici registr\u00f3 '+a1+'\u00a0mil viajes el lunes, aumentando '+d+'\u00a0mil diariamente por '+n+' d\u00edas.'
+  ];
+  return {
+    tipo:'numeric',tema:'Series',brief:'Serie aritm\u00e9tica \u2014 suma',
+    enunc:'<p>'+pick(ctxs)+'</p>'+
+          '<p>\u00bfCu\u00e1l es el <strong>total acumulado en los '+n+' d\u00edas</strong>?</p>'+
+          '<div class="sbox az">S&#8345; = (n/2) \u00b7 (a\u2081 + a\u2099)</div>',
+    opts:null, ans:String(sn),
+    proc:'Paso 1 \u2014 t\u00e9rmino final: a<sub>'+n+'</sub> = '+a1+' + ('+n+'\u22121)\u00b7'+d+' = <strong>'+an+'</strong><br>'+
+         'Paso 2 \u2014 suma: S<sub>'+n+'</sub> = ('+n+'/2) \u00b7 ('+a1+'+'+an+') = '+(n%2===0?n/2:n+'/2')+' \xd7 '+(a1+an)+' = <strong>'+sn+'</strong>'
+  };
+}
+
+/* ── Q16 · SERIE GEOMÉTRICA — suma ── */
+function genQ16(){
+  var b1=rInt(2,4), r=pick([2,3]), n=pick([4,5]);
+  var rn=Math.pow(r,n);
+  var sn=Math.round(b1*(1-rn)/(1-r));
+  var ctxs=[
+    'Un video del <strong>Metro CDMX</strong> tuvo '+b1+'\u00a0mil vistas la primera hora y se '+(r===2?'duplic\u00f3':'triplic\u00f3')+' cada hora por '+n+' horas.',
+    'Una alerta s\u00edsmica fue compartida '+b1+' veces la primera hora; los compartidos se '+(r===2?'duplicaron':'triplicaron')+' cada hora durante '+n+' horas.',
+    'Un programa en <strong>Milpa Alta</strong> sembr\u00f3 '+b1+' \u00e1rboles la primera semana y '+r+' veces m\u00e1s cada semana por '+n+' semanas.'
+  ];
+  return {
+    tipo:'numeric',tema:'Series',brief:'Serie geom\u00e9trica \u2014 suma',
+    enunc:'<p>'+pick(ctxs)+'</p>'+
+          '<p>\u00bfCu\u00e1l es el <strong>total acumulado en las '+n+' unidades de tiempo</strong>?</p>'+
+          '<div class="sbox az">S&#8345; = a\u2081 \u00b7 (1 \u2212 r\u207f) / (1 \u2212 r)</div>',
+    opts:null, ans:String(sn),
+    proc:'Paso 1: r<sup>n</sup> = '+r+'<sup>'+n+'</sup> = <strong>'+rn+'</strong><br>'+
+         'Paso 2: S<sub>'+n+'</sub> = '+b1+' \xd7 (1\u2212'+rn+') / (1\u2212'+r+') = '+b1+' \xd7 '+(1-rn)+' / '+(1-r)+' = <strong>'+sn+'</strong>'
+  };
+}
+
+/* ════════════════════════════════════════════════════════
+   GENERACIÓN Y ARRANQUE
+═════════════════════════════════════════════════════════ */
+
+/* Pregunta de emergencia para cualquier genQ que falle */
+function qFallback(n){
+  var data=[
+    {t:'Conjuntos',b:'Unión A ∪ B',
+     e:'<p>Dado A = {1, 2, 3} y B = {3, 4, 5}, ¿cuánto es A ∪ B?</p>',
+     ans:'{1, 2, 3, 4, 5}',ops:['{1,2,3,4,5}','{3}','{1,2,4,5}','{1,2,3}','{4,5}'],ok:0,
+     p:'A ∪ B reúne todos los elementos de ambos conjuntos sin repetir.'},
+    {t:'Conjuntos',b:'Intersección A ∩ B',
+     e:'<p>Dado A = {2, 4, 6} y B = {4, 6, 8}, ¿cuánto es A ∩ B?</p>',
+     ans:'{4, 6}',ops:['{4,6}','{2,8}','{2,4,6,8}','{4}','{6}'],ok:0,
+     p:'A ∩ B contiene solo los elementos comunes.'},
+    {t:'Números Reales',b:'Raíz cuadrada',
+     e:'<p>Calcula: √144</p>',
+     ans:'12',ops:['12','72','13','11','14'],ok:0,
+     p:'12 × 12 = 144, por tanto √144 = 12.'},
+    {t:'Agrupación',b:'Signos de agrupación',
+     e:'<p>Calcula: 2 × (3 + 4)</p>',
+     ans:'14',ops:['14','10','11','24','7'],ok:0,
+     p:'Primero el paréntesis: 3+4=7. Luego 2×7=14.'},
+    {t:'Jerarquía',b:'Jerarquía básica',
+     e:'<p>Calcula: 4 + 3 × 2</p>',
+     ans:'10',ops:['10','14','9','8','11'],ok:0,
+     p:'Primero la multiplicación: 3×2=6. Luego la suma: 4+6=10.'},
+    {t:'Sucesiones',b:'Sucesión aritmética',
+     e:'<p>Sucesión: 5, 8, 11, 14, … ¿Cuánto vale a₅?</p>',
+     ans:'17',ops:['17','15','19','16','18'],ok:0,
+     p:'d=3. a₅ = 5 + 4×3 = 5 + 12 = 17.'},
+    {t:'Series',b:'Serie aritmética',
+     e:'<p>Suma: 1 + 2 + 3 + 4 + 5 = ?</p>',
+     ans:'15',ops:['15','10','12','20','14'],ok:0,
+     p:'Sn = (5/2)×(1+5) = 2.5×6 = 15.'}
+  ];
+  var d=data[n%data.length];
+  return {tipo:'mc',tema:d.t,brief:d.b,enunc:d.e,
+          opts:d.ops,ansIdx:d.ok,ans:d.ans,proc:d.p};
+}
+
+function safeGenQ(fn, idx){
+  try {
+    var q=fn();
+    if(q && q.tema && q.enunc) return q;
+    return qFallback(idx);
+  } catch(e){
+    return qFallback(idx);
+  }
+}
+
+function genAll(){
+  QS=[];
+  ANS=[];
+  var fns=[genQ1,genQ2,genQ3,genQ4,genQ5,genQ6,genQ7,genQ8,
+           genQ9,genQ10,genQ11,genQ12,genQ13,genQ14,genQ15,genQ16];
+  for(var i=0;i<fns.length;i++){
+    QS.push(safeGenQ(fns[i],i));
+  }
+  for(var j=0;j<TOTAL_Q;j++) ANS.push(null);
+}
+
+/* ════════════════════════════════════════════════════════
+   NAVEGACIÓN UI
+═════════════════════════════════════════════════════════ */
+function showSec(id){
+  var ss=document.querySelectorAll('.sec');
+  for(var i=0;i<ss.length;i++) ss[i].classList.remove('on');
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function chkNombre(){
+  var v=document.getElementById('inp-nombre').value.trim();
+  document.getElementById('btn-iniciar').disabled=(v.length<4);
+  document.getElementById('fb-nombre').textContent=v.length>0&&v.length<4?'Escribe tu nombre completo.':'';
+}
+
+function iniciar(){
+  NOMBRE=document.getElementById('inp-nombre').value.trim().toUpperCase();
+  genAll();
+  CUR=0; SEL=-1;
+  document.getElementById('hdr').style.display='block';
+  /* botones de navegación docente */
+  var btns='';
+  for(var i=0;i<TOTAL_Q;i++){
+    btns+='<button class="pfqb" onclick="profGoQ('+i+')">P'+(i+1)+'</button>';
+  }
+  document.getElementById('pfab-grid').innerHTML=btns;
+  renderQ();
+  showSec('s-exam');
+}
+
+/* ── RENDERIZADO DE PREGUNTA ── */
+var TEMA_COLOR={
+  'Conjuntos':'#5B2D8E',
+  'N\u00fameros Reales':'#1565C0',
+  'Agrupaci\u00f3n':'#c06000',
+  'Jerarqu\u00eda':'#c06000',
+  'Sucesiones':'#1B6B45',
+  'Series':'#C1121F'
+};
+
+function renderQ(){
+  var q=QS[CUR];
+  if(!q||!q.tema){ /* pregunta no generada — redirigir */ CUR=0; q=QS[0]; if(!q) return; }
+  var pct=Math.round((CUR/TOTAL_Q)*100);
+
+  document.getElementById('hdr-chip').textContent='P '+(CUR+1)+'/'+TOTAL_Q;
+  document.getElementById('bfill').style.width=pct+'%';
+  document.getElementById('bpct').textContent='Avance: '+pct+'%';
+
+  document.getElementById('q-numtxt').textContent='Pregunta '+(CUR+1);
+  document.getElementById('q-of').textContent='de '+TOTAL_Q;
+
+  var tTag=document.getElementById('q-tematag');
+  tTag.textContent=q.tema;
+  tTag.style.background=TEMA_COLOR[q.tema]||'#5B2D8E';
+
+  document.getElementById('q-enunc').innerHTML=q.enunc;
+
+  /* reset */
+  document.getElementById('q-opts').innerHTML='';
+  document.getElementById('q-input').style.display='none';
+  document.getElementById('sym-bar').className='';
+  SEL=-1;
+
+  if(q.tipo==='mc'){
+    var html='';
+    for(var i=0;i<q.opts.length;i++){
+      html+='<button class="opt" onclick="selOpt(this,'+i+')">'+
+        '<span class="opt-ltr">'+String.fromCharCode(65+i)+'.</span>'+q.opts[i]+'</button>';
+    }
+    document.getElementById('q-opts').innerHTML=html;
+  } else {
+    document.getElementById('q-input').style.display='block';
+    var inp=document.getElementById('inp-resp');
+    inp.value=''; inp.disabled=false;
+    if(q.tipo==='open'){
+      inp.placeholder='Ej: {2, 4, 6}';
+      inp.inputMode='text';
+      document.getElementById('sym-bar').className='vis';
+      document.getElementById('inp-lbl').textContent='Escribe el conjunto (usa los botones de arriba):';
+      document.getElementById('inp-hint').textContent='Usa llaves { }. El orden de los elementos no importa — {2,4} y {4,2} son correctos. Espacios extra tampoco afectan.';
+    } else {
+      inp.placeholder='Escribe solo el número resultado';
+      inp.inputMode='decimal';
+      document.getElementById('inp-lbl').textContent='Tu respuesta:';
+      document.getElementById('inp-hint').textContent='Solo el número entero. Puedes usar punto o coma para decimales.';
+    }
+  }
+
+  document.getElementById('btn-sig').disabled=true;
+}
+
+function selOpt(btn,idx){
+  SEL=idx;
+  var opts=document.getElementById('q-opts').querySelectorAll('.opt');
+  for(var i=0;i<opts.length;i++) opts[i].classList.remove('sel');
+  btn.classList.add('sel');
+  document.getElementById('btn-sig').disabled=false;
+}
+
+function chkInp(){
+  var v=document.getElementById('inp-resp').value.trim();
+  document.getElementById('btn-sig').disabled=(v.length===0);
+}
+
+function insS(s){
+  var el=document.getElementById('inp-resp');
+  if(!el) return;
+  var st=el.selectionStart, en=el.selectionEnd;
+  el.value=el.value.slice(0,st)+s+el.value.slice(en);
+  el.selectionStart=el.selectionEnd=st+s.length;
+  el.focus();
+  chkInp();
+}
+
+function siguiente(skip){
+  var q=QS[CUR];
+  if(skip){
+    ANS[CUR]=null;
+  } else {
+    if(q.tipo==='mc'){
+      ANS[CUR]=SEL;
+    } else {
+      ANS[CUR]=document.getElementById('inp-resp').value.trim();
+    }
+  }
+  SEL=-1;
+  CUR++;
+  if(CUR>=TOTAL_Q){ mostrarResultados(); }
+  else { renderQ(); }
+}
+
+/* ════════════════════════════════════════════════════════
+   EVALUACIÓN Y RESULTADOS
+═════════════════════════════════════════════════════════ */
+function isOk(q,ans){
+  if(ans===null||ans==='') return false;
+  if(q.tipo==='mc'){
+    return ans===q.ansIdx;
+  } else if(q.tipo==='open'){
+    return setsEq(String(ans),q.ans);
+  } else {
+    var n1=parseFloat(String(ans).replace(',','.'));
+    var n2=parseFloat(q.ans);
+    return !isNaN(n1)&&!isNaN(n2)&&Math.abs(n1-n2)<0.5;
+  }
+}
+
+function ansText(q,ans){
+  if(ans===null||ans==='') return '(sin respuesta)';
+  if(q.tipo==='mc'){
+    return (typeof ans==='number'&&ans>=0&&ans<q.opts.length)?q.opts[ans]:'(sin respuesta)';
+  }
+  return String(ans);
+}
+
+function mostrarResultados(){
+  var correctas=0;
+  var html='';
+
+  for(var i=0;i<TOTAL_Q;i++){
+    var q=QS[i];
+    var ok=isOk(q,ANS[i]);
+    if(ok) correctas++;
+    var aText=ansText(q,ANS[i]);
+    var chipCls=ok?'chip-tu-ok':'chip-tu-er';
+    var enuncClean=q.enunc.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,160);
+
+    html+='<div class="res-item">'+
+      '<div class="rh '+(ok?'rh-ok':'rh-er')+'">'+
+      '<div><strong>P'+(i+1)+'</strong>&nbsp;'+
+      '<span style="font-size:10px;background:rgba(0,0,0,.1);border-radius:4px;padding:1px 6px">'+q.tema+'</span>'+
+      '&nbsp;&nbsp;'+q.brief+'</div>'+
+      '<span style="font-size:18px">'+(ok?'\u2705':'\u274c')+'</span>'+
+      '</div>'+
+      '<div class="rb">'+
+      '<div style="font-size:12px;color:var(--grisdk);margin-bottom:7px;line-height:1.5">'+enuncClean+'...</div>'+
+      '<div>'+
+      '<span class="chip-r '+chipCls+'">Tu respuesta: <strong>'+aText+'</strong></span>'+
+      '<span class="chip-r chip-esp">Esperado: <strong>'+q.ans+'</strong></span>'+
+      '</div>'+
+      '<div class="proc-box">'+q.proc+'</div>'+
+      '</div>'+
+      '</div>';
+  }
+
+  document.getElementById('res-detalle').innerHTML=html;
+
+  /* Calificación /6 */
+  var pts=Math.round(correctas/TOTAL_Q*6*100)/100;
+  var ptsStr=pts.toFixed(2).replace(/\.00$/,'').replace(/(\.\d)0$/,'$1');
+  document.getElementById('cal-raw').innerHTML=correctas+'<span class="cal-denom">/16</span>';
+  document.getElementById('cal-pts').textContent=ptsStr+' / 6 pts';
+
+  var lbl=pts>=5.5?'\uD83C\uDF1F Excelente':pts>=4?'\uD83D\uDC4D Bien logrado':pts>=3.6?'\uD83D\uDCDA Suficiente':'\uD83D\uDCAA A repasar';
+  document.getElementById('cal-lbl').textContent=lbl;
+  document.getElementById('res-nombre').textContent=NOMBRE;
+
+  document.getElementById('hdr-chip').textContent='\u2705 Fin';
+  document.getElementById('bfill').style.width='100%';
+  document.getElementById('bpct').textContent='Completado';
+
+  showSec('s-res');
+}
+
+/* ════════════════════════════════════════════════════════
+   PDF / IMPRIMIR
+═════════════════════════════════════════════════════════ */
+function guardarPDF(){
+  /* Asegurar que la sección de resultados sea visible antes de imprimir */
+  window.scrollTo(0,0);
+  setTimeout(function(){ window.print(); }, 200);
+}
+
+/* ════════════════════════════════════════════════════════
+   ANTI-PASTE
+═════════════════════════════════════════════════════════ */
+window.onload=function(){
+  var el=document.getElementById('inp-resp');
+  if(el){
+    el.addEventListener('paste',function(e){e.preventDefault();});
+    el.addEventListener('copy', function(e){e.preventDefault();});
+    el.addEventListener('cut',  function(e){e.preventDefault();});
+  }
+};
+
+/* ════════════════════════════════════════════════════════
+   PANEL DOCENTE · código 890
+   → clic en "Prof. Adrián CruzH" en portada o en header abre el PIN
+   → tras autenticación aparece barra flotante esquina inferior derecha
+═════════════════════════════════════════════════════════ */
+function tapNombre(){ abrirPin(); }
+
+function abrirPin(){
+  document.getElementById('pin-modal').classList.add('show');
+  document.getElementById('pin-inp').value='';
+  document.getElementById('pin-fb').textContent='';
+  setTimeout(function(){ document.getElementById('pin-inp').focus(); },120);
+}
+function cerrarPin(){ document.getElementById('pin-modal').classList.remove('show'); }
+
+function chkPin(v){
+  if(v==='890'){
+    cerrarPin();
+    document.body.classList.add('teacher-mode');
+    /* Asegurar que la grilla de preguntas esté lista */
+    if(!QS.length){
+      var g=document.getElementById('pfab-grid');
+      if(g&&!g.innerHTML){
+        var btns='';
+        for(var i=0;i<TOTAL_Q;i++){
+          btns+='<button class="pfqb" onclick="profGoQ('+i+')">P'+(i+1)+'</button>';
+        }
+        g.innerHTML=btns;
+      }
+    }
+    /* Abrir panel automáticamente */
+    document.getElementById('prof-fab').classList.add('open');
+  } else if(v.length>=3){
+    document.getElementById('pin-fb').textContent='C\u00f3digo incorrecto.';
+  }
+}
+
+function toggleFab(){
+  var p=document.getElementById('prof-fab');
+  if(p.classList.contains('open')) p.classList.remove('open');
+  else p.classList.add('open');
+}
+
+/* FAB: avanzar sin validar */
+function fabAvanzar(){
+  if(CUR<TOTAL_Q){ siguiente(true); }
+}
+
+function profGoQ(idx){
+  if(!QS.length){ genAll(); }
+  if(NOMBRE==='') NOMBRE='DOCENTE DEMO';
+  CUR=idx; SEL=-1;
+  if(document.getElementById('hdr').style.display==='none'||
+     document.getElementById('hdr').style.display===''){
+    document.getElementById('hdr').style.display='block';
+  }
+  renderQ();
+  showSec('s-exam');
+  /* mantener panel visible pero cerrado para no tapar */
+  document.getElementById('prof-fab').classList.remove('open');
+}
+
+function profVerRes(){
+  if(!QS.length){ genAll(); }
+  NOMBRE='DOCENTE DEMO';
+  for(var i=0;i<TOTAL_Q;i++){
+    var q=QS[i];
+    if(q.tipo==='mc') ANS[i]=q.ansIdx;
+    else ANS[i]=q.ans;
+  }
+  document.getElementById('hdr').style.display='block';
+  mostrarResultados();
+}
+</script>
+</body>
+</html>
