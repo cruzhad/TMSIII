@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 7: Expresiones Algebraicas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --fondo: #f8f9fa;
+      --superficie: #ffffff;
+      --primario: #2d6a4f;
+      --acento: #f9a825;
+      --texto: #1a1a2e;
+      --texto-suave: #555566;
+      --borde: #ccccdd;
+      --error: #c62828;
+      --ok: #2e7d32;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.6;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+    h1, h2, h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--primario);
+      letter-spacing: 1px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin: 20px 0 15px;
+    }
+    h3 {
+      font-size: 1.4rem;
+      margin: 15px 0 10px;
+    }
+    .seccion {
+      display: none;
+      background: var(--superficie);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px auto;
+      max-width: 900px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .seccion.activa {
+      display: block;
+    }
+    .btn {
+      background: var(--primario);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: all 0.2s;
+      margin: 10px 5px;
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+    .btn:hover {
+      background: #235639;
+      transform: translateY(-2px);
+    }
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-acento {
+      background: var(--acento);
+      color: var(--texto);
+    }
+    .btn-acento:hover {
+      background: #d88e1c;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--borde);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Nunito', sans-serif;
+      margin: 8px 0;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primario);
+    }
+    .live-preview {
+      min-height: 32px;
+      padding: 8px;
+      background: #f0f7f4;
+      border-left: 3px solid var(--primario);
+      border-radius: 4px;
+      margin: 4px 0 8px;
+      font-size: 1.1rem;
+    }
+    .teclado-mat {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .teclado-mat button {
+      min-width: 44px;
+      min-height: 44px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f0f0f0;
+      cursor: pointer;
+      touch-action: manipulation;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+    }
+    .teclado-mat button:active {
+      background: #e0e0e0;
+    }
+    .ejercicio {
+      background: #f9f9fb;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 15px 0;
+    }
+    .feedback {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-weight: 600;
+    }
+    .feedback.correcto {
+      background: #e8f5e9;
+      color: var(--ok);
+      border-left: 4px solid var(--ok);
+    }
+    .feedback.incorrecto {
+      background: #ffebee;
+      color: var(--error);
+      border-left: 4px solid var(--error);
+    }
+    .cuaderno-box {
+      background: #fffde7;
+      border-left: 5px solid var(--acento);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .cuaderno-box h3 {
+      color: #e65100;
+      margin-top: 0;
+    }
+    .quiz-opciones {
+      margin: 15px 0;
+    }
+    .quiz-opciones label {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      background: #f9f9fb;
+      border: 2px solid var(--borde);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quiz-opciones label:hover {
+      border-color: var(--primario);
+      background: #f0f7f4;
+    }
+    .quiz-opciones input[type="radio"] {
+      margin-right: 10px;
+    }
+    #tabla-resultados {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 20px 0;
+    }
+    #tabla-resultados th,
+    #tabla-resultados td {
+      border: 1px solid #555;
+      padding: 6px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    #tabla-resultados tr:first-child td {
+      background: #e8f4fd;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    #tabla-resultados th {
+      background: var(--primario);
+      color: #fff;
+    }
+    .respuesta-correcta {
+      background: #c8e6c9 !important;
+    }
+    .panel-docente {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 320px;
+      width: 90vw;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      z-index: 9999;
+      padding: 10px 14px;
+      display: none;
+    }
+    .panel-docente.activo {
+      display: block;
+    }
+    .panel-titulo {
+      cursor: move;
+      font-weight: 700;
+      padding: 6px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-contenido {
+      font-size: 0.82rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .panel-botones {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .panel-botones button {
+      flex: 1;
+      min-width: 80px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      min-height: 36px;
+    }
+    .firma {
+      text-align: center;
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+      margin: 30px 0 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .tabla-comp {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .tabla-comp th,
+    .tabla-comp td {
+      border: 1px solid var(--borde);
+      padding: 10px;
+      text-align: left;
+    }
+    .tabla-comp th {
+      background: #e8f4fd;
+      font-weight: 700;
+      color: var(--primario);
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 2px solid var(--borde);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Nunito', sans-serif;
+      resize: vertical;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--primario);
+    }
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body > *:not(#seccion-resultados) { display: none !important; }
+      #seccion-resultados {
+        display: block !important;
+        position: static;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      button, .teclado-mat, .panel-docente, .firma { display: none !important; }
+      #tabla-resultados, #tabla-resultados th, #tabla-resultados td {
+        border: 1px solid #333 !important;
+      }
+      .respuesta-correcta {
+        background: #c8e6c9 !important;
+      }
+      @page { margin: 1.5cm; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- S0: Intro -->
+<div id="seccion-intro" class="seccion activa">
+  <h1>📊 Expresiones Algebraicas</h1>
+  <h2>Estructura y Clasificación</h2>
+  <p style="text-align: center; font-size: 1.1rem; color: var(--texto-suave); margin: 20px 0;">
+    Sesión 7 · Matemáticas 1° semestre<br>
+    Prof. Adrián CruzH
+  </p>
+  <div style="max-width: 600px; margin: 30px auto;">
+    <label for="nombre-alumno" style="display: block; font-weight: 600; margin-bottom: 8px;">
+      Tu nombre completo:
+    </label>
+    <input type="text" id="nombre-alumno" placeholder="Escribe tu nombre aquí" 
+           style="font-size: 1.1rem;">
+    <button class="btn btn-acento" onclick="iniciarActividad()" style="width: 100%; margin-top: 15px;">
+      Comenzar actividad
+    </button>
+  </div>
+</div>
+
+<!-- S1: Detonador -->
+<div id="seccion-detonador" class="seccion">
+  <h2>🔌 El Misterio del Recibo de Luz</h2>
+  <p style="font-size: 1.05rem; margin: 15px 0;">
+    En la colonia Portales, doña Carmen recibió su recibo de luz de CFE. Al revisarlo, notó algo curioso:
+  </p>
+  <div style="background: #fff3cd; border: 2px solid #f9a825; border-radius: 8px; padding: 20px; margin: 20px 0;">
+    <p style="font-weight: 600; color: #856404;">💡 RECIBO CFE - Enero 2026</p>
+    <p style="margin: 10px 0;">• Cargo fijo mensual: $85.00</p>
+    <p style="margin: 10px 0;">• Costo por kWh (primeros 150): $0.85 por cada kWh</p>
+    <p style="margin: 10px 0;">• Costo por kWh (excedente): $2.40 por cada kWh adicional</p>
+    <p style="margin: 10px 0;">• Alumbrado público: 5% del consumo total</p>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Problema 1: ¿Cómo escribirías la tarifa?</h3>
+    <p>Si doña Carmen consume <strong>exactamente 150 kWh</strong>, ¿cuál sería el total a pagar?</p>
+    <p style="margin-top: 10px;">Anota tu cálculo (usa números):</p>
+    <input type="text" id="det1" placeholder=""
+           oninput="actualizarPreview('det1','preview_det1')">
+    <div id="preview_det1" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_det1"></div>
+    <button class="btn" onclick="verificarDet1()">Verificar</button>
+    <div id="feedback-det1"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Problema 2: Ahora con variables</h3>
+    <p>Si no sabes exactamente cuántos kWh consumió, pero sabes que consumió <strong>menos de 150 kWh</strong>, 
+       ¿cómo representarías el costo total usando la letra $x$ para los kWh consumidos?</p>
+    <p style="margin-top: 10px;">Escribe la expresión algebraica:</p>
+    <input type="text" id="det2" placeholder="ej. a + bx" 
+           oninput="actualizarPreview('det2','preview_det2')">
+    <div id="preview_det2" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_det2"></div>
+    <button class="btn" onclick="verificarDet2()">Verificar</button>
+    <div id="feedback-det2"></div>
+  </div>
+
+  <button class="btn btn-acento" onclick="navegarA('seccion-formalizacion')" style="margin-top: 20px;">
+    Continuar a la formalización →
+  </button>
+</div>
+
+<!-- S2: Formalización -->
+<div id="seccion-formalizacion" class="seccion">
+  <h2>📐 Anatomía de una Expresión Algebraica</h2>
+  
+  <p style="font-size: 1.05rem; margin: 20px 0;">
+    Una <strong>expresión algebraica</strong> es una combinación de números, letras (variables) 
+    y operaciones matemáticas. Es como una receta matemática que puede tomar diferentes valores.
+  </p>
+
+  <div class="cuaderno-box">
+    <h3>📓 Copia en tu cuaderno</h3>
+    
+    <h4 style="color: var(--primario); margin-top: 15px;">Componentes de una expresión algebraica:</h4>
+    
+    <p style="margin: 12px 0;"><strong>1. Variable:</strong> Letra que representa un valor desconocido. 
+    Ejemplos: $x$, $y$, $a$, $b$</p>
+    
+    <p style="margin: 12px 0;"><strong>2. Coeficiente:</strong> Número que multiplica a la variable.
+    <br>En $5x^3$, el coeficiente es $5$
+    <br>En $-7ab^2$, el coeficiente es $-7$</p>
+    
+    <p style="margin: 12px 0;"><strong>3. Exponente:</strong> Indica cuántas veces se multiplica la variable por sí misma.
+    <br>En $x^5$, el exponente es $5$ (significa $x \times x \times x \times x \times x$)</p>
+    
+    <p style="margin: 12px 0;"><strong>4. Parte literal:</strong> Las variables con sus exponentes.
+    <br>En $8x^4y^2$, la parte literal es $x^4y^2$</p>
+    
+    <p style="margin: 12px 0;"><strong>5. Término:</strong> Expresión separada por signos $+$ o $-$
+    <br>En $3x^2 - 5xy + 7$, hay tres términos</p>
+    
+    <p style="margin: 12px 0;"><strong>6. Grado de un término:</strong> Suma de los exponentes de todas las variables.
+    <br>$7x^3y^2$ tiene grado $3+2=5$
+    <br>$-4a^5b^2c$ tiene grado $5+2+1=8$</p>
+    
+    <h4 style="color: var(--primario); margin-top: 20px;">Clasificación por número de términos:</h4>
+    
+    <table class="tabla-comp">
+      <tr>
+        <th>Nombre</th>
+        <th>Número de términos</th>
+        <th>Ejemplo</th>
+      </tr>
+      <tr>
+        <td><strong>Monomio</strong></td>
+        <td>1 término</td>
+        <td>$5x^3y^2$</td>
+      </tr>
+      <tr>
+        <td><strong>Binomio</strong></td>
+        <td>2 términos</td>
+        <td>$3a^4 - 7b^2$</td>
+      </tr>
+      <tr>
+        <td><strong>Trinomio</strong></td>
+        <td>3 términos</td>
+        <td>$x^2 + 5x - 8$</td>
+      </tr>
+      <tr>
+        <td><strong>Polinomio</strong></td>
+        <td>2 o más términos</td>
+        <td>$2x^5 - 3x^3 + x^2 - 9x + 4$</td>
+      </tr>
+    </table>
+    
+    <h4 style="color: var(--primario); margin-top: 20px;">Términos semejantes:</h4>
+    <p style="margin: 12px 0;">
+      Dos términos son <strong>semejantes</strong> cuando tienen exactamente la misma parte literal 
+      (mismas variables con los mismos exponentes). Solo se diferencian en el coeficiente.
+    </p>
+    
+    <p style="margin: 12px 0;"><strong>Ejemplo 1:</strong> $7x^2y$ y $-3x^2y$ son semejantes</p>
+    <p style="margin: 12px 0;"><strong>Ejemplo 2:</strong> $5ab^3$ y $12ab^3$ son semejantes</p>
+    <p style="margin: 12px 0;"><strong>Ejemplo 3:</strong> $4x^2$ y $4x^3$ NO son semejantes (diferentes exponentes)</p>
+    
+    <h4 style="color: var(--primario); margin-top: 20px;">Ejemplo completo resuelto:</h4>
+    <p style="background: #f0f7f4; padding: 15px; border-radius: 8px; margin: 15px 0;">
+      Analiza: $6x^4y^2 - 3x^2y + 9xy^3 - 2x^4y^2 + x^2y$
+    </p>
+    <p><strong>Paso 1:</strong> Identificar términos semejantes:
+    <br>• $6x^4y^2$ y $-2x^4y^2$ (misma parte literal: $x^4y^2$)
+    <br>• $-3x^2y$ y $x^2y$ (misma parte literal: $x^2y$)
+    <br>• $9xy^3$ (no tiene semejante)</p>
+    
+    <p><strong>Paso 2:</strong> Clasificar:
+    <br>• Es un polinomio de 5 términos
+    <br>• Tiene 2 variables ($x$ e $y$)</p>
+    
+    <p><strong>Paso 3:</strong> Determinar el grado de cada término:
+    <br>• $6x^4y^2$: grado $4+2=6$
+    <br>• $-3x^2y$: grado $2+1=3$
+    <br>• $9xy^3$: grado $1+3=4$
+    <br>• $-2x^4y^2$: grado $4+2=6$
+    <br>• $x^2y$: grado $2+1=3$</p>
+    
+    <p><strong>Grado del polinomio:</strong> 6 (el mayor grado de sus términos)</p>
+  </div>
+
+  <button class="btn btn-acento" onclick="navegarA('seccion-practica-guiada')" style="margin-top: 20px;">
+    Continuar a práctica guiada →
+  </button>
+</div>
+
+<!-- S3: Práctica Guiada -->
+<div id="seccion-practica-guiada" class="seccion">
+  <h2>🎯 Práctica Guiada</h2>
+  <p style="font-size: 1.05rem; margin-bottom: 20px;">
+    Ahora vamos a practicar juntos. Lee cada ejercicio con cuidado y sigue los pasos.
+  </p>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 1: Identificar componentes</h3>
+    <p>En la expresión $-8x^5y^3z^2$, identifica:</p>
+    
+    <p style="margin-top: 15px;"><strong>a)</strong> ¿Cuál es el coeficiente?</p>
+    <input type="text" id="pg1a" placeholder="">
+    <button class="btn" onclick="verificarPG1a()">Verificar</button>
+    <div id="feedback-pg1a"></div>
+
+    <p style="margin-top: 15px;"><strong>b)</strong> ¿Cuál es el grado del término?</p>
+    <p style="font-size: 0.9rem; color: var(--texto-suave);">
+      Pista: Suma todos los exponentes
+    </p>
+    <input type="text" id="pg1b" placeholder="">
+    <button class="btn" onclick="verificarPG1b()">Verificar</button>
+    <div id="feedback-pg1b"></div>
+
+    <p style="margin-top: 15px;"><strong>c)</strong> Escribe la parte literal (sin coeficiente):</p>
+    <input type="text" id="pg1c" placeholder="ej. a^2bc^3"
+           oninput="actualizarPreview('pg1c','preview_pg1c')">
+    <div id="preview_pg1c" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_pg1c"></div>
+    <button class="btn" onclick="verificarPG1c()">Verificar</button>
+    <div id="feedback-pg1c"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 2: Clasificar expresiones</h3>
+    <p>La expresión $5a^6b^2 - 12a^3b^5 + 7ab$ es un:</p>
+    
+    <div style="margin: 15px 0;">
+      <label style="display: block; padding: 10px; margin: 5px 0; background: #f9f9fb; border: 2px solid var(--borde); border-radius: 8px; cursor: pointer;">
+        <input type="radio" name="pg2" value="monomio"> Monomio
+      </label>
+      <label style="display: block; padding: 10px; margin: 5px 0; background: #f9f9fb; border: 2px solid var(--borde); border-radius: 8px; cursor: pointer;">
+        <input type="radio" name="pg2" value="binomio"> Binomio
+      </label>
+      <label style="display: block; padding: 10px; margin: 5px 0; background: #f9f9fb; border: 2px solid var(--borde); border-radius: 8px; cursor: pointer;">
+        <input type="radio" name="pg2" value="trinomio"> Trinomio
+      </label>
+      <label style="display: block; padding: 10px; margin: 5px 0; background: #f9f9fb; border: 2px solid var(--borde); border-radius: 8px; cursor: pointer;">
+        <input type="radio" name="pg2" value="polinomio"> Polinomio (más de 3 términos)
+      </label>
+    </div>
+    <button class="btn" onclick="verificarPG2()">Verificar</button>
+    <div id="feedback-pg2"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 3: Términos semejantes</h3>
+    <p>Dada la expresión: $9x^3y^4 - 5xy^2 + 2x^3y^4 + 8xy^2 - x^3y^4$</p>
+    
+    <p style="margin-top: 15px;"><strong>a)</strong> ¿Cuántos términos semejantes a $9x^3y^4$ hay en total 
+    (incluyéndolo a él mismo)?</p>
+    <input type="text" id="pg3a" placeholder="">
+    <button class="btn" onclick="verificarPG3a()">Verificar</button>
+    <div id="feedback-pg3a"></div>
+
+    <p style="margin-top: 15px;"><strong>b)</strong> Si sumas los coeficientes de los términos semejantes a $9x^3y^4$, 
+    ¿qué coeficiente obtienes?</p>
+    <p style="font-size: 0.9rem; color: var(--texto-suave);">
+      Pista: $9 + 2 + (-1) = ?$
+    </p>
+    <input type="text" id="pg3b" placeholder="">
+    <button class="btn" onclick="verificarPG3b()">Verificar</button>
+    <div id="feedback-pg3b"></div>
+
+    <p style="margin-top: 15px;"><strong>c)</strong> Escribe la expresión simplificada (sumando términos semejantes):</p>
+    <input type="text" id="pg3c" placeholder="ej. ax^2y + bxy^2"
+           oninput="actualizarPreview('pg3c','preview_pg3c')">
+    <div id="preview_pg3c" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_pg3c"></div>
+    <button class="btn" onclick="verificarPG3c()">Verificar</button>
+    <div id="feedback-pg3c"></div>
+  </div>
+
+  <button class="btn btn-acento" onclick="navegarA('seccion-practica-independiente')" style="margin-top: 20px;">
+    Continuar a práctica independiente →
+  </button>
+</div>
+
+<!-- S4: Práctica Independiente -->
+<div id="seccion-practica-independiente" class="seccion">
+  <h2>💪 Práctica Independiente</h2>
+  <p style="font-size: 1.05rem; margin-bottom: 20px;">
+    Ahora es tu turno de resolver sin ayuda. ¡Demuestra lo que aprendiste!
+  </p>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 1: Grado de términos</h3>
+    <p>¿Cuál es el grado del término $-15a^4b^3c^7$?</p>
+    <input type="text" id="pi1" placeholder="">
+    <button class="btn" onclick="verificarPI1()">Verificar</button>
+    <div id="feedback-pi1"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 2: Parte literal</h3>
+    <p>Escribe la parte literal del término $23x^6y^2z^5$:</p>
+    <input type="text" id="pi2" placeholder="ej. a^3b^2"
+           oninput="actualizarPreview('pi2','preview_pi2')">
+    <div id="preview_pi2" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_pi2"></div>
+    <button class="btn" onclick="verificarPI2()">Verificar</button>
+    <div id="feedback-pi2"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 3: Expresión del metro</h3>
+    <p>En el Metro Línea 3 (Universidad-Indios Verdes), cada viaje cuesta $6.00, pero si compras 
+    una tarjeta recargable pagas $5.00 por viaje. La tarjeta cuesta $15.00.</p>
+    <p style="margin-top: 10px;">Escribe una expresión algebraica que represente el costo total 
+    de usar la tarjeta para $n$ viajes:</p>
+    <input type="text" id="pi3" placeholder="ej. a + bn"
+           oninput="actualizarPreview('pi3','preview_pi3')">
+    <div id="preview_pi3" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_pi3"></div>
+    <button class="btn" onclick="verificarPI3()">Verificar</button>
+    <div id="feedback-pi3"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 4: Simplificar</h3>
+    <p>Simplifica sumando términos semejantes: $7m^5n^2 + 4m^3n - 2m^5n^2 + 9m^3n - m^5n^2$</p>
+    <input type="text" id="pi4" placeholder="ej. am^2n + bmn^2"
+           oninput="actualizarPreview('pi4','preview_pi4')">
+    <div id="preview_pi4" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_pi4"></div>
+    <button class="btn" onclick="verificarPI4()">Verificar</button>
+    <div id="feedback-pi4"></div>
+  </div>
+
+  <div class="ejercicio">
+    <h3>Ejercicio 5: Mercado de Jamaica</h3>
+    <p>En el mercado de Jamaica, un puesto vende flores. Las rosas cuestan $p$ pesos cada una, 
+    los claveles $q$ pesos y los girasoles $r$ pesos. Un cliente compra 5 rosas, 8 claveles y 3 girasoles.</p>
+    <p style="margin-top: 10px;">Escribe la expresión que representa el costo total:</p>
+    <input type="text" id="pi5" placeholder="ej. ap + bq + cr"
+           oninput="actualizarPreview('pi5','preview_pi5')">
+    <div id="preview_pi5" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+    <div class="teclado-mat" id="teclado_pi5"></div>
+    <button class="btn" onclick="verificarPI5()">Verificar</button>
+    <div id="feedback-pi5"></div>
+  </div>
+
+  <button class="btn btn-acento" onclick="navegarA('seccion-construccion')" style="margin-top: 20px;">
+    Continuar a construcción →
+  </button>
+</div>
+
+<!-- S4b: Construcción -->
+<div id="seccion-construccion" class="seccion">
+  <h2>🔨 Construye tu Entendimiento</h2>
+  <p style="font-size: 1.05rem; margin-bottom: 20px;">
+    Esta sección no tiene calificación automática, pero el profesor podrá ver tu respuesta 
+    en la tabla de resultados.
+  </p>
+
+  <div class="ejercicio">
+    <h3>Reflexión: Expresiones algebraicas en la vida real</h3>
+    <p>Con tus propias palabras, explica:</p>
+    <p style="margin: 10px 0 5px; font-weight: 600;">
+      1. ¿Para qué sirven las expresiones algebraicas en situaciones cotidianas? 
+      Da al menos 2 ejemplos diferentes a los que vimos en clase.
+    </p>
+    <p style="margin: 10px 0 5px; font-weight: 600;">
+      2. ¿Por qué es importante identificar términos semejantes? 
+      ¿Qué ventaja nos da poder simplificar expresiones?
+    </p>
+    <p style="margin: 10px 0 5px; font-weight: 600;">
+      3. Inventa una situación de tu colonia o escuela donde usarías una expresión algebraica 
+      con al menos 2 variables. Descríbela y escribe la expresión.
+    </p>
+    <textarea id="construccion-texto" placeholder="Escribe aquí tu reflexión..."></textarea>
+  </div>
+
+  <button class="btn btn-acento" onclick="navegarA('seccion-quiz')" style="margin-top: 20px;">
+    Continuar al quiz →
+  </button>
+</div>
+
+<!-- S5: Quiz -->
+<div id="seccion-quiz" class="seccion">
+  <h2>📝 Quiz Final</h2>
+  <p style="font-size: 1.05rem; margin-bottom: 20px;">
+    10 preguntas · 6 puntos cada una · Total: 60 puntos → Calificación /10
+  </p>
+  <div id="quiz-container"></div>
+  <button class="btn btn-acento" onclick="verificarQuiz()" style="margin-top: 20px;">
+    Calificar Quiz
+  </button>
+  <div id="quiz-resultado"></div>
+</div>
+
+<!-- S6: Resultados -->
+<div id="seccion-resultados" class="seccion">
+  <h2>✅ Resultados</h2>
+  <table id="tabla-resultados"></table>
+  <button class="btn btn-acento" onclick="guardarPDF()" style="margin-top: 20px;">
+    💾 Guardar Resultados (PDF)
+  </button>
+</div>
+
+<div class="firma" onclick="togglePanelDocente()">Prof. Adrián CruzH</div>
+
+<!-- Panel Docente -->
+<div id="panel-docente" class="panel-docente">
+  <div class="panel-titulo" id="panel-titulo-drag">
+    <span>Panel Docente</span>
+    <button onclick="togglePanelDocente()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">×</button>
+  </div>
+  <div id="panel-auth">
+    <p style="margin: 10px 0;">Contraseña:</p>
+    <input type="password" id="panel-password" style="width: 100%; padding: 8px;">
+    <button class="btn" onclick="autenticarPanel()" style="width: 100%; margin-top: 10px;">
+      Ingresar
+    </button>
+  </div>
+  <div id="panel-contenido-auth" class="panel-contenido" style="display: none;"></div>
+  <div id="panel-botones" class="panel-botones" style="display: none;">
+    <button class="btn" onclick="avanzarSeccion()">Avanzar ▶</button>
+    <button class="btn" onclick="simularResultados()">Simular 🎲</button>
+  </div>
+</div>
+
+<script>
+// ============================================================================
+// VARIABLES GLOBALES
+// ============================================================================
+const resultados = {
+  nombre: '',
+  detonador: { det1: '', det2: '' },
+  practicaGuiada: { pg1a: '', pg1b: '', pg1c: '', pg2: '', pg3a: '', pg3b: '', pg3c: '' },
+  practicaIndep: { pi1: '', pi2: '', pi3: '', pi4: '', pi5: '' },
+  construccion: '',
+  quiz: [],
+  puntosQuiz: 0,
+  calificacion: 0
+};
+
+const respuestasEsperadas = {
+  det1: ['212.5', '212.50', '85+127.5', '85 + 127.5', '85+150*0.85', '85 + 150 * 0.85'],
+  det2: ['85+0.85x', '85 + 0.85x', '0.85x+85', '0.85x + 85'],
+  pg1a: ['-8'],
+  pg1b: ['10'],
+  pg1c: ['x^5y^3z^2', 'x^5y^3z^2'],
+  pg2: ['trinomio'],
+  pg3a: ['3'],
+  pg3b: ['10'],
+  pg3c: ['10x^3y^4+3xy^2', '10x^3y^4 + 3xy^2', '3xy^2+10x^3y^4', '3xy^2 + 10x^3y^4'],
+  pi1: ['14'],
+  pi2: ['x^6y^2z^5'],
+  pi3: ['15+5n', '15 + 5n', '5n+15', '5n + 15'],
+  pi4: ['4m^5n^2+13m^3n', '4m^5n^2 + 13m^3n', '13m^3n+4m^5n^2', '13m^3n + 4m^5n^2'],
+  pi5: ['5p+8q+3r', '5p + 8q + 3r']
+};
+
+let intentos = {
+  det1: 0, det2: 0, pg1a: 0, pg1b: 0, pg1c: 0, pg2: 0, pg3a: 0, pg3b: 0, pg3c: 0,
+  pi1: 0, pi2: 0, pi3: 0, pi4: 0, pi5: 0
+};
+
+let seccionActual = 'seccion-intro';
+let panelAutenticado = false;
+let offsetX = 0, offsetY = 0, isDragging = false;
+
+// ============================================================================
+// FUNCIONES DE NAVEGACIÓN
+// ============================================================================
+function iniciarActividad() {
+  const nombre = document.getElementById('nombre-alumno').value.trim();
+  if (!nombre) {
+    document.getElementById('nombre-alumno').style.borderColor = 'var(--error)';
+    return;
+  }
+  resultados.nombre = nombre;
+  navegarA('seccion-detonador');
+}
+
+function navegarA(seccionId) {
+  document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+  document.getElementById(seccionId).classList.add('activa');
+  seccionActual = seccionId;
+  window.scrollTo(0, 0);
+  
+  // Renderizar MathJax en la nueva sección
+  setTimeout(() => {
+    MathJax.typesetPromise([document.getElementById(seccionId)]);
+  }, 50);
+  
+  // Inicializar teclados si es necesario
+  if (seccionId === 'seccion-detonador') {
+    crearTeclado('teclado_det1', 'det1');
+    crearTeclado('teclado_det2', 'det2');
+  } else if (seccionId === 'seccion-practica-guiada') {
+    crearTeclado('teclado_pg1c', 'pg1c');
+    crearTeclado('teclado_pg3c', 'pg3c');
+  } else if (seccionId === 'seccion-practica-independiente') {
+    crearTeclado('teclado_pi2', 'pi2');
+    crearTeclado('teclado_pi3', 'pi3');
+    crearTeclado('teclado_pi4', 'pi4');
+    crearTeclado('teclado_pi5', 'pi5');
+  } else if (seccionId === 'seccion-quiz') {
+    renderQuiz();
+  }
+}
+
+// ============================================================================
+// TECLADO MATEMÁTICO
+// ============================================================================
+function crearTeclado(containerId, campoId) {
+  const container = document.getElementById(containerId);
+  if (!container || container.children.length > 0) return;
+  
+  // TECLADO MINIMALISTA por defecto
+  const simbolos = [
+    ['+', '−', '×', '÷', '=', '(', ')'],
+    ['^', '.', 'fraccion', '⌫', '✕']
+  ];
+  
+  simbolos.forEach(fila => {
+    fila.forEach(sim => {
+      const btn = document.createElement('button');
+      btn.textContent = sim === 'fraccion' ? 'a/b' : sim;
+      btn.onclick = (e) => {
+        e.preventDefault();
+        if (sim === '⌫') borrarUltimo(campoId);
+        else if (sim === '✕') limpiarCampo(campoId);
+        else insertarSimbolo(campoId, sim);
+      };
+      container.appendChild(btn);
+    });
+  });
+}
+
+function insertarSimbolo(campoId, simbolo) {
+  const campo = document.getElementById(campoId);
+  const inicio = campo.selectionStart;
+  const fin = campo.selectionEnd;
+  const val = campo.value;
+  let insertar = simbolo;
+  if (simbolo === 'fracción') insertar = '\\dfrac{}{}';
+  if (simbolo === '|x|') insertar = '|x|';
+  campo.value = val.substring(0, inicio) + insertar + val.substring(fin);
+  const nuevaPos = inicio + insertar.length;
+  campo.setSelectionRange(nuevaPos, nuevaPos);
+  campo.focus();
+  actualizarPreview(campoId, 'preview_' + campoId);
+}
+
+function borrarUltimo(campoId) {
+  const campo = document.getElementById(campoId);
+  const inicio = campo.selectionStart;
+  if (inicio > 0) {
+    campo.value = campo.value.substring(0, inicio - 1) + campo.value.substring(inicio);
+    campo.setSelectionRange(inicio - 1, inicio - 1);
+  }
+  actualizarPreview(campoId, 'preview_' + campoId);
+}
+
+function limpiarCampo(campoId) {
+  document.getElementById(campoId).value = '';
+  actualizarPreview(campoId, 'preview_' + campoId);
+}
+
+function actualizarPreview(campoId, previewId) {
+  const val = document.getElementById(campoId).value;
+  const pre = document.getElementById(previewId);
+  pre.innerHTML = val ? '$' + val + '$' : '<em style="color:#aaa">vista previa</em>';
+  MathJax.typesetPromise([pre]);
+}
+
+// ============================================================================
+// VERIFICACIONES - DETONADOR
+// ============================================================================
+function verificarDet1() {
+  const val = document.getElementById('det1').value.trim().replace(/\s/g, '');
+  intentos.det1++;
+  resultados.detonador.det1 = val;
+  
+  // Evaluar si es correcto (aproximado a 212.5)
+  let correcto = false;
+  try {
+    const num = parseFloat(val);
+    if (Math.abs(num - 212.5) < 0.1) correcto = true;
+  } catch(e) {}
+  
+  if (!correcto && val.includes('85')) {
+    if (val.includes('127.5') || (val.includes('150') && val.includes('0.85'))) {
+      correcto = true;
+    }
+  }
+  
+  const fb = document.getElementById('feedback-det1');
+  if (correcto) {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Correcto! El total es $212.50 (cargo fijo $85 + 150 kWh × $0.85 = $85 + $127.50)';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.det1 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: 85 + 150(0.85) = 212.50. Continuemos...';
+      setTimeout(() => navegarA('seccion-formalizacion'), 2000);
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.det1}/3). Pista: Cargo fijo + (kWh × precio)`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarDet2() {
+  const val = document.getElementById('det2').value.trim().replace(/\s/g, '');
+  intentos.det2++;
+  resultados.detonador.det2 = val;
+  
+  const correcto = respuestasEsperadas.det2.some(r => 
+    val.replace(/\s/g, '') === r.replace(/\s/g, '')
+  );
+  
+  const fb = document.getElementById('feedback-det2');
+  if (correcto) {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Excelente! La expresión $85 + 0.85x$ representa el costo total, donde $x$ es el consumo en kWh.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.det2 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $85 + 0.85x$. Esta es tu primera expresión algebraica. ¡Avancemos!';
+      setTimeout(() => navegarA('seccion-formalizacion'), 2000);
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.det2}/3). Usa $x$ para representar los kWh consumidos.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+// ============================================================================
+// VERIFICACIONES - PRÁCTICA GUIADA
+// ============================================================================
+function verificarPG1a() {
+  const val = document.getElementById('pg1a').value.trim();
+  intentos.pg1a++;
+  resultados.practicaGuiada.pg1a = val;
+  
+  const fb = document.getElementById('feedback-pg1a');
+  if (val === '-8') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Correcto! El coeficiente es $-8$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg1a >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $-8$. Es el número que multiplica a las variables.';
+    } else {
+      fb.innerHTML = `✗ Revisa (${intentos.pg1a}/3). El coeficiente es el número al inicio del término.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPG1b() {
+  const val = document.getElementById('pg1b').value.trim();
+  intentos.pg1b++;
+  resultados.practicaGuiada.pg1b = val;
+  
+  const fb = document.getElementById('feedback-pg1b');
+  if (val === '10') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Perfecto! Grado = $5 + 3 + 2 = 10$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg1b >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $10$. Se suman los exponentes: $5 + 3 + 2 = 10$.';
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.pg1b}/3). Suma los exponentes de todas las variables.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPG1c() {
+  const val = document.getElementById('pg1c').value.trim().replace(/\s/g, '');
+  intentos.pg1c++;
+  resultados.practicaGuiada.pg1c = val;
+  
+  const fb = document.getElementById('feedback-pg1c');
+  if (val === 'x^5y^3z^2' || val === 'x^{5}y^{3}z^{2}') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Exacto! La parte literal es $x^5y^3z^2$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg1c >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $x^5y^3z^2$. Son las variables con sus exponentes, sin el coeficiente.';
+    } else {
+      fb.innerHTML = `✗ Revisa (${intentos.pg1c}/3). Escribe solo las letras con sus exponentes.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPG2() {
+  const seleccionado = document.querySelector('input[name="pg2"]:checked');
+  if (!seleccionado) return;
+  
+  const val = seleccionado.value;
+  intentos.pg2++;
+  resultados.practicaGuiada.pg2 = val;
+  
+  const fb = document.getElementById('feedback-pg2');
+  if (val === 'trinomio') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Correcto! Es un trinomio porque tiene 3 términos separados por $+$ o $-$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg2 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: Trinomio. Cuenta los términos separados por $+$ o $-$: hay 3.';
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.pg2}/3). Cuenta cuántos términos están separados por $+$ o $-$.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPG3a() {
+  const val = document.getElementById('pg3a').value.trim();
+  intentos.pg3a++;
+  resultados.practicaGuiada.pg3a = val;
+  
+  const fb = document.getElementById('feedback-pg3a');
+  if (val === '3') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Bien! Hay 3 términos con parte literal $x^3y^4$: $9x^3y^4$, $2x^3y^4$ y $-x^3y^4$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg3a >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $3$. Los términos $9x^3y^4$, $2x^3y^4$ y $-x^3y^4$ son semejantes.';
+    } else {
+      fb.innerHTML = `✗ Revisa (${intentos.pg3a}/3). Busca todos los términos que tengan exactamente $x^3y^4$.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPG3b() {
+  const val = document.getElementById('pg3b').value.trim();
+  intentos.pg3b++;
+  resultados.practicaGuiada.pg3b = val;
+  
+  const fb = document.getElementById('feedback-pg3b');
+  if (val === '10') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Excelente! $9 + 2 + (-1) = 10$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg3b >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $10$. Suma: $9 + 2 + (-1) = 9 + 2 - 1 = 10$.';
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.pg3b}/3). Suma los coeficientes: $9 + 2 + (-1)$.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPG3c() {
+  const val = document.getElementById('pg3c').value.trim().replace(/\s/g, '');
+  intentos.pg3c++;
+  resultados.practicaGuiada.pg3c = val;
+  
+  const correcto = respuestasEsperadas.pg3c.some(r => 
+    val.replace(/\s/g, '') === r.replace(/\s/g, '')
+  );
+  
+  const fb = document.getElementById('feedback-pg3c');
+  if (correcto) {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Perfecto! La expresión simplificada es $10x^3y^4 + 3xy^2$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pg3c >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $10x^3y^4 + 3xy^2$. Suma términos semejantes: $(9+2-1)x^3y^4 + (-5+8)xy^2$.';
+    } else {
+      fb.innerHTML = `✗ Revisa (${intentos.pg3c}/3). Agrupa y suma los términos con la misma parte literal.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+// ============================================================================
+// VERIFICACIONES - PRÁCTICA INDEPENDIENTE
+// ============================================================================
+function verificarPI1() {
+  const val = document.getElementById('pi1').value.trim();
+  intentos.pi1++;
+  resultados.practicaIndep.pi1 = val;
+  
+  const fb = document.getElementById('feedback-pi1');
+  if (val === '14') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Correcto! Grado = $4 + 3 + 7 = 14$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pi1 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $14$. Suma: $4 + 3 + 7 = 14$.';
+      setTimeout(() => document.getElementById('pi2').focus(), 1500);
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.pi1}/3). Suma todos los exponentes.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPI2() {
+  const val = document.getElementById('pi2').value.trim().replace(/\s/g, '');
+  intentos.pi2++;
+  resultados.practicaIndep.pi2 = val;
+  
+  const fb = document.getElementById('feedback-pi2');
+  if (val === 'x^6y^2z^5' || val === 'x^{6}y^{2}z^{5}') {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Perfecto! La parte literal es $x^6y^2z^5$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pi2 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $x^6y^2z^5$. Solo las variables con sus exponentes.';
+      setTimeout(() => document.getElementById('pi3').focus(), 1500);
+    } else {
+      fb.innerHTML = `✗ Revisa (${intentos.pi2}/3). Omite el coeficiente numérico.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPI3() {
+  const val = document.getElementById('pi3').value.trim().replace(/\s/g, '');
+  intentos.pi3++;
+  resultados.practicaIndep.pi3 = val;
+  
+  const correcto = respuestasEsperadas.pi3.some(r => 
+    val.replace(/\s/g, '') === r.replace(/\s/g, '')
+  );
+  
+  const fb = document.getElementById('feedback-pi3');
+  if (correcto) {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Excelente! La expresión es $15 + 5n$ (costo de tarjeta + $5 por viaje).';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pi3 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $15 + 5n$. Costo inicial de tarjeta más $5 por cada uno de los $n$ viajes.';
+      setTimeout(() => document.getElementById('pi4').focus(), 1500);
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.pi3}/3). ¿Cuánto pagas en total por la tarjeta y los viajes?`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPI4() {
+  const val = document.getElementById('pi4').value.trim().replace(/\s/g, '');
+  intentos.pi4++;
+  resultados.practicaIndep.pi4 = val;
+  
+  const correcto = respuestasEsperadas.pi4.some(r => 
+    val.replace(/\s/g, '') === r.replace(/\s/g, '')
+  );
+  
+  const fb = document.getElementById('feedback-pi4');
+  if (correcto) {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Bien! Simplificado: $4m^5n^2 + 13m^3n$ (suma $7-2-1$ y $4+9$).';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pi4 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $4m^5n^2 + 13m^3n$. Agrupa: $(7-2-1)m^5n^2 + (4+9)m^3n$.';
+      setTimeout(() => document.getElementById('pi5').focus(), 1500);
+    } else {
+      fb.innerHTML = `✗ Revisa (${intentos.pi4}/3). Identifica y suma los términos semejantes.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+function verificarPI5() {
+  const val = document.getElementById('pi5').value.trim().replace(/\s/g, '');
+  intentos.pi5++;
+  resultados.practicaIndep.pi5 = val;
+  
+  const correcto = respuestasEsperadas.pi5.some(r => 
+    val.replace(/\s/g, '') === r.replace(/\s/g, '')
+  );
+  
+  const fb = document.getElementById('feedback-pi5');
+  if (correcto) {
+    fb.className = 'feedback correcto';
+    fb.innerHTML = '✓ ¡Perfecto! La expresión es $5p + 8q + 3r$.';
+  } else {
+    fb.className = 'feedback incorrecto';
+    if (intentos.pi5 >= 3) {
+      fb.innerHTML = '✗ Respuesta esperada: $5p + 8q + 3r$. Multiplica cantidad por precio de cada tipo.';
+      setTimeout(() => navegarA('seccion-construccion'), 1500);
+    } else {
+      fb.innerHTML = `✗ Intenta de nuevo (${intentos.pi5}/3). 5 rosas a $p$, 8 claveles a $q$, 3 girasoles a $r$.`;
+    }
+  }
+  MathJax.typesetPromise([fb]);
+}
+
+// ============================================================================
+// QUIZ
+// ============================================================================
+function genOpts(correcta, d1, d2, d3, d4) {
+  const opts = [correcta, d1, d2, d3, d4];
+  for (let i = opts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [opts[i], opts[j]] = [opts[j], opts[i]];
+  }
+  return opts;
+}
+
+const preguntasQuiz = [
+  {
+    pregunta: '¿Cuál es el coeficiente en el término $-12x^3y^5$?',
+    correcta: '$-12$',
+    distractores: ['$12$', '$3$', '$-3$', '$5$']
+  },
+  {
+    pregunta: '¿Cuál es el grado del término $6a^2b^4c^3$?',
+    correcta: '$9$',
+    distractores: ['$4$', '$3$', '$2$', '$24$']
+  },
+  {
+    pregunta: 'La expresión $8x^5 - 3x^2 + 7$ es un:',
+    correcta: 'Trinomio',
+    distractores: ['Monomio', 'Binomio', 'Polinomio de 4 términos', 'Polinomio de 5 términos']
+  },
+  {
+    pregunta: '¿Cuáles términos son semejantes a $5m^3n^2$?',
+    correcta: '$-7m^3n^2$ y $12m^3n^2$',
+    distractores: ['$5m^2n^3$ y $-7m^2n^3$', '$5m^3n$ y $12mn^2$', '$m^3n^2$ y $5m^3$', '$5mn$ y $-7mn$']
+  },
+  {
+    pregunta: 'Simplifica: $9x^4y - 4x^4y + 2x^4y$',
+    correcta: '$7x^4y$',
+    distractores: ['$15x^4y$', '$11x^4y$', '$5x^4y$', '$7x^{12}y^3$']
+  },
+  {
+    pregunta: '¿Cuál es la parte literal de $-15a^6b^2c^4$?',
+    correcta: '$a^6b^2c^4$',
+    distractores: ['$-15$', '$6+2+4$', '$15a^6b^2c^4$', '$abc$']
+  },
+  {
+    pregunta: 'En un puesto de tacos, cada taco cuesta $t$ pesos y cada refresco $r$ pesos. Si compras 4 tacos y 2 refrescos, el costo total es:',
+    correcta: '$4t + 2r$',
+    distractores: ['$6tr$', '$4 + 2$', '$t + r$', '$\\dfrac{4}{t} + \\dfrac{2}{r}$']
+  },
+  {
+    pregunta: '¿Cuántos términos tiene la expresión $7p^3 - 2pq + 5q^2 - p^3 + 8$?',
+    correcta: '$5$',
+    distractores: ['$3$', '$4$', '$6$', '$2$']
+  },
+  {
+    pregunta: 'Simplifica: $3x^2y + 5xy^2 - x^2y + 2xy^2$',
+    correcta: '$2x^2y + 7xy^2$',
+    distractores: ['$8x^2y + 7xy^2$', '$2x^2y + 3xy^2$', '$4x^2y + 7xy^2$', '$10x^3y^3$']
+  },
+  {
+    pregunta: 'El grado del polinomio $5x^7 - 3x^4y^2 + 2xy^5 - 9$ es:',
+    correcta: '$7$',
+    distractores: ['$6$', '$4$', '$9$', '$5$']
+  }
+];
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  
+  preguntasQuiz.forEach((p, idx) => {
+    const opciones = genOpts(p.correcta, ...p.distractores);
+    
+    const div = document.createElement('div');
+    div.className = 'ejercicio';
+    div.innerHTML = `
+      <h3>Pregunta ${idx + 1}</h3>
+      <p>${p.pregunta}</p>
+      <div class="quiz-opciones">
+        ${opciones.map((op, i) => `
+          <label>
+            <input type="radio" name="quiz${idx}" value="${op}">
+            <span>${op}</span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  
+  MathJax.typesetPromise([container]);
+}
+
+function verificarQuiz() {
+  let puntos = 0;
+  resultados.quiz = [];
+  
+  preguntasQuiz.forEach((p, idx) => {
+    const seleccionado = document.querySelector(`input[name="quiz${idx}"]:checked`);
+    const respuesta = seleccionado ? seleccionado.value : 'Sin respuesta';
+    resultados.quiz.push({
+      pregunta: p.pregunta,
+      respuesta: respuesta,
+      correcta: p.correcta,
+      esCorrecta: respuesta === p.correcta
+    });
+    if (respuesta === p.correcta) puntos += 6;
+  });
+  
+  resultados.puntosQuiz = puntos;
+  resultados.calificacion = (puntos / 60) * 10;
+  
+  // Guardar construcción
+  resultados.construccion = document.getElementById('construccion-texto').value;
+  
+  const resDiv = document.getElementById('quiz-resultado');
+  resDiv.className = 'feedback ' + (puntos >= 36 ? 'correcto' : 'incorrecto');
+  resDiv.innerHTML = `
+    <h3>Resultado: ${puntos}/60 puntos</h3>
+    <p style="font-size: 1.2rem; margin: 10px 0;">
+      Calificación: <strong>${resultados.calificacion.toFixed(1)}/10</strong>
+    </p>
+  `;
+  
+  setTimeout(() => {
+    mostrarResultados();
+    navegarA('seccion-resultados');
+  }, 2000);
+}
+
+// ============================================================================
+// TABLA DE RESULTADOS
+// ============================================================================
+function mostrarResultados() {
+  const tabla = document.getElementById('tabla-resultados');
+  
+  let html = `
+    <tr>
+      <td colspan="3" style="text-align: center;">
+        <strong>Nombre:</strong> ${resultados.nombre} | 
+        <strong>Calificación:</strong> ${resultados.calificacion.toFixed(1)}/10
+      </td>
+    </tr>
+    <tr>
+      <th>Pregunta</th>
+      <th>Resp. Alumno</th>
+      <th>Resp. Esperada</th>
+    </tr>
+  `;
+  
+  // Detonador
+  html += `
+    <tr><td colspan="3" style="background: #e8f4fd; font-weight: 700;">DETONADOR</td></tr>
+  `;
+  
+  // Det1: Verificar si es correcto
+  let det1Correcto = false;
+  try {
+    const num = parseFloat(resultados.detonador.det1);
+    if (Math.abs(num - 212.5) < 0.1) det1Correcto = true;
+  } catch(e) {}
+  const det1Val = resultados.detonador.det1.replace(/\s/g, '');
+  if (!det1Correcto && det1Val.includes('85')) {
+    if (det1Val.includes('127.5') || (det1Val.includes('150') && det1Val.includes('0.85'))) {
+      det1Correcto = true;
+    }
+  }
+  
+  html += `
+    <tr>
+      <td>Costo 150 kWh</td>
+      <td${det1Correcto ? ' class="respuesta-correcta"' : ''}>${resultados.detonador.det1}</td>
+      <td${det1Correcto ? ' class="respuesta-correcta"' : ''}>212.5</td>
+    </tr>
+  `;
+  
+  // Det2: Verificar si es correcto
+  const det2Val = resultados.detonador.det2.replace(/\s/g, '');
+  const det2Correcto = respuestasEsperadas.det2.some(r => 
+    det2Val === r.replace(/\s/g, '')
+  );
+  
+  html += `
+    <tr>
+      <td>Expresión algebraica</td>
+      <td${det2Correcto ? ' class="respuesta-correcta"' : ''}>$${resultados.detonador.det2}$</td>
+      <td${det2Correcto ? ' class="respuesta-correcta"' : ''}>$85 + 0.85x$</td>
+    </tr>
+  `;
+  
+  // Práctica Guiada
+  html += `
+    <tr><td colspan="3" style="background: #e8f4fd; font-weight: 700;">PRÁCTICA GUIADA</td></tr>
+  `;
+  
+  const pg1aCorrecto = resultados.practicaGuiada.pg1a === '-8';
+  html += `<tr><td>PG1a: Coeficiente</td><td${pg1aCorrecto ? ' class="respuesta-correcta"' : ''}>${resultados.practicaGuiada.pg1a}</td><td${pg1aCorrecto ? ' class="respuesta-correcta"' : ''}>-8</td></tr>`;
+  
+  const pg1bCorrecto = resultados.practicaGuiada.pg1b === '10';
+  html += `<tr><td>PG1b: Grado</td><td${pg1bCorrecto ? ' class="respuesta-correcta"' : ''}>${resultados.practicaGuiada.pg1b}</td><td${pg1bCorrecto ? ' class="respuesta-correcta"' : ''}>10</td></tr>`;
+  
+  const pg1cVal = resultados.practicaGuiada.pg1c.replace(/\s/g, '');
+  const pg1cCorrecto = pg1cVal === 'x^5y^3z^2' || pg1cVal === 'x^{5}y^{3}z^{2}';
+  html += `<tr><td>PG1c: Parte literal</td><td${pg1cCorrecto ? ' class="respuesta-correcta"' : ''}>$${resultados.practicaGuiada.pg1c}$</td><td${pg1cCorrecto ? ' class="respuesta-correcta"' : ''}>$x^5y^3z^2$</td></tr>`;
+  
+  const pg2Correcto = resultados.practicaGuiada.pg2 === 'trinomio';
+  html += `<tr><td>PG2: Clasificación</td><td${pg2Correcto ? ' class="respuesta-correcta"' : ''}>${resultados.practicaGuiada.pg2}</td><td${pg2Correcto ? ' class="respuesta-correcta"' : ''}>trinomio</td></tr>`;
+  
+  const pg3aCorrecto = resultados.practicaGuiada.pg3a === '3';
+  html += `<tr><td>PG3a: Términos semejantes</td><td${pg3aCorrecto ? ' class="respuesta-correcta"' : ''}>${resultados.practicaGuiada.pg3a}</td><td${pg3aCorrecto ? ' class="respuesta-correcta"' : ''}>3</td></tr>`;
+  
+  const pg3bCorrecto = resultados.practicaGuiada.pg3b === '10';
+  html += `<tr><td>PG3b: Suma coeficientes</td><td${pg3bCorrecto ? ' class="respuesta-correcta"' : ''}>${resultados.practicaGuiada.pg3b}</td><td${pg3bCorrecto ? ' class="respuesta-correcta"' : ''}>10</td></tr>`;
+  
+  const pg3cVal = resultados.practicaGuiada.pg3c.replace(/\s/g, '');
+  const pg3cCorrecto = respuestasEsperadas.pg3c.some(r => pg3cVal === r.replace(/\s/g, ''));
+  html += `<tr><td>PG3c: Simplificada</td><td${pg3cCorrecto ? ' class="respuesta-correcta"' : ''}>$${resultados.practicaGuiada.pg3c}$</td><td${pg3cCorrecto ? ' class="respuesta-correcta"' : ''}>$10x^3y^4+3xy^2$</td></tr>`;
+
+  
+  // Práctica Independiente
+  html += `
+    <tr><td colspan="3" style="background: #e8f4fd; font-weight: 700;">PRÁCTICA INDEPENDIENTE</td></tr>
+  `;
+  
+  const pi1Correcto = resultados.practicaIndep.pi1 === '14';
+  html += `<tr><td>PI1: Grado</td><td${pi1Correcto ? ' class="respuesta-correcta"' : ''}>${resultados.practicaIndep.pi1}</td><td${pi1Correcto ? ' class="respuesta-correcta"' : ''}>14</td></tr>`;
+  
+  const pi2Val = resultados.practicaIndep.pi2.replace(/\s/g, '');
+  const pi2Correcto = pi2Val === 'x^6y^2z^5' || pi2Val === 'x^{6}y^{2}z^{5}';
+  html += `<tr><td>PI2: Parte literal</td><td${pi2Correcto ? ' class="respuesta-correcta"' : ''}>$${resultados.practicaIndep.pi2}$</td><td${pi2Correcto ? ' class="respuesta-correcta"' : ''}>$x^6y^2z^5$</td></tr>`;
+  
+  const pi3Val = resultados.practicaIndep.pi3.replace(/\s/g, '');
+  const pi3Correcto = respuestasEsperadas.pi3.some(r => pi3Val === r.replace(/\s/g, ''));
+  html += `<tr><td>PI3: Metro</td><td${pi3Correcto ? ' class="respuesta-correcta"' : ''}>$${resultados.practicaIndep.pi3}$</td><td${pi3Correcto ? ' class="respuesta-correcta"' : ''}>$15+5n$</td></tr>`;
+  
+  const pi4Val = resultados.practicaIndep.pi4.replace(/\s/g, '');
+  const pi4Correcto = respuestasEsperadas.pi4.some(r => pi4Val === r.replace(/\s/g, ''));
+  html += `<tr><td>PI4: Simplificar</td><td${pi4Correcto ? ' class="respuesta-correcta"' : ''}>$${resultados.practicaIndep.pi4}$</td><td${pi4Correcto ? ' class="respuesta-correcta"' : ''}>$4m^5n^2+13m^3n$</td></tr>`;
+  
+  const pi5Val = resultados.practicaIndep.pi5.replace(/\s/g, '');
+  const pi5Correcto = respuestasEsperadas.pi5.some(r => pi5Val === r.replace(/\s/g, ''));
+  html += `<tr><td>PI5: Mercado</td><td${pi5Correcto ? ' class="respuesta-correcta"' : ''}>$${resultados.practicaIndep.pi5}$</td><td${pi5Correcto ? ' class="respuesta-correcta"' : ''}>$5p+8q+3r$</td></tr>`;
+
+  
+  // Construcción
+  html += `
+    <tr><td colspan="3" style="background: #e8f4fd; font-weight: 700;">CONSTRUCCIÓN</td></tr>
+    <tr><td colspan="3">${resultados.construccion || 'Sin respuesta'}</td></tr>
+  `;
+  
+  // Quiz
+  html += `
+    <tr><td colspan="3" style="background: #e8f4fd; font-weight: 700;">QUIZ (${resultados.puntosQuiz}/60 pts)</td></tr>
+  `;
+  
+  resultados.quiz.forEach((q, idx) => {
+    html += `
+      <tr>
+        <td>Q${idx + 1}: ${q.pregunta}</td>
+        <td${q.esCorrecta ? ' class="respuesta-correcta"' : ''}>${q.respuesta}</td>
+        <td${q.esCorrecta ? ' class="respuesta-correcta"' : ''}>${q.correcta}</td>
+      </tr>
+    `;
+  });
+  
+  tabla.innerHTML = html;
+  MathJax.typesetPromise([tabla]);
+}
+
+function guardarPDF() {
+  window.print();
+}
+
+// ============================================================================
+// PANEL DOCENTE
+// ============================================================================
+function togglePanelDocente() {
+  const panel = document.getElementById('panel-docente');
+  panel.classList.toggle('activo');
+}
+
+function autenticarPanel() {
+  const pass = document.getElementById('panel-password').value;
+  if (pass === '890') {
+    panelAutenticado = true;
+    document.getElementById('panel-auth').style.display = 'none';
+    document.getElementById('panel-contenido-auth').style.display = 'block';
+    document.getElementById('panel-botones').style.display = 'flex';
+    actualizarPanelDocente();
+  } else {
+    document.getElementById('panel-password').style.borderColor = 'var(--error)';
+  }
+}
+
+function actualizarPanelDocente() {
+  const contenido = document.getElementById('panel-contenido-auth');
+  contenido.innerHTML = `
+    <p><strong>Sección actual:</strong> ${seccionActual}</p>
+    <p><strong>Alumno:</strong> ${resultados.nombre || 'Sin nombre'}</p>
+    <p><strong>Intentos:</strong></p>
+    <ul style="font-size: 0.75rem; margin-left: 15px;">
+      ${Object.entries(intentos).map(([k, v]) => `<li>${k}: ${v}</li>`).join('')}
+    </ul>
+    <p><strong>Calificación actual:</strong> ${resultados.calificacion.toFixed(1)}/10</p>
+  `;
+}
+
+function avanzarSeccion() {
+  const secciones = [
+    'seccion-intro', 'seccion-detonador', 'seccion-formalizacion',
+    'seccion-practica-guiada', 'seccion-practica-independiente',
+    'seccion-construccion', 'seccion-quiz', 'seccion-resultados'
+  ];
+  const idx = secciones.indexOf(seccionActual);
+  if (idx < secciones.length - 1) {
+    navegarA(secciones[idx + 1]);
+  }
+  actualizarPanelDocente();
+}
+
+function simularResultados() {
+  resultados.nombre = resultados.nombre || 'Alumno Simulado';
+  resultados.detonador = { det1: '212.5', det2: '85+0.85x' };
+  resultados.practicaGuiada = {
+    pg1a: '-8', pg1b: '10', pg1c: 'x^5y^3z^2',
+    pg2: 'trinomio', pg3a: '3', pg3b: '10', pg3c: '10x^3y^4+3xy^2'
+  };
+  resultados.practicaIndep = {
+    pi1: '14', pi2: 'x^6y^2z^5', pi3: '15+5n',
+    pi4: '4m^5n^2+13m^3n', pi5: '5p+8q+3r'
+  };
+  resultados.construccion = 'Ejemplo de construcción simulada.';
+  resultados.quiz = preguntasQuiz.map((p, i) => ({
+    pregunta: p.pregunta,
+    respuesta: i % 2 === 0 ? p.correcta : p.distractores[0],
+    correcta: p.correcta,
+    esCorrecta: i % 2 === 0
+  }));
+  resultados.puntosQuiz = 30;
+  resultados.calificacion = 5.0;
+  
+  mostrarResultados();
+  navegarA('seccion-resultados');
+  actualizarPanelDocente();
+}
+
+// Drag del panel
+document.addEventListener('DOMContentLoaded', () => {
+  const panel = document.getElementById('panel-docente');
+  const titulo = document.getElementById('panel-titulo-drag');
+  
+  titulo.addEventListener('mousedown', iniciarDrag);
+  titulo.addEventListener('touchstart', iniciarDrag);
+  
+  function iniciarDrag(e) {
+    isDragging = true;
+    const rect = panel.getBoundingClientRect();
+    offsetX = (e.clientX || e.touches[0].clientX) - rect.left;
+    offsetY = (e.clientY || e.touches[0].clientY) - rect.top;
+  }
+  
+  document.addEventListener('mousemove', moverPanel);
+  document.addEventListener('touchmove', moverPanel);
+  
+  function moverPanel(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = (e.clientX || e.touches[0].clientX) - offsetX;
+    const y = (e.clientY || e.touches[0].clientY) - offsetY;
+    panel.style.left = x + 'px';
+    panel.style.top = y + 'px';
+    panel.style.transform = 'none';
+  }
+  
+  document.addEventListener('mouseup', () => isDragging = false);
+  document.addEventListener('touchend', () => isDragging = false);
+});
+</script>
+
+</body>
+</html>
