@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 8 · Suma y Resta de Polinomios</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+<style>
+:root {
+  --fondo: #f4f6f9;
+  --superficie: #ffffff;
+  --primario: #1a4a7a;
+  --primario-claro: #2563a8;
+  --acento: #f0a500;
+  --acento2: #e05c2a;
+  --texto: #1a1a2e;
+  --texto-suave: #4a5568;
+  --borde: #d1d9e6;
+  --error: #c62828;
+  --ok: #2e7d32;
+  --ok-bg: #e8f5e9;
+  --error-bg: #ffebee;
+  --neutro-bg: #f0f4ff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+/* ── HEADER ─────────────────────────────── */
+.header-app {
+  background: var(--primario);
+  color: #fff;
+  padding: 14px 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+.header-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.55rem;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.header-subtitulo {
+  font-size: 0.72rem;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+.btn-docente {
+  font-size: 0.7rem;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.btn-docente:hover { background: rgba(255,255,255,0.25); }
+
+/* ── NAV SECCIONES ───────────────────────── */
+.nav-secciones {
+  display: flex;
+  overflow-x: auto;
+  background: var(--primario-claro);
+  padding: 0 6px;
+  gap: 2px;
+  scrollbar-width: none;
+}
+.nav-secciones::-webkit-scrollbar { display: none; }
+.nav-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  background: transparent;
+  border: none;
+  padding: 9px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+.nav-btn.activo { color: #fff; border-bottom-color: var(--acento); }
+.nav-btn:hover { color: #fff; }
+
+/* ── SECCIONES ───────────────────────────── */
+.seccion { display: none; padding: 20px 16px 100px; max-width: 700px; margin: 0 auto; }
+.seccion.activa { display: block; }
+
+/* ── TARJETAS ────────────────────────────── */
+.card {
+  background: var(--superficie);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  border: 1px solid var(--borde);
+}
+.card-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.25rem;
+  color: var(--primario);
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.chip {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--primario);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.chip.acento { background: var(--acento); color: var(--texto); }
+.chip.ok { background: var(--ok); }
+.chip.err { background: var(--error); }
+
+/* ── BOTONES PRINCIPALES ─────────────────── */
+.btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 11px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primario { background: var(--primario); color: #fff; }
+.btn-primario:hover { background: var(--primario-claro); }
+.btn-acento { background: var(--acento); color: var(--texto); }
+.btn-acento:hover { filter: brightness(1.08); }
+.btn-sm { font-size: 0.82rem; padding: 7px 14px; }
+.btn-bloque { width: 100%; justify-content: center; margin-top: 10px; }
+
+/* ── INPUT + TECLADO ─────────────────────── */
+.campo-grupo { margin-bottom: 18px; }
+.campo-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--texto-suave);
+  margin-bottom: 5px;
+  display: block;
+}
+.campo-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Nunito', sans-serif;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+.campo-input:focus { outline: none; border-color: var(--primario-claro); }
+.live-preview {
+  min-height: 32px;
+  padding: 6px 10px;
+  background: var(--neutro-bg);
+  border-radius: 6px;
+  margin-top: 5px;
+  font-size: 1.05rem;
+  color: var(--primario);
+}
+.teclado-mat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.teclado-mat button {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f0f0f0;
+  cursor: pointer;
+  touch-action: manipulation;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.teclado-mat button:hover { background: #dde3ff; }
+.teclado-mat button.borrar { background: #ffeaea; border-color: #ffbbbb; }
+.teclado-mat button.limpiar { background: #f5f5f5; }
+
+/* ── FEEDBACK ────────────────────────────── */
+.feedback {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: none;
+}
+.feedback.ok { background: var(--ok-bg); color: var(--ok); border: 1px solid #a5d6a7; }
+.feedback.err { background: var(--error-bg); color: var(--error); border: 1px solid #ffcdd2; }
+.feedback.info { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+.feedback.visible { display: block; }
+
+/* ── PASOS ───────────────────────────────── */
+.paso-bloque {
+  background: var(--neutro-bg);
+  border-left: 4px solid var(--primario-claro);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  font-size: 0.92rem;
+}
+.paso-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: var(--primario);
+  margin-bottom: 4px;
+}
+
+/* ── CUADERNO ────────────────────────────── */
+.cuaderno-box {
+  background: #fffde7;
+  border-left: 5px solid var(--acento);
+  border-radius: 0 8px 8px 0;
+  padding: 18px 20px;
+  margin: 20px 0;
+}
+.cuaderno-box h3 { color: #e65100; margin-bottom: 12px; }
+.cuaderno-box p, .cuaderno-box li { font-size: 0.92rem; line-height: 1.7; }
+.cuaderno-box ul { padding-left: 18px; margin-top: 6px; }
+
+/* ── QUIZ ────────────────────────────────── */
+.quiz-pregunta { margin-bottom: 24px; }
+.quiz-enunciado { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; }
+.quiz-opciones { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff;
+  font-size: 0.9rem;
+  font-family: 'Nunito', sans-serif;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.quiz-opcion:hover { border-color: var(--primario-claro); background: var(--neutro-bg); }
+.quiz-opcion.seleccionada { border-color: var(--primario); background: #e8f0ff; }
+.quiz-opcion.correcta { border-color: var(--ok); background: var(--ok-bg); }
+.quiz-opcion.incorrecta { border-color: var(--error); background: var(--error-bg); }
+.opcion-letra {
+  font-weight: 800;
+  color: var(--primario);
+  min-width: 20px;
+}
+
+/* ── BARRA PROGRESO QUIZ ─────────────────── */
+.prog-bar-wrap {
+  background: #e2e8f0;
+  border-radius: 20px;
+  height: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.prog-bar {
+  height: 8px;
+  background: linear-gradient(90deg, var(--primario), var(--primario-claro));
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+/* ── TABLA RESULTADOS MÓVIL ──────────────── */
+#tabla-resultados {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  table-layout: fixed;
+}
+#tabla-resultados th,
+#tabla-resultados td {
+  border: 1px solid #555;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+#tabla-resultados .fila-encabezado td {
+  background: #e8f4fd;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+#tabla-resultados th {
+  background: var(--primario);
+  color: #fff;
+}
+/* Tarjeta por actividad en lugar de filas multi-columna */
+.res-card {
+  border: 1px solid #555;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.res-card-titulo {
+  background: #e8f0fb;
+  padding: 5px 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--primario);
+  border-bottom: 1px solid #bbb;
+}
+.res-card-fila {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  gap: 4px;
+  border-bottom: 1px solid #ddd;
+}
+.res-card-fila:last-child { border-bottom: none; }
+.res-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.res-valor {
+  font-size: 0.88rem;
+  color: var(--texto);
+  line-height: 1.5;
+}
+.res-ok { background: #e8f5e9; }
+.res-err { background: #ffebee; }
+.res-header-tabla {
+  background: var(--primario);
+  color: #fff;
+  padding: 8px 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  margin: 14px 0 6px;
+  border-radius: 6px;
+}
+.res-alumno-box {
+  background: #e8f4fd;
+  border: 1px solid #90c4f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.res-alumno-nombre { font-weight: 800; font-size: 1rem; flex: 1; min-width: 140px; }
+.res-alumno-cal {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: var(--primario);
+  background: #fff;
+  border: 2px solid var(--primario);
+  border-radius: 8px;
+  padding: 4px 14px;
+}
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body > *:not(#seccion-resultados) { display: none !important; }
+  .header-app, .nav-secciones { display: none !important; }
+  #seccion-resultados {
+    display: block !important;
+    position: static;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  button, .teclado-mat, .panel-docente, nav, .btn { display: none !important; }
+  .res-card { page-break-inside: avoid; }
+  @page { margin: 1.5cm; }
+}
+
+/* ── S0 ──────────────────────────────────── */
+.s0-hero {
+  text-align: center;
+  padding: 30px 0 20px;
+}
+.s0-icon { font-size: 3.5rem; margin-bottom: 10px; }
+.s0-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  color: var(--primario);
+  line-height: 1.1;
+}
+.s0-subtitulo { font-size: 1rem; color: var(--texto-suave); margin-top: 6px; }
+.nombre-input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--borde);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-family: 'Nunito', sans-serif;
+  margin-top: 12px;
+  text-align: center;
+}
+.nombre-input:focus { outline: none; border-color: var(--primario); }
+.objetivo-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.objetivo-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  color: var(--primario-claro);
+  min-width: 24px;
+}
+
+/* ── CANVAS ──────────────────────────────── */
+#canvas-s4b {
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  cursor: crosshair;
+  display: block;
+  width: 100%;
+  background: #fff;
+  touch-action: none;
+}
+.canvas-controles { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.canvas-controles button { font-size: 0.82rem; padding: 7px 12px; }
+
+/* ── PANEL DOCENTE ───────────────────────── */
+.panel-docente {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 320px;
+  width: 90vw;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  z-index: 9999;
+  border: 1px solid var(--borde);
+  display: none;
+  user-select: none;
+}
+.panel-docente.visible { display: block; }
+.panel-titulo {
+  background: var(--primario);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 12px 12px 0 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
+}
+.panel-titulo:active { cursor: grabbing; }
+.panel-cuerpo { padding: 12px; }
+.panel-cuerpo input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 1.5px solid var(--borde);
+  border-radius: 6px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.panel-stat { font-size: 0.78rem; color: var(--texto-suave); margin-bottom: 4px; }
+.panel-stat span { font-weight: 700; color: var(--texto); }
+.panel-acciones {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.panel-acciones button {
+  flex: 1;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 7px 6px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.btn-avanzar { background: var(--primario); color: #fff; }
+.btn-simular { background: var(--acento); color: var(--texto); }
+.btn-cerrar-panel { background: #eee; color: var(--texto); }
+.panel-minimizado .panel-cuerpo { display: none; }
+.panel-minimizado { border-radius: 12px; }
+
+/* ── PRACTICA GUIADA ─────────────────────── */
+.paso-respuesta-wrap { position: relative; }
+.intentos-contador {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+  margin-top: 4px;
+}
+.terreno-visual {
+  background: #e8f5e9;
+  border: 2px solid #a5d6a7;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  margin: 14px 0;
+}
+.terreno-label { font-size: 0.8rem; font-weight: 700; color: var(--ok); margin-bottom: 4px; }
+.terreno-expr { font-size: 1.1rem; color: var(--texto); }
+
+.highlight-box {
+  background: var(--neutro-bg);
+  border: 1.5px solid var(--primario-claro);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-size: 0.92rem;
+}
+
+/* ── PRACTICA GUIADA ─────────────────────── */
+.paso-respuesta-wrap { position: relative; }
+.intentos-contador {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+  margin-top: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     HEADER
+════════════════════════════════════════ -->
+<div class="header-app">
+  <div>
+    <div class="header-titulo">📐 Sesión 8 · Polinomios</div>
+    <div class="header-subtitulo">Suma y Resta · Varias Variables · 1° Sem. Matemáticas</div>
+  </div>
+  <button class="btn-docente" onclick="abrirPanelDocente()">Prof. Adrián CruzH</button>
+</div>
+
+<!-- NAV -->
+<nav class="nav-secciones" id="nav-principal">
+  <button class="nav-btn activo" onclick="navegarA(0)">🏠 Inicio</button>
+  <button class="nav-btn" onclick="navegarA(1)">🔥 Detonador</button>
+  <button class="nav-btn" onclick="navegarA(2)">📖 Teoría</button>
+  <button class="nav-btn" onclick="navegarA(3)">✏️ Guiada</button>
+  <button class="nav-btn" onclick="navegarA(4)">🧠 Independ.</button>
+  <button class="nav-btn" onclick="navegarA(5)">🔨 Modelo</button>
+  <button class="nav-btn" onclick="navegarA(6)">🎯 Quiz</button>
+  <button class="nav-btn" onclick="navegarA(7)">📊 Resultados</button>
+</nav>
+
+<!-- ════════════════════════════════════════
+     S0 INICIO
+════════════════════════════════════════ -->
+<section class="seccion activa" id="sec-0">
+  <div class="s0-hero">
+    <div class="s0-icon">🏗️</div>
+    <div class="s0-titulo">Suma y Resta<br>de Polinomios</div>
+    <div class="s0-subtitulo">Sesión 8 · Algebra · Bachillerato CDMX</div>
+  </div>
+  <div class="card">
+    <div class="chip">Tu nombre</div>
+    <input type="text" class="nombre-input" id="nombre-alumno" placeholder="Escribe tu nombre completo…">
+    <button class="btn btn-primario btn-bloque" onclick="comenzar()" style="margin-top:14px;">Comenzar actividad ▶</button>
+  </div>
+  <div class="card">
+    <div class="card-titulo">¿Qué vas a aprender hoy?</div>
+    <div class="objetivo-item"><span class="objetivo-num">01</span><span>Identificar términos semejantes en polinomios de varias variables.</span></div>
+    <div class="objetivo-item"><span class="objetivo-num">02</span><span>Sumar y restar polinomios con exponentes del 1 al 7.</span></div>
+    <div class="objetivo-item"><span class="objetivo-num">03</span><span>Modelar situaciones reales (áreas de terrenos, costos) con polinomios.</span></div>
+    <div class="objetivo-item"><span class="objetivo-num">04</span><span>Interpretar el resultado de una operación polinomial en contexto.</span></div>
+  </div>
+  <div class="card">
+    <div class="card-titulo">Duración estimada</div>
+    <p style="font-size:0.9rem;color:var(--texto-suave);">Esta actividad está diseñada para <strong>70 minutos de trabajo real</strong>. Trabaja a tu ritmo y responde con atención, sin prisa.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     S1 DETONADOR
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-1">
+  <div class="chip acento">🔥 Detonador · ~8 min</div>
+  <div class="card">
+    <div class="card-titulo">Los Terrenos de la Unidad Iztapalapa</div>
+    <p style="font-size:0.93rem;margin-bottom:14px;">El delegado de Iztapalapa quiere calcular el <strong>área total</strong> de dos terrenos para construir canchas deportivas. Un arquitecto ya midió cada terreno y expresó sus áreas como polinomios (en metros cuadrados), donde <em>x</em> e <em>y</em> representan dimensiones variables que dependen del tipo de cancha.</p>
+
+    <div class="terreno-visual">
+      <div class="terreno-label">🟩 TERRENO A</div>
+      <div class="terreno-expr" id="det-A">cargando...</div>
+    </div>
+    <div class="terreno-visual" style="background:#e3f2fd;border-color:#90caf9;">
+      <div class="terreno-label" style="color:#1565c0;">🟦 TERRENO B</div>
+      <div class="terreno-expr" id="det-B">cargando...</div>
+    </div>
+    <p style="font-size:0.85rem;color:var(--texto-suave);margin-bottom:12px;">Antes de calcular, responde estas preguntas de exploración:</p>
+
+    <div class="highlight-box">
+      <p><strong>1.</strong> ¿Cuántos términos diferentes puedes identificar en el Terreno A? ¿Y en el B?</p>
+    </div>
+    <div class="campo-grupo">
+      <label class="campo-label">Tu respuesta</label>
+      <input type="text" id="det_q1" class="campo-input" placeholder="Escribe cuántos términos tiene cada terreno">
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>2.</strong> Sin calcular todavía: ¿crees que la suma de ambas áreas tendría más términos, menos términos, o los mismos que el terreno A? ¿Por qué?</p>
+    </div>
+    <div class="campo-grupo">
+      <label class="campo-label">Tu conjetura</label>
+      <input type="text" id="det_q2" class="campo-input" placeholder="Escribe tu predicción y explica por qué">
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>3.</strong> Escribe <strong>con notación algebraica</strong> cuáles términos del Terreno A y del Terreno B crees que se pueden combinar. Por ejemplo, si crees que $m^3n^2$ de cada terreno son semejantes, escríbelos.</p>
+    </div>
+    <div class="campo-grupo">
+      <label class="campo-label">Tu observación — usa el teclado para escribir los términos</label>
+      <input type="text" id="det_q3" class="campo-input" inputmode="decimal" placeholder="Escribe los términos que parecen del mismo tipo" oninput="actualizarPreview('det_q3','preview_det_q3')">
+      <div id="preview_det_q3" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+      <div class="teclado-mat" id="teclado_det_q3"></div>
+    </div>
+
+    <button class="btn btn-primario btn-bloque" onclick="registrarDetonador()">Guardar y continuar →</button>
+    <div id="fb-det" class="feedback"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     S2 FORMALIZACIÓN
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-2">
+  <div class="chip">📖 Formalización · ~12 min</div>
+
+  <div class="cuaderno-box">
+    <h3>📓 Copia en tu cuaderno</h3>
+
+    <p><strong>Polinomio de varias variables:</strong> expresión algebraica formada por la suma de monomios con dos o más variables.</p>
+
+    <p style="margin-top:10px;"><strong>¿Cuándo dos términos son semejantes?</strong> Cuando tienen exactamente <em>las mismas variables elevadas a los mismos exponentes</em>. El coeficiente puede ser distinto.</p>
+
+    <ul style="margin-top:8px;">
+      <li>$3x^2y^3$ y $-7x^2y^3$ ✅ semejantes (mismas variables y exponentes)</li>
+      <li>$5x^2y$ y $5xy^2$ ❌ no semejantes (exponentes distintos)</li>
+      <li>$4x^3z^5$ y $2x^3z^5$ ✅ semejantes</li>
+    </ul>
+
+    <p style="margin-top:14px;"><strong>Regla para sumar o restar:</strong></p>
+    <p>Solo se combinan los términos semejantes, sumando o restando sus coeficientes y conservando la parte literal exactamente igual.</p>
+
+    <p style="margin-top:10px;text-align:center;">$$( 5x^2y^3 ) + ( -3x^2y^3 ) = 2x^2y^3$$</p>
+
+    <p style="margin-top:14px;"><strong>Ejemplo 1 – Suma:</strong></p>
+    <p>$(3a^2b^4 - 2ab^3 + 5b^7) + (a^2b^4 + 6ab^3 - b^7)$</p>
+    <p><strong>Paso 1:</strong> identificar semejantes: $3a^2b^4$ y $a^2b^4$; $-2ab^3$ y $6ab^3$; $5b^7$ y $-b^7$</p>
+    <p><strong>Paso 2:</strong> sumar coeficientes:</p>
+    <p style="text-align:center;">$$= 4a^2b^4 + 4ab^3 + 4b^7$$</p>
+
+    <p style="margin-top:14px;"><strong>Ejemplo 2 – Resta:</strong></p>
+    <p>$(7x^3y^2 + 2x^2z^5 - 4xz) - (3x^3y^2 - x^2z^5 + 2xz)$</p>
+    <p><strong>Paso 1:</strong> distribuir el signo menos (cambia todos los signos del segundo polinomio):</p>
+    <p style="text-align:center;">$= 7x^3y^2 + 2x^2z^5 - 4xz - 3x^3y^2 + x^2z^5 - 2xz$</p>
+    <p><strong>Paso 2:</strong> agrupar y operar semejantes:</p>
+    <p style="text-align:center;">$$= 4x^3y^2 + 3x^2z^5 - 6xz$$</p>
+
+    <p style="margin-top:14px;"><strong>Ejemplo 3 – Suma con tres variables:</strong></p>
+    <p>$(p^4q^3r + 2p^2r^5 - 3q^6) + (-p^4q^3r + 5p^2r^5 + q^6)$</p>
+    <p style="text-align:center;">$$= 0 + 7p^2r^5 - 2q^6 = 7p^2r^5 - 2q^6$$</p>
+    <p><em>Nota: cuando los coeficientes de un término semejante suman 0, ese término desaparece.</em></p>
+
+    <p style="margin-top:14px;color:#795548;"><strong>¿Para qué sirve esto?</strong> Sumar y restar polinomios permite calcular áreas totales, costos acumulados, distancias combinadas — cualquier situación donde se juntan o separan cantidades expresadas con variables.</p>
+  </div>
+
+  <button class="btn btn-primario btn-bloque" onclick="navegarA(3)">Ir a Práctica Guiada →</button>
+</section>
+
+<!-- ════════════════════════════════════════
+     S3 PRÁCTICA GUIADA
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-3">
+  <div class="chip">✏️ Práctica Guiada · ~15 min</div>
+  <p style="font-size:0.88rem;color:var(--texto-suave);margin-bottom:14px;">Resuelve cada operación paso a paso. Si te equivocas 3 veces, el sistema te mostrará la respuesta y podrás continuar.</p>
+
+  <!-- EJERCICIO GUIADO 1 -->
+  <div class="card" id="card-g1">
+    <div class="card-titulo">Ejercicio 1 de 3 — Suma de áreas de jardines</div>
+    <div class="chip acento">Contexto</div>
+    <p style="font-size:0.9rem;margin:10px 0 14px;">En el Deportivo Xochimilco hay dos jardines. El área de cada uno está expresada como polinomio (m²).</p>
+    <div class="highlight-box" id="g1-enunciado" style="text-align:center;font-size:1rem;"></div>
+
+    <div class="paso-bloque">
+      <div class="paso-num">PASO 1 — Identificar semejantes</div>
+      <p style="font-size:0.88rem;">¿Qué término del segundo polinomio se combina con $4m^3n^2$?</p>
+      <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+        <input type="text" id="g1p1" class="campo-input" inputmode="decimal" placeholder="Escribe el término semejante">
+        <div id="preview_g1p1" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+        <div class="teclado-mat" id="teclado_g1p1">
+          <!-- algebra_basica set -->
+        </div>
+        <div class="intentos-contador" id="cont-g1p1">Intento: 0 / 3</div>
+        <div id="fb-g1p1" class="feedback"></div>
+        <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g1p1','g1p1_ok',g1p1_ans,3,'g1p2-wrap')">Verificar paso 1</button>
+      </div>
+    </div>
+
+    <div id="g1p2-wrap" style="display:none;">
+      <div class="paso-bloque">
+        <div class="paso-num">PASO 2 — Combinar el primer par de semejantes</div>
+        <p style="font-size:0.88rem;">Suma los coeficientes de $m^3n^2$. ¿Cuál es el resultado?</p>
+        <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+          <input type="text" id="g1p2" class="campo-input" inputmode="decimal" placeholder="Escribe el término resultante">
+          <div id="preview_g1p2" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+          <div class="teclado-mat" id="teclado_g1p2"></div>
+          <div class="intentos-contador" id="cont-g1p2">Intento: 0 / 3</div>
+          <div id="fb-g1p2" class="feedback"></div>
+          <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g1p2','g1p2_ok',g1p2_ans,3,'g1p3-wrap')">Verificar paso 2</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="g1p3-wrap" style="display:none;">
+      <div class="paso-bloque">
+        <div class="paso-num">PASO 3 — Resultado completo</div>
+        <p style="font-size:0.88rem;">Escribe el polinomio resultado completo de la suma (ordena de mayor a menor grado).</p>
+        <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+          <input type="text" id="g1p3" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado completo">
+          <div id="preview_g1p3" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+          <div class="teclado-mat" id="teclado_g1p3"></div>
+          <div class="intentos-contador" id="cont-g1p3">Intento: 0 / 3</div>
+          <div id="fb-g1p3" class="feedback"></div>
+          <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g1p3','g1p3_ok',g1p3_ans,3,'card-g2-wrap')">Verificar resultado</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJERCICIO GUIADO 2 -->
+  <div id="card-g2-wrap" style="display:none;">
+  <div class="card">
+    <div class="card-titulo">Ejercicio 2 de 3 — Resta de costos en el Metro</div>
+    <div class="chip acento">Contexto</div>
+    <p style="font-size:0.9rem;margin:10px 0 14px;">El Metro CDMX modela el costo de mantenimiento de dos líneas con polinomios (en miles de pesos). ¿Cuánto más cuesta la Línea A que la Línea B?</p>
+    <div class="highlight-box" id="g2-enunciado" style="text-align:center;font-size:1rem;"></div>
+
+    <div class="paso-bloque">
+      <div class="paso-num">PASO 1 — Distribuir el signo menos</div>
+      <p style="font-size:0.88rem;">Al restar, el signo menos afecta a TODOS los términos del segundo polinomio. Escribe el segundo polinomio con los signos cambiados.</p>
+      <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+        <input type="text" id="g2p1" class="campo-input" inputmode="decimal" placeholder="Escribe el segundo polinomio con todos los signos cambiados">
+        <div id="preview_g2p1" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+        <div class="teclado-mat" id="teclado_g2p1"></div>
+        <div class="intentos-contador" id="cont-g2p1">Intento: 0 / 3</div>
+        <div id="fb-g2p1" class="feedback"></div>
+        <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g2p1','g2p1_ok',g2p1_ans,3,'g2p2-wrap')">Verificar paso 1</button>
+      </div>
+    </div>
+
+    <div id="g2p2-wrap" style="display:none;">
+      <div class="paso-bloque">
+        <div class="paso-num">PASO 2 — Identificar y combinar semejantes</div>
+        <p style="font-size:0.88rem;">¿Cuántos pares de términos semejantes hay? Escribe solo la cantidad (número).</p>
+        <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+          <input type="text" id="g2p2" class="campo-input" inputmode="decimal" placeholder="Escribe solo el número">
+          <div class="intentos-contador" id="cont-g2p2">Intento: 0 / 3</div>
+          <div id="fb-g2p2" class="feedback"></div>
+          <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g2p2','g2p2_ok',g2p2_ans,3,'g2p3-wrap')">Verificar paso 2</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="g2p3-wrap" style="display:none;">
+      <div class="paso-bloque">
+        <div class="paso-num">PASO 3 — Resultado de la resta</div>
+        <p style="font-size:0.88rem;">Escribe el polinomio resultado completo.</p>
+        <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+          <input type="text" id="g2p3" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado completo">
+          <div id="preview_g2p3" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+          <div class="teclado-mat" id="teclado_g2p3"></div>
+          <div class="intentos-contador" id="cont-g2p3">Intento: 0 / 3</div>
+          <div id="fb-g2p3" class="feedback"></div>
+          <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g2p3','g2p3_ok',g2p3_ans,3,'card-g3-wrap')">Verificar resultado</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /card-g2-wrap -->
+
+  <!-- EJERCICIO GUIADO 3 -->
+  <div id="card-g3-wrap" style="display:none;">
+  <div class="card">
+    <div class="card-titulo">Ejercicio 3 de 3 — Suma con términos que se cancelan</div>
+    <div class="chip acento">Contexto</div>
+    <p style="font-size:0.9rem;margin:10px 0 14px;">Dos vendedores del mercado La Merced modelan sus ganancias mensuales (pesos) con polinomios. ¿Cuánto ganan juntos?</p>
+    <div class="highlight-box" id="g3-enunciado" style="text-align:center;font-size:1rem;"></div>
+
+    <div class="paso-bloque">
+      <div class="paso-num">PASO 1 — Detectar términos que se cancelan</div>
+      <p style="font-size:0.88rem;">¿Qué término se cancela completamente al sumar los dos polinomios? Escríbelo.</p>
+      <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+        <input type="text" id="g3p1" class="campo-input" inputmode="decimal" placeholder="Escribe el término que desaparece">
+        <div id="preview_g3p1" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+        <div class="teclado-mat" id="teclado_g3p1"></div>
+        <div class="intentos-contador" id="cont-g3p1">Intento: 0 / 3</div>
+        <div id="fb-g3p1" class="feedback"></div>
+        <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g3p1','g3p1_ok',g3p1_ans,3,'g3p2-wrap')">Verificar paso 1</button>
+      </div>
+    </div>
+
+    <div id="g3p2-wrap" style="display:none;">
+      <div class="paso-bloque">
+        <div class="paso-num">PASO 2 — Resultado final</div>
+        <p style="font-size:0.88rem;">Escribe el polinomio resultado (sin el término que se canceló).</p>
+        <div class="campo-grupo" style="margin-top:8px;margin-bottom:0;">
+          <input type="text" id="g3p2" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio simplificado">
+          <div id="preview_g3p2" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+          <div class="teclado-mat" id="teclado_g3p2"></div>
+          <div class="intentos-contador" id="cont-g3p2">Intento: 0 / 3</div>
+          <div id="fb-g3p2" class="feedback"></div>
+          <button class="btn btn-sm btn-acento" style="margin-top:8px;" onclick="verificarGuiada('g3p2','g3p2_ok',g3p2_ans,3,'fin-guiada')">Verificar resultado</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /card-g3-wrap -->
+
+  <div id="fin-guiada" style="display:none;">
+    <button class="btn btn-primario btn-bloque" onclick="navegarA(4)">Ir a Práctica Independiente →</button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     S4 PRÁCTICA INDEPENDIENTE
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-4">
+  <div class="chip">🧠 Práctica Independiente · ~15 min</div>
+  <p style="font-size:0.88rem;color:var(--texto-suave);margin-bottom:14px;">Resuelve cada ejercicio. Escribe directamente el resultado final. Recuerda ordenar los términos.</p>
+
+  <!-- IND 1 -->
+  <div class="card">
+    <div class="card-titulo">Problema 1 · Fácil — Costos de la Feria de Tepito</div>
+    <p style="font-size:0.9rem;margin-bottom:12px;">Un vendedor tiene dos tipos de productos. El ingreso semanal del primero es <span id="ind1-A"></span> y del segundo es <span id="ind1-B"></span> (pesos, donde $p$ = precio unitario, $q$ = cantidad). ¿Cuál es el ingreso total?</p>
+    <div class="campo-grupo">
+      <label class="campo-label">Ingreso total</label>
+      <input type="text" id="ind1" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado">
+      <div id="preview_ind1" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+      <div class="teclado-mat" id="teclado_ind1"></div>
+      <div class="intentos-contador" id="cont-ind1">Intento: 0 / 3</div>
+      <div id="fb-ind1" class="feedback"></div>
+      <button class="btn btn-sm btn-primario" style="margin-top:8px;" onclick="verificarInd('ind1',ind1_ans,'cont-ind1','fb-ind1')">Verificar</button>
+    </div>
+  </div>
+
+  <!-- IND 2 -->
+  <div class="card">
+    <div class="card-titulo">Problema 2 · Medio — Diferencia de áreas en Jamaica</div>
+    <p style="font-size:0.9rem;margin-bottom:12px;">El mercado Jamaica tiene dos zonas de venta. La zona principal ocupa <span id="ind2-A"></span> m² y la zona secundaria <span id="ind2-B"></span> m². ¿Cuántos m² más tiene la zona principal?</p>
+    <div class="campo-grupo">
+      <label class="campo-label">Diferencia de área</label>
+      <input type="text" id="ind2" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado">
+      <div id="preview_ind2" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+      <div class="teclado-mat" id="teclado_ind2"></div>
+      <div class="intentos-contador" id="cont-ind2">Intento: 0 / 3</div>
+      <div id="fb-ind2" class="feedback"></div>
+      <button class="btn btn-sm btn-primario" style="margin-top:8px;" onclick="verificarInd('ind2',ind2_ans,'cont-ind2','fb-ind2')">Verificar</button>
+    </div>
+  </div>
+
+  <!-- IND 3 -->
+  <div class="card">
+    <div class="card-titulo">Problema 3 · Medio — Tarifas del Metrobús</div>
+    <p style="font-size:0.9rem;margin-bottom:12px;">El modelo de costo de operación mensual de la Ruta 1 es <span id="ind3-A"></span> y de la Ruta 4 es <span id="ind3-B"></span> (miles de pesos). ¿Cuánto es el costo combinado?</p>
+    <div class="campo-grupo">
+      <label class="campo-label">Costo combinado</label>
+      <input type="text" id="ind3" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado">
+      <div id="preview_ind3" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+      <div class="teclado-mat" id="teclado_ind3"></div>
+      <div class="intentos-contador" id="cont-ind3">Intento: 0 / 3</div>
+      <div id="fb-ind3" class="feedback"></div>
+      <button class="btn btn-sm btn-primario" style="margin-top:8px;" onclick="verificarInd('ind3',ind3_ans,'cont-ind3','fb-ind3')">Verificar</button>
+    </div>
+  </div>
+
+  <!-- IND 4 -->
+  <div class="card">
+    <div class="card-titulo">Problema 4 · Difícil — Energía solar en azoteas de Xochimilco</div>
+    <p style="font-size:0.9rem;margin-bottom:12px;">Tres azoteas instalan paneles solares. La energía generada (kWh) por cada una está modelada por: Azotea 1: <span id="ind4-A"></span>, Azotea 2: <span id="ind4-B"></span>, Azotea 3: <span id="ind4-C"></span>. Se retira la Azotea 2. ¿Cuánta energía queda? (Azotea 1 + Azotea 3 − Azotea 2)</p>
+    <div class="campo-grupo">
+      <label class="campo-label">Energía resultante</label>
+      <input type="text" id="ind4" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado">
+      <div id="preview_ind4" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+      <div class="teclado-mat" id="teclado_ind4"></div>
+      <div class="intentos-contador" id="cont-ind4">Intento: 0 / 3</div>
+      <div id="fb-ind4" class="feedback"></div>
+      <button class="btn btn-sm btn-primario" style="margin-top:8px;" onclick="verificarInd('ind4',ind4_ans,'cont-ind4','fb-ind4')">Verificar</button>
+    </div>
+  </div>
+
+  <!-- IND 5 -->
+  <div class="card">
+    <div class="card-titulo">Problema 5 · Difícil — Caudal del Canal de Xochimilco</div>
+    <p style="font-size:0.9rem;margin-bottom:12px;">El caudal de agua (litros/hora) que entra al canal es <span id="ind5-A"></span> y el que sale es <span id="ind5-B"></span>. El caudal neto es la diferencia (entrada − salida). ¿Cuál es?</p>
+    <div class="campo-grupo">
+      <label class="campo-label">Caudal neto</label>
+      <input type="text" id="ind5" class="campo-input" inputmode="decimal" placeholder="Escribe el polinomio resultado">
+      <div id="preview_ind5" class="live-preview"><em style="color:#aaa">vista previa</em></div>
+      <div class="teclado-mat" id="teclado_ind5"></div>
+      <div class="intentos-contador" id="cont-ind5">Intento: 0 / 3</div>
+      <div id="fb-ind5" class="feedback"></div>
+      <button class="btn btn-sm btn-primario" style="margin-top:8px;" onclick="verificarInd('ind5',ind5_ans,'cont-ind5','fb-ind5')">Verificar</button>
+    </div>
+  </div>
+
+  <button class="btn btn-primario btn-bloque" onclick="navegarA(5)">Ir a Construcción / Modelo →</button>
+</section>
+
+<!-- ════════════════════════════════════════
+     S4b CONSTRUCCIÓN / MODELO
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-5">
+  <div class="chip">🔨 Construcción · ~8 min</div>
+  <div class="card">
+    <div class="card-titulo">Explica con tus palabras + Dibuja</div>
+    <p style="font-size:0.9rem;margin-bottom:14px;">Con lo que aprendiste hoy, responde estas dos preguntas. <strong>No hay calificación automática</strong>, pero el profesor podrá ver tus respuestas en la tabla de resultados.</p>
+
+    <div class="campo-grupo">
+      <label class="campo-label">1. ¿Qué son los términos semejantes y por qué SOLO se pueden combinar entre ellos? Usa un ejemplo inventado por ti.</label>
+      <textarea id="modelo_texto" class="campo-input" rows="4" style="resize:vertical;" placeholder="Escribe aquí tu explicación…"></textarea>
+    </div>
+
+    <div class="campo-grupo" style="margin-top:16px;">
+      <label class="campo-label">2. En el espacio de abajo, dibuja un esquema que muestre cómo se agrupan los términos semejantes de esta suma:</label>
+      <div class="highlight-box" id="s4b-enunciado" style="margin-bottom:10px;text-align:center;"></div>
+      <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:8px;">Puedes rodear con círculos los términos semejantes, usar flechas o cualquier representación que te ayude a entender.</p>
+      <div class="canvas-controles">
+        <button class="btn btn-sm" style="background:#e3f2fd;border:1px solid #90caf9;" onclick="seleccionarColor('#1a4a7a')">🖊 Azul</button>
+        <button class="btn btn-sm" style="background:#fce4ec;border:1px solid #f48fb1;" onclick="seleccionarColor('#c62828')">🖊 Rojo</button>
+        <button class="btn btn-sm" style="background:#e8f5e9;border:1px solid #a5d6a7;" onclick="seleccionarColor('#2e7d32')">🖊 Verde</button>
+        <button class="btn btn-sm" style="background:#fff3e0;border:1px solid #ffcc80;" onclick="seleccionarColor('#f0a500')">🖊 Naranja</button>
+        <button class="btn btn-sm" onclick="limpiarCanvas()" style="background:#eee;">🗑 Borrar</button>
+      </div>
+      <canvas id="canvas-s4b" width="600" height="220"></canvas>
+    </div>
+
+    <button class="btn btn-primario btn-bloque" onclick="guardarModelo()">Guardar mi modelo y continuar →</button>
+    <div id="fb-modelo" class="feedback"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     S5 QUIZ
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-6">
+  <div class="chip">🎯 Quiz · ~12 min</div>
+  <div class="card">
+    <div class="card-titulo">Quiz Final · 10 preguntas</div>
+    <p style="font-size:0.85rem;color:var(--texto-suave);margin-bottom:12px;">Selecciona la opción correcta. Cada pregunta vale 6 puntos.</p>
+    <div class="prog-bar-wrap"><div class="prog-bar" id="quiz-bar" style="width:0%"></div></div>
+    <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:14px;" id="quiz-contador">Pregunta 1 de 10</p>
+
+    <div id="quiz-contenedor"></div>
+
+    <button class="btn btn-primario btn-bloque" id="btn-siguiente-quiz" onclick="siguienteQuiz()" style="display:none;">Siguiente →</button>
+    <button class="btn btn-acento btn-bloque" id="btn-finalizar-quiz" onclick="finalizarQuiz()" style="display:none;">Ver mis resultados 📊</button>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     S6 RESULTADOS
+════════════════════════════════════════ -->
+<section class="seccion" id="sec-7" id="seccion-resultados">
+  <div class="chip ok">📊 Resultados</div>
+  <div class="card" id="seccion-resultados">
+    <div class="card-titulo">Tabla de Resultados</div>
+    <button class="btn btn-primario btn-sm" onclick="guardarPDF()" style="margin-bottom:14px;">💾 Guardar Resultados (PDF)</button>
+    <div id="tabla-wrap"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     PANEL DOCENTE
+════════════════════════════════════════ -->
+<div class="panel-docente" id="panel-docente">
+  <div class="panel-titulo" id="panel-titulo-drag" onmousedown="iniciarArrastre(event)" ontouchstart="iniciarArrastre(event)">
+    <span>🔒 Panel Docente</span>
+    <button onclick="togglePanel()" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;">×</button>
+  </div>
+  <div class="panel-cuerpo" id="panel-cuerpo">
+    <div id="panel-login">
+      <input type="password" id="panel-pass" placeholder="Contraseña…" onkeydown="if(event.key==='Enter')autenticar()">
+      <button class="btn btn-sm btn-primario" onclick="autenticar()">Entrar</button>
+      <div id="panel-err" style="font-size:0.78rem;color:var(--error);margin-top:4px;display:none;">Contraseña incorrecta</div>
+    </div>
+    <div id="panel-contenido" style="display:none;">
+      <div class="panel-stat">Alumno: <span id="ps-nombre">—</span></div>
+      <div class="panel-stat">Sección actual: <span id="ps-seccion">—</span></div>
+      <div class="panel-stat">Respuestas escritas: <span id="ps-escritas">0</span></div>
+      <div class="panel-stat">Quiz respondido: <span id="ps-quiz">0/10</span></div>
+      <div class="panel-stat">Calificación: <span id="ps-cal">—</span></div>
+      <div class="panel-acciones">
+        <button class="btn-avanzar" onclick="avanzarSinValidar()">Avanzar ▶</button>
+        <button class="btn-simular" onclick="simularResultados()">Simular 🎲</button>
+        <button class="btn-cerrar-panel" onclick="togglePanel()">× Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+// ─── ESTADO GLOBAL ───────────────────────────────────────────────
+var estadoActual = 0;
+var nombreAlumno = '';
+var panelAutenticado = false;
+var panelVisible = false;
+var respuestasEscritas = {};
+var respuestasQuiz = [];
+var puntajeQuiz = 0;
+var canvasDibujo = null;
+var canvasCtx = null;
+var colorActual = '#1a4a7a';
+var dibujando = false;
+var modeloGuardado = false;
+var quizPreguntaActual = 0;
+var quizPreguntas = [];
+var quizSeleccion = null;
+var panelOffsetX = 0, panelOffsetY = 0, panelArrastrando = false;
+var intentos = {};
+
+// ─── POLINOMIOS DE LA ACTIVIDAD ──────────────────────────────────
+// Detonador
+var detA_tex = '4m^3n^2 - 2m^2n^4 + 5mn^5 - 3m^6';
+var detB_tex = '3m^3n^2 + m^2n^4 - mn^5 + 7m^6';
+
+// Guiada 1: Jardines Xochimilco
+//  A = 4m³n² - 2m²n⁴ + 5mn⁵ - 3m⁶
+//  B = 3m³n² + m²n⁴ - mn⁵ + 7m⁶
+//  R = 7m³n² - m²n⁴ + 4mn⁵ + 4m⁶
+var g1p1_ans = ['3m^3n^2','3m³n²'];
+var g1p2_ans = ['7m^3n^2','7m³n²'];
+var g1p3_ans = ['7m^3n^2-m^2n^4+4mn^5+4m^6','7m³n²-m²n⁴+4mn⁵+4m⁶'];
+
+// Guiada 2: Metro CDMX
+//  A = 8x³y² + 3x²z⁵ - 5xz + 2z⁷
+//  B = 3x³y² - x²z⁵ + 2xz - z⁷
+//  A - B = 5x³y² + 4x²z⁵ - 7xz + 3z⁷
+//  Paso1: distribuyendo - en B → -3x³y² + x²z⁵ - 2xz + z⁷
+var g2p1_ans = ['-3x^3y^2+x^2z^5-2xz+z^7','-3x³y²+x²z⁵-2xz+z⁷'];
+var g2p2_ans = ['4'];
+var g2p3_ans = ['5x^3y^2+4x^2z^5-7xz+3z^7','5x³y²+4x²z⁵-7xz+3z⁷'];
+
+// Guiada 3: La Merced
+//  A = 6p⁵ + 5p²q³ - 2q⁶ + p
+//  B = 3p⁵ - 5p²q³ + q⁶ - 2p
+//  R = 9p⁵ + 0 - q⁶ - p = 9p⁵ - q⁶ - p
+var g3p1_ans = ['5p^2q^3','5p²q³'];
+var g3p2_ans = ['9p^5-q^6-p','9p⁵-q⁶-p'];
+
+// Independiente
+// IND1: A = 3p²q + 2pq² + p³   B = 2p²q + 4pq² - p³   R = 5p²q + 6pq²
+var ind1_ans = ['5p^2q+6pq^2','5p²q+6pq²'];
+// IND2: A = 7a³b² + 3ab⁵ - 4b⁶   B = 2a³b² + 5ab⁵ - b⁶   D = 5a³b² - 2ab⁵ - 3b⁶
+var ind2_ans = ['5a^3b^2-2ab^5-3b^6','5a³b²-2ab⁵-3b⁶'];
+// IND3: A = 4r⁴s + 2r²s³ - 3s⁵   B = 2r⁴s + r²s³ + 5s⁵   R = 6r⁴s + 3r²s³ + 2s⁵
+var ind3_ans = ['6r^4s+3r^2s^3+2s^5','6r⁴s+3r²s³+2s⁵'];
+// IND4: A1 = 5u⁵v² + 3u²w⁴ - 2v⁷   A2 = 2u⁵v² - u²w⁴ + 4v⁷   A3 = u⁵v² + 2u²w⁴ - v⁷
+//  A1 + A3 - A2 = (5+1-2)u⁵v² + (3+2+1)u²w⁴ + (-2-1-4)v⁷ = 4u⁵v² + 6u²w⁴ - 7v⁷
+var ind4_ans = ['4u^5v^2+6u^2w^4-7v^7','4u⁵v²+6u²w⁴-7v⁷'];
+// IND5: Entrada = 8c⁶d + 4c²d⁴ - 3cd⁶ + 2d   Salida = 3c⁶d + c²d⁴ + 5cd⁶ - d
+//  Neto = 5c⁶d + 3c²d⁴ - 8cd⁶ + 3d
+var ind5_ans = ['5c^6d+3c^2d^4-8cd^6+3d','5c⁶d+3c²d⁴-8cd⁶+3d'];
+
+// S4b enunciado
+var s4b_sum_tex = '(3a^2b^4 - 5ab^3 + 2b^6) + (7a^2b^4 + 5ab^3 - b^6)';
+
+// ─── QUIZ DATA ────────────────────────────────────────────────────
+var quizData = [
+  {
+    enunciado: 'En la expresión $6x^3y^4 - 2x^3y^4$, ¿cuál es el resultado?',
+    correcta: '$4x^3y^4$',
+    d1: '$4x^6y^8$',
+    d2: '$-4x^3y^4$',
+    d3: '$4x^3y^{-4}$',
+    d4: '$8x^3y^4$'
+  },
+  {
+    enunciado: '¿Cuáles son términos semejantes?',
+    correcta: '$5a^2b^3$ y $-3a^2b^3$',
+    d1: '$5a^2b^3$ y $5ab^{23}$',
+    d2: '$5a^2b^3$ y $5a^3b^2$',
+    d3: '$5a^2b^3$ y $5a^2b$',
+    d4: '$5a^2b^3$ y $-3a^3b^2$'
+  },
+  {
+    enunciado: 'Suma: $(3p^4q^2 + 2pq^5) + (p^4q^2 - 4pq^5)$',
+    correcta: '$4p^4q^2 - 2pq^5$',
+    d1: '$4p^4q^2 + 6pq^5$',
+    d2: '$4p^8q^4 - 2pq^5$',
+    d3: '$2p^4q^2 - 2pq^5$',
+    d4: '$4p^4q^2 + 2pq^5$'
+  },
+  {
+    enunciado: 'Resta: $(7m^3n^5 + 4mn^2) - (3m^3n^5 - mn^2)$',
+    correcta: '$4m^3n^5 + 5mn^2$',
+    d1: '$4m^3n^5 + 3mn^2$',
+    d2: '$4m^3n^5 - 5mn^2$',
+    d3: '$10m^3n^5 + 3mn^2$',
+    d4: '$4m^3n^5 - 3mn^2$'
+  },
+  {
+    enunciado: 'Al sumar $8x^2y^7 + (-8x^2y^7)$, el resultado es:',
+    correcta: '$0$',
+    d1: '$16x^2y^7$',
+    d2: '$1$',
+    d3: '$-16x^2y^7$',
+    d4: '$8x^4y^{14}$'
+  },
+  {
+    enunciado: 'El área total de dos terrenos es $(5a^3b^2 + 3ab^4 - b^6) + (2a^3b^2 - 3ab^4 + 2b^6)$. ¿Cuál es?',
+    correcta: '$7a^3b^2 + b^6$',
+    d1: '$7a^3b^2 + 6ab^4 + b^6$',
+    d2: '$7a^3b^2 - b^6$',
+    d3: '$3a^3b^2 + b^6$',
+    d4: '$7a^6b^4 + b^{12}$'
+  },
+  {
+    enunciado: 'Suma: $(4r^5s + 2r^2s^3 - rs^6) + (-r^5s + 5r^2s^3 + 3rs^6)$',
+    correcta: '$3r^5s + 7r^2s^3 + 2rs^6$',
+    d1: '$3r^5s + 7r^2s^3 - 2rs^6$',
+    d2: '$5r^5s + 7r^2s^3 + 2rs^6$',
+    d3: '$3r^{10}s^2 + 7r^2s^3 + 2rs^6$',
+    d4: '$3r^5s + 3r^2s^3 + 2rs^6$'
+  },
+  {
+    enunciado: 'Resta: $(9u^4v^3 - 3uv^6 + 2u^7) - (4u^4v^3 + 3uv^6 - u^7)$',
+    correcta: '$5u^4v^3 - 6uv^6 + 3u^7$',
+    d1: '$5u^4v^3 + 6uv^6 + 3u^7$',
+    d2: '$5u^4v^3 - 6uv^6 - 3u^7$',
+    d3: '$13u^4v^3 - 6uv^6 + u^7$',
+    d4: '$5u^4v^3 - 6uv^6 + u^7$'
+  },
+  {
+    enunciado: 'El ingreso combinado es $(6p^3q + 2p^2q^4) + (3p^3q - p^2q^4 + 4pq^5)$. ¿Cuál es?',
+    correcta: '$9p^3q + p^2q^4 + 4pq^5$',
+    d1: '$9p^3q - p^2q^4 + 4pq^5$',
+    d2: '$9p^3q + 3p^2q^4 + 4pq^5$',
+    d3: '$3p^3q + p^2q^4 + 4pq^5$',
+    d4: '$9p^6q^2 + p^2q^4 + 4pq^5$'
+  },
+  {
+    enunciado: 'La diferencia $(10c^6d - 4c^2d^4 + cd^7) - (6c^6d + 2c^2d^4 - cd^7)$ es:',
+    correcta: '$4c^6d - 6c^2d^4 + 2cd^7$',
+    d1: '$4c^6d - 6c^2d^4 - 2cd^7$',
+    d2: '$4c^6d + 6c^2d^4 + 2cd^7$',
+    d3: '$16c^6d - 6c^2d^4 + 2cd^7$',
+    d4: '$4c^{12}d^2 - 6c^2d^4 + 2cd^7$'
+  }
+];
+
+// ─── NAVEGACIÓN ───────────────────────────────────────────────────
+var seccionesNombres = ['Inicio','Detonador','Teoría','Práctica Guiada','Práctica Indep.','Construcción','Quiz','Resultados'];
+
+function navegarA(n) {
+  document.querySelectorAll('.seccion').forEach(function(s){ s.classList.remove('activa'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('activo', i===n); });
+  var secs = document.querySelectorAll('.seccion');
+  if (secs[n]) secs[n].classList.add('activa');
+  estadoActual = n;
+  actualizarPanelStat();
+  if (n === 1) inicializarDetonador();
+  if (n === 3) inicializarGuiada();
+  if (n === 4) inicializarInd();
+  if (n === 5) inicializarS4b();
+  if (n === 6) inicializarQuiz();
+  if (n === 7) mostrarResultados();
+  window.scrollTo(0, 0);
+  setTimeout(function(){
+    var el = secs[n];
+    if (el) MathJax.typesetPromise([el]);
+  }, 100);
+}
+
+// ─── S0 ───────────────────────────────────────────────────────────
+function comenzar() {
+  var n = document.getElementById('nombre-alumno').value.trim();
+  if (!n) { alert_custom('Escribe tu nombre para comenzar.'); return; }
+  nombreAlumno = n;
+  actualizarPanelStat();
+  navegarA(1);
+}
+
+function alert_custom(msg) {
+  var fb = document.createElement('div');
+  fb.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1a4a7a;color:#fff;padding:12px 20px;border-radius:8px;z-index:99999;font-family:Nunito,sans-serif;font-size:0.9rem;max-width:90vw;text-align:center;';
+  fb.textContent = msg;
+  document.body.appendChild(fb);
+  setTimeout(function(){ fb.remove(); }, 2500);
+}
+
+// ─── DETONADOR ────────────────────────────────────────────────────
+function inicializarDetonador() {
+  document.getElementById('det-A').innerHTML = '$' + detA_tex + '$';
+  document.getElementById('det-B').innerHTML = '$' + detB_tex + '$';
+  crearTeclado('det_q3');
+  initInputListener('det_q3');
+  MathJax.typesetPromise([document.getElementById('sec-1')]);
+}
+
+function registrarDetonador() {
+  var q1 = document.getElementById('det_q1').value.trim();
+  var q2 = document.getElementById('det_q2').value.trim();
+  var q3 = document.getElementById('det_q3').value.trim();
+  if (!q1 || !q2 || !q3) { mostrarFeedback('fb-det','Responde las tres preguntas antes de continuar.','info'); return; }
+  respuestasEscritas['detonador_q1'] = q1;
+  respuestasEscritas['detonador_q2'] = q2;
+  respuestasEscritas['detonador_q3'] = q3;
+  actualizarPanelStat();
+  navegarA(2);
+}
+
+// ─── TECLADOS ─────────────────────────────────────────────────────
+var TECLA_ALGEBRA = [
+  {lbl:'+',val:'+'},
+  {lbl:'−',val:'-'},
+  {lbl:'×',val:'×'},
+  {lbl:'=',val:'='},
+  {lbl:'(',val:'('},
+  {lbl:')',val:')'},
+  {lbl:'^',val:'^'},
+  {lbl:'√',val:'\\sqrt{}'},
+  {lbl:'≤',val:'≤'},
+  {lbl:'≥',val:'≥'},
+  {lbl:'≠',val:'≠'},
+  {lbl:'·',val:'·'},
+  {lbl:'fracción',val:'fraccion'},
+  {lbl:'⌫',val:'__BORRAR__',cls:'borrar'},
+  {lbl:'✕',val:'__LIMPIAR__',cls:'limpiar'}
+];
+
+function crearTeclado(campoId) {
+  var cont = document.getElementById('teclado_' + campoId);
+  if (!cont || cont.dataset.inicializado) return;
+  cont.dataset.inicializado = '1';
+  TECLA_ALGEBRA.forEach(function(t) {
+    var btn = document.createElement('button');
+    btn.textContent = t.lbl;
+    btn.type = 'button';
+    if (t.cls) btn.classList.add(t.cls);
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (t.val === '__BORRAR__') borrarUltimo(campoId);
+      else if (t.val === '__LIMPIAR__') limpiarCampo(campoId);
+      else insertarSimbolo(campoId, t.val);
+    });
+    cont.appendChild(btn);
+  });
+}
+
+function insertarSimbolo(campoId, simbolo) {
+  var campo = document.getElementById(campoId);
+  if (!campo) return;
+  var inicio = campo.selectionStart;
+  var fin = campo.selectionEnd;
+  var val = campo.value;
+  var insertar = simbolo === 'fraccion' ? '\\dfrac{}{}' : simbolo;
+  campo.value = val.substring(0, inicio) + insertar + val.substring(fin);
+  var nuevaPos = inicio + insertar.length;
+  campo.setSelectionRange(nuevaPos, nuevaPos);
+  campo.focus();
+  actualizarPreview(campoId, 'preview_' + campoId);
+}
+
+function borrarUltimo(campoId) {
+  var campo = document.getElementById(campoId);
+  if (!campo) return;
+  var inicio = campo.selectionStart;
+  if (inicio > 0) {
+    campo.value = campo.value.substring(0, inicio - 1) + campo.value.substring(inicio);
+    campo.setSelectionRange(inicio - 1, inicio - 1);
+  }
+  actualizarPreview(campoId, 'preview_' + campoId);
+}
+
+function limpiarCampo(campoId) {
+  var campo = document.getElementById(campoId);
+  if (campo) campo.value = '';
+  actualizarPreview(campoId, 'preview_' + campoId);
+}
+
+function actualizarPreview(campoId, previewId) {
+  var campo = document.getElementById(campoId);
+  var pre = document.getElementById(previewId);
+  if (!campo || !pre) return;
+  var val = campo.value.trim();
+  pre.innerHTML = val ? '$' + val + '$' : '<em style="color:#aaa">vista previa</em>';
+  MathJax.typesetPromise([pre]);
+}
+
+function initInputListener(campoId) {
+  var campo = document.getElementById(campoId);
+  if (campo) campo.addEventListener('input', function(){
+    actualizarPreview(campoId, 'preview_' + campoId);
+  });
+}
+
+// ─── PRÁCTICA GUIADA ─────────────────────────────────────────────
+function inicializarGuiada() {
+  // Mostrar enunciados
+  document.getElementById('g1-enunciado').innerHTML =
+    '$(4m^3n^2 - 2m^2n^4 + 5mn^5 - 3m^6) + (3m^3n^2 + m^2n^4 - mn^5 + 7m^6)$';
+  document.getElementById('g2-enunciado').innerHTML =
+    '$(8x^3y^2 + 3x^2z^5 - 5xz + 2z^7) - (3x^3y^2 - x^2z^5 + 2xz - z^7)$';
+  document.getElementById('g3-enunciado').innerHTML =
+    '$(6p^5 + 5p^2q^3 - 2q^6 + p) + (3p^5 - 5p^2q^3 + q^6 - 2p)$';
+
+  var ids = ['g1p1','g1p2','g1p3','g2p1','g2p3','g3p1','g3p2'];
+  ids.forEach(function(id) {
+    crearTeclado(id);
+    initInputListener(id);
+  });
+  MathJax.typesetPromise([document.getElementById('sec-3')]);
+}
+
+function verificarGuiada(campoId, okId, respuestasAceptadas, maxIntentos, siguienteId) {
+  var campo = document.getElementById(campoId);
+  if (!campo) return;
+  var val = normalizarRespuesta(campo.value);
+
+  if (!intentos[campoId]) intentos[campoId] = 0;
+  intentos[campoId]++;
+
+  var correcto = respuestasAceptadas.some(function(r){ return normalizarRespuesta(r) === val; });
+
+  var contEl = document.getElementById('cont-' + campoId);
+  if (contEl) contEl.textContent = 'Intento: ' + intentos[campoId] + ' / ' + maxIntentos;
+
+  var fb = document.getElementById('fb-' + campoId);
+  if (correcto) {
+    mostrarFeedbackEl(fb, '✅ ¡Correcto!', 'ok');
+    respuestasEscritas[campoId] = campo.value;
+    actualizarPanelStat();
+    setTimeout(function() {
+      var sig = document.getElementById(siguienteId);
+      if (sig) sig.style.display = 'block';
+      if (siguienteId === 'fin-guiada') {
+        var fg = document.getElementById('fin-guiada');
+        if(fg) fg.style.display='block';
+      }
+      MathJax.typesetPromise([document.getElementById('sec-3')]);
+    }, 600);
+  } else if (intentos[campoId] >= maxIntentos) {
+    mostrarFeedbackEl(fb, '❌ Respuesta: ' + respuestasAceptadas[0] + ' — Continúa al siguiente paso.', 'err');
+    respuestasEscritas[campoId] = '(sin responder) ' + campo.value;
+    actualizarPanelStat();
+    setTimeout(function() {
+      var sig = document.getElementById(siguienteId);
+      if (sig) sig.style.display = 'block';
+      MathJax.typesetPromise([document.getElementById('sec-3')]);
+    }, 900);
+  } else {
+    mostrarFeedbackEl(fb, '❌ Intenta de nuevo. Revisa los exponentes y coeficientes.', 'err');
+  }
+}
+
+// ─── PRÁCTICA INDEPENDIENTE ───────────────────────────────────────
+function inicializarInd() {
+  document.getElementById('ind1-A').innerHTML = '$3p^2q + 2pq^2 + p^3$';
+  document.getElementById('ind1-B').innerHTML = '$2p^2q + 4pq^2 - p^3$';
+  document.getElementById('ind2-A').innerHTML = '$7a^3b^2 + 3ab^5 - 4b^6$';
+  document.getElementById('ind2-B').innerHTML = '$2a^3b^2 + 5ab^5 - b^6$';
+  document.getElementById('ind3-A').innerHTML = '$4r^4s + 2r^2s^3 - 3s^5$';
+  document.getElementById('ind3-B').innerHTML = '$2r^4s + r^2s^3 + 5s^5$';
+  document.getElementById('ind4-A').innerHTML = '$5u^5v^2 + 3u^2w^4 - 2v^7$';
+  document.getElementById('ind4-B').innerHTML = '$2u^5v^2 - u^2w^4 + 4v^7$';
+  document.getElementById('ind4-C').innerHTML = '$u^5v^2 + 2u^2w^4 - v^7$';
+  document.getElementById('ind5-A').innerHTML = '$8c^6d + 4c^2d^4 - 3cd^6 + 2d$';
+  document.getElementById('ind5-B').innerHTML = '$3c^6d + c^2d^4 + 5cd^6 - d$';
+
+  ['ind1','ind2','ind3','ind4','ind5'].forEach(function(id) {
+    crearTeclado(id);
+    initInputListener(id);
+  });
+  MathJax.typesetPromise([document.getElementById('sec-4')]);
+}
+
+function verificarInd(campoId, respuestasAceptadas, contId, fbId) {
+  var campo = document.getElementById(campoId);
+  if (!campo) return;
+  var val = normalizarRespuesta(campo.value);
+
+  if (!intentos[campoId]) intentos[campoId] = 0;
+  intentos[campoId]++;
+
+  var correcto = respuestasAceptadas.some(function(r){ return normalizarRespuesta(r) === val; });
+  var contEl = document.getElementById(contId);
+  if (contEl) contEl.textContent = 'Intento: ' + intentos[campoId] + ' / 3';
+
+  var fb = document.getElementById(fbId);
+  if (correcto) {
+    mostrarFeedbackEl(fb, '✅ ¡Correcto!', 'ok');
+    respuestasEscritas[campoId] = campo.value;
+    actualizarPanelStat();
+  } else if (intentos[campoId] >= 3) {
+    mostrarFeedbackEl(fb, '❌ Respuesta: ' + respuestasAceptadas[0] + ' — Puedes continuar.', 'err');
+    respuestasEscritas[campoId] = '(incorrecto) ' + campo.value;
+    actualizarPanelStat();
+  } else {
+    mostrarFeedbackEl(fb, '❌ Revisa los términos semejantes e intenta de nuevo.', 'err');
+  }
+}
+
+// ─── S4b CANVAS ───────────────────────────────────────────────────
+function inicializarS4b() {
+  document.getElementById('s4b-enunciado').innerHTML = '$' + s4b_sum_tex + '$';
+  MathJax.typesetPromise([document.getElementById('s4b-enunciado')]);
+
+  var canvas = document.getElementById('canvas-s4b');
+  if (canvasDibujo) return; // ya inicializado
+  canvasDibujo = canvas;
+  canvasCtx = canvas.getContext('2d');
+
+  // Tamaño responsive
+  var w = canvas.parentElement.offsetWidth || 340;
+  canvas.width = w;
+  canvas.height = 220;
+
+  dibujarWatermark(canvasCtx, 'Prof. CruzH');
+
+  canvas.addEventListener('mousedown', function(e){ dibujando = true; canvasCtx.beginPath(); canvasCtx.moveTo(getPosCanvas(e).x, getPosCanvas(e).y); });
+  canvas.addEventListener('mousemove', function(e){ if(!dibujando) return; var p=getPosCanvas(e); canvasCtx.lineTo(p.x,p.y); canvasCtx.strokeStyle=colorActual; canvasCtx.lineWidth=2.5; canvasCtx.lineCap='round'; canvasCtx.stroke(); });
+  canvas.addEventListener('mouseup', function(){ dibujando=false; });
+  canvas.addEventListener('mouseleave', function(){ dibujando=false; });
+  canvas.addEventListener('touchstart', function(e){ e.preventDefault(); dibujando=true; var p=getPosCanvasTouch(e.touches[0]); canvasCtx.beginPath(); canvasCtx.moveTo(p.x,p.y); },{passive:false});
+  canvas.addEventListener('touchmove', function(e){ e.preventDefault(); if(!dibujando) return; var p=getPosCanvasTouch(e.touches[0]); canvasCtx.lineTo(p.x,p.y); canvasCtx.strokeStyle=colorActual; canvasCtx.lineWidth=2.5; canvasCtx.lineCap='round'; canvasCtx.stroke(); },{passive:false});
+  canvas.addEventListener('touchend', function(){ dibujando=false; });
+}
+
+function getPosCanvas(e) {
+  var r = canvasDibujo.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * (canvasDibujo.width / r.width), y: (e.clientY - r.top) * (canvasDibujo.height / r.height) };
+}
+function getPosCanvasTouch(t) {
+  var r = canvasDibujo.getBoundingClientRect();
+  return { x: (t.clientX - r.left) * (canvasDibujo.width / r.width), y: (t.clientY - r.top) * (canvasDibujo.height / r.height) };
+}
+
+function dibujarWatermark(ctx, texto) {
+  ctx.save();
+  ctx.globalAlpha = 0.04;
+  ctx.font = 'bold 48px Bebas Neue, sans-serif';
+  ctx.fillStyle = '#000';
+  ctx.textAlign = 'center';
+  ctx.fillText(texto, ctx.canvas.width / 2, ctx.canvas.height / 2 + 16);
+  ctx.restore();
+}
+
+function seleccionarColor(c) { colorActual = c; }
+
+function limpiarCanvas() {
+  if (!canvasCtx) return;
+  canvasCtx.clearRect(0, 0, canvasDibujo.width, canvasDibujo.height);
+  dibujarWatermark(canvasCtx, 'Prof. CruzH');
+}
+
+function canvasTieneDibujo(canvas) {
+  try {
+    var data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+    for (var i = 3; i < data.length; i += 4) { if (data[i] > 10) return true; }
+    return false;
+  } catch(e) { return false; }
+}
+
+function guardarModelo() {
+  var txt = document.getElementById('modelo_texto').value.trim();
+  if (!txt) { mostrarFeedback('fb-modelo','Escribe tu explicación antes de guardar.','info'); return; }
+  respuestasEscritas['modelo_texto'] = txt;
+  if (canvasDibujo && canvasTieneDibujo(canvasDibujo)) {
+    respuestasEscritas['modelo_canvas_b64'] = canvasDibujo.toDataURL('image/png');
+  } else {
+    respuestasEscritas['modelo_canvas_b64'] = '';
+  }
+  modeloGuardado = true;
+  actualizarPanelStat();
+  mostrarFeedback('fb-modelo','✅ Modelo guardado. ¡Continúa al Quiz!','ok');
+  setTimeout(function(){ navegarA(6); }, 1200);
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────
+function inicializarQuiz() {
+  if (quizPreguntas.length > 0) return; // ya generado
+  quizPreguntas = quizData.map(function(q) {
+    return {
+      enunciado: q.enunciado,
+      opciones: genOpts(q.correcta, q.d1, q.d2, q.d3, q.d4),
+      correcta: q.correcta
+    };
+  });
+  quizPreguntaActual = 0;
+  respuestasQuiz = [];
+  puntajeQuiz = 0;
+  quizSeleccion = null;
+  renderQuiz();
+}
+
+function genOpts(correcta, d1, d2, d3, d4) {
+  var opts = [correcta, d1, d2, d3, d4];
+  for (var i = opts.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp;
+  }
+  return opts;
+}
+
+function renderQuiz() {
+  if (quizPreguntaActual >= quizPreguntas.length) { finalizarQuiz(); return; }
+  var q = quizPreguntas[quizPreguntaActual];
+  var letras = ['A','B','C','D','E'];
+  quizSeleccion = null;
+
+  document.getElementById('quiz-contador').textContent = 'Pregunta ' + (quizPreguntaActual + 1) + ' de ' + quizPreguntas.length;
+  document.getElementById('quiz-bar').style.width = (quizPreguntaActual / quizPreguntas.length * 100) + '%';
+
+  var html = '<div class="quiz-pregunta"><div class="quiz-enunciado">' + q.enunciado + '</div><div class="quiz-opciones">';
+  q.opciones.forEach(function(op, i) {
+    html += '<button class="quiz-opcion" id="qop-' + i + '" onclick="seleccionarOpcion(' + i + ')">'
+          + '<span class="opcion-letra">' + letras[i] + '.</span>'
+          + '<span>' + op + '</span></button>';
+  });
+  html += '</div></div>';
+
+  document.getElementById('quiz-contenedor').innerHTML = html;
+  document.getElementById('btn-siguiente-quiz').style.display = 'none';
+  document.getElementById('btn-finalizar-quiz').style.display = 'none';
+
+  MathJax.typesetPromise([document.getElementById('quiz-contenedor')]);
+}
+
+function seleccionarOpcion(i) {
+  if (quizSeleccion !== null) return;
+  quizSeleccion = i;
+  var q = quizPreguntas[quizPreguntaActual];
+  var correcto = q.opciones[i] === q.correcta;
+
+  document.querySelectorAll('.quiz-opcion').forEach(function(btn, j) {
+    if (q.opciones[j] === q.correcta) btn.classList.add('correcta');
+    else if (j === i && !correcto) btn.classList.add('incorrecta');
+  });
+
+  if (correcto) puntajeQuiz += 6;
+  respuestasQuiz.push({ pregunta: q.enunciado, seleccion: q.opciones[i], correcta: q.correcta, ok: correcto });
+
+  if (quizPreguntaActual < quizPreguntas.length - 1) {
+    document.getElementById('btn-siguiente-quiz').style.display = 'block';
+  } else {
+    document.getElementById('btn-finalizar-quiz').style.display = 'block';
+  }
+}
+
+function siguienteQuiz() {
+  if (quizSeleccion === null) return;
+  quizPreguntaActual++;
+  renderQuiz();
+}
+
+function finalizarQuiz() {
+  document.getElementById('quiz-bar').style.width = '100%';
+  actualizarPanelStat();
+  navegarA(7);
+}
+
+// ─── RESULTADOS ───────────────────────────────────────────────────
+var respuestasEsperadas = {
+  detonador_q1: 'Observación libre — Terreno A: 4 términos, Terreno B: 4 términos',
+  detonador_q2: 'Conjetura libre — se espera que el alumno razone sobre términos semejantes',
+  detonador_q3: 'Observación libre — ej. $m^3n^2$, $m^2n^4$, $mn^5$, $m^6$ son los pares semejantes',
+  g1p1: '$3m^3n^2$',
+  g1p2: '$7m^3n^2$',
+  g1p3: '$7m^3n^2 - m^2n^4 + 4mn^5 + 4m^6$',
+  g2p1: '$-3x^3y^2 + x^2z^5 - 2xz + z^7$',
+  g2p2: '$4$ pares semejantes',
+  g2p3: '$5x^3y^2 + 4x^2z^5 - 7xz + 3z^7$',
+  g3p1: '$5p^2q^3$ (coeficientes +5 y −5 se cancelan)',
+  g3p2: '$9p^5 - q^6 - p$',
+  ind1: '$5p^2q + 6pq^2$',
+  ind2: '$5a^3b^2 - 2ab^5 - 3b^6$',
+  ind3: '$6r^4s + 3r^2s^3 + 2s^5$',
+  ind4: '$4u^5v^2 + 6u^2w^4 - 7v^7$',
+  ind5: '$5c^6d + 3c^2d^4 - 8cd^6 + 3d$',
+  modelo_texto: 'Respuesta abierta — ver explicación del alumno'
+};
+
+function mostrarResultados() {
+  var cal10 = (puntajeQuiz / 60 * 10).toFixed(1);
+  var wrap = document.getElementById('tabla-wrap');
+
+  var html = '';
+
+  // ── Encabezado alumno ──
+  html += '<div class="res-alumno-box">'
+        + '<div class="res-alumno-nombre">👤 ' + (nombreAlumno || '—') + '</div>'
+        + '<div class="res-alumno-cal">' + cal10 + '/10 <span style="font-size:0.7rem;font-family:Nunito,sans-serif;font-weight:600;">(' + puntajeQuiz + '/60 pts)</span></div>'
+        + '</div>';
+
+  // ── Sección Respuestas Escritas ──
+  html += '<div class="res-header-tabla">📝 Respuestas Escritas</div>';
+
+  var actividades = [
+    { id: 'detonador_q1', titulo: 'Detonador 1 — ¿Cuántos términos tiene cada terreno?' },
+    { id: 'detonador_q2', titulo: 'Detonador 2 — Conjetura sobre la suma' },
+    { id: 'detonador_q3', titulo: 'Detonador 3 — Términos semejantes identificados' },
+    { id: 'g1p1', titulo: 'Guiada 1 P1 — Término semejante a $4m^3n^2$' },
+    { id: 'g1p2', titulo: 'Guiada 1 P2 — Suma de coeficientes de $m^3n^2$' },
+    { id: 'g1p3', titulo: 'Guiada 1 P3 — Resultado completo (jardines Xochimilco)' },
+    { id: 'g2p1', titulo: 'Guiada 2 P1 — Signo menos distribuido' },
+    { id: 'g2p2', titulo: 'Guiada 2 P2 — Número de pares semejantes' },
+    { id: 'g2p3', titulo: 'Guiada 2 P3 — Resultado resta (Metro CDMX)' },
+    { id: 'g3p1', titulo: 'Guiada 3 P1 — Término que se cancela (La Merced)' },
+    { id: 'g3p2', titulo: 'Guiada 3 P2 — Resultado final (La Merced)' },
+    { id: 'ind1',  titulo: 'Independiente 1 — Ingreso total (Tepito)' },
+    { id: 'ind2',  titulo: 'Independiente 2 — Diferencia de áreas (Jamaica)' },
+    { id: 'ind3',  titulo: 'Independiente 3 — Costo combinado (Metrobús)' },
+    { id: 'ind4',  titulo: 'Independiente 4 — Energía resultante (Xochimilco)' },
+    { id: 'ind5',  titulo: 'Independiente 5 — Caudal neto (Canal)' },
+    { id: 'modelo_texto', titulo: 'Construcción — Explicación con palabras propias' }
+  ];
+
+  actividades.forEach(function(a) {
+    var resp = respuestasEscritas[a.id] || '';
+    var esp  = respuestasEsperadas[a.id] || '';
+    html += '<div class="res-card">'
+          + '<div class="res-card-titulo">' + a.titulo + '</div>'
+          + '<div class="res-card-fila">'
+          + '<div class="res-label">Respuesta del alumno</div>'
+          + '<div class="res-valor" id="rv-' + a.id + '">' + (resp || '<em style="color:#aaa">sin respuesta</em>') + '</div>'
+          + '</div>'
+          + '<div class="res-card-fila" style="background:#f7f9ff;">'
+          + '<div class="res-label">Respuesta esperada</div>'
+          + '<div class="res-valor" id="re-' + a.id + '">' + esp + '</div>'
+          + '</div>'
+          + '</div>';
+  });
+
+  // ── Sección Quiz ──
+  html += '<div class="res-header-tabla">🎯 Quiz — 10 Preguntas</div>';
+
+  respuestasQuiz.forEach(function(r, i) {
+    var cls = r.ok ? 'res-ok' : 'res-err';
+    html += '<div class="res-card ' + cls + '">'
+          + '<div class="res-card-titulo">' + (r.ok ? '✅' : '❌') + ' Pregunta ' + (i+1) + '</div>'
+          + '<div class="res-card-fila">'
+          + '<div class="res-label">Enunciado</div>'
+          + '<div class="res-valor" id="qe-' + i + '">' + r.pregunta + '</div>'
+          + '</div>'
+          + '<div class="res-card-fila">'
+          + '<div class="res-label">Tu respuesta</div>'
+          + '<div class="res-valor" id="qs-' + i + '">' + r.seleccion + '</div>'
+          + '</div>'
+          + '<div class="res-card-fila">'
+          + '<div class="res-label">Respuesta correcta</div>'
+          + '<div class="res-valor" id="qc-' + i + '">' + r.correcta + '</div>'
+          + '</div>'
+          + '</div>';
+  });
+
+  if (respuestasEscritas['modelo_canvas_b64']) {
+    html += '<div class="res-header-tabla">🖊 Diagrama (S4b)</div>';
+    html += '<div class="res-card"><div style="padding:10px;"><img src="' + respuestasEscritas['modelo_canvas_b64'] + '" style="max-width:100%;border:1px solid #ccc;border-radius:6px;display:block;"></div></div>';
+  }
+
+  wrap.innerHTML = html;
+
+  // Renderizar MathJax en todo el contenedor
+  MathJax.typesetPromise([wrap]);
+}
+
+function guardarPDF() { window.print(); }
+
+// ─── HELPERS ─────────────────────────────────────────────────────
+function normalizarRespuesta(s) {
+  return s.replace(/\s+/g,'')
+          .replace(/[×x]/g,'*')
+          .replace(/−/g,'-')
+          .replace(/\^/g,'^')
+          .toLowerCase();
+}
+
+function mostrarFeedback(id, msg, tipo) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'feedback ' + tipo + ' visible';
+}
+function mostrarFeedbackEl(el, msg, tipo) {
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'feedback ' + tipo + ' visible';
+}
+
+// ─── PANEL DOCENTE ────────────────────────────────────────────────
+function abrirPanelDocente() {
+  var p = document.getElementById('panel-docente');
+  p.classList.add('visible');
+  panelVisible = true;
+}
+
+function togglePanel() {
+  var p = document.getElementById('panel-docente');
+  p.classList.toggle('visible');
+  panelVisible = p.classList.contains('visible');
+}
+
+function autenticar() {
+  var pass = document.getElementById('panel-pass').value;
+  if (pass === '890') {
+    panelAutenticado = true;
+    document.getElementById('panel-login').style.display = 'none';
+    document.getElementById('panel-contenido').style.display = 'block';
+    actualizarPanelStat();
+    document.getElementById('panel-err').style.display = 'none';
+  } else {
+    document.getElementById('panel-err').style.display = 'block';
+  }
+}
+
+function actualizarPanelStat() {
+  if (!panelAutenticado) return;
+  document.getElementById('ps-nombre').textContent = nombreAlumno || '—';
+  document.getElementById('ps-seccion').textContent = seccionesNombres[estadoActual] || '—';
+  document.getElementById('ps-escritas').textContent = Object.keys(respuestasEscritas).length;
+  document.getElementById('ps-quiz').textContent = respuestasQuiz.length + '/10';
+  var cal = puntajeQuiz > 0 ? (puntajeQuiz/60*10).toFixed(1) + '/10' : '—';
+  document.getElementById('ps-cal').textContent = cal;
+}
+
+function avanzarSinValidar() {
+  if (estadoActual < 7) navegarA(estadoActual + 1);
+}
+
+function simularResultados() {
+  if (!nombreAlumno) nombreAlumno = 'Alumno Simulado';
+  respuestasEscritas = {
+    detonador_q1: 'Terreno A: 4 términos, Terreno B: 4 términos',
+    detonador_q2: 'Creo que tendría menos términos porque varios se parecen',
+    detonador_q3: 'm^3n^2, m^2n^4, mn^5, m^6',
+    g1p1: '3m^3n^2', g1p2: '7m^3n^2', g1p3: '7m^3n^2-m^2n^4+4mn^5+4m^6',
+    g2p1: '-3x^3y^2+x^2z^5-2xz+z^7', g2p2: '4', g2p3: '5x^3y^2+4x^2z^5-7xz+3z^7',
+    g3p1: '5p^2q^3', g3p2: '9p^5-q^6-p',
+    ind1: '5p^2q+6pq^2', ind2: '5a^3b^2-2ab^5-3b^6', ind3: '6r^4s+3r^2s^3+2s^5',
+    ind4: '4u^5v^2+6u^2w^4-7v^7', ind5: '5c^6d+3c^2d^4-8cd^6+3d',
+    modelo_texto: 'Los términos semejantes son los que tienen exactamente las mismas variables con los mismos exponentes. Por ejemplo 3x²y y -5x²y son semejantes porque ambos tienen x² y y. Solo se pueden combinar entre ellos porque suman o restan esas cantidades específicas, como si fueran del mismo "tipo de objeto".'
+  };
+  quizPreguntas = quizData.map(function(q) {
+    return { enunciado: q.enunciado, opciones: genOpts(q.correcta, q.d1, q.d2, q.d3, q.d4), correcta: q.correcta };
+  });
+  puntajeQuiz = 0;
+  respuestasQuiz = [];
+  quizPreguntas.forEach(function(q) {
+    var ok = Math.random() > 0.3;
+    var sel = ok ? q.correcta : q.opciones.find(function(o){ return o !== q.correcta; });
+    if (ok) puntajeQuiz += 6;
+    respuestasQuiz.push({ pregunta: q.enunciado, seleccion: sel, correcta: q.correcta, ok: ok });
+  });
+  actualizarPanelStat();
+  navegarA(7);
+}
+
+// ARRASTRE PANEL
+function iniciarArrastre(e) {
+  panelArrastrando = true;
+  var p = document.getElementById('panel-docente');
+  var rect = p.getBoundingClientRect();
+  var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  panelOffsetX = clientX - rect.left;
+  panelOffsetY = clientY - rect.top;
+
+  function mover(ev) {
+    if (!panelArrastrando) return;
+    var cx = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    var cy = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    p.style.left = (cx - panelOffsetX) + 'px';
+    p.style.top = (cy - panelOffsetY) + 'px';
+    p.style.transform = 'none';
+    p.style.bottom = 'auto';
+  }
+  function soltar() {
+    panelArrastrando = false;
+    document.removeEventListener('mousemove', mover);
+    document.removeEventListener('mouseup', soltar);
+    document.removeEventListener('touchmove', mover);
+    document.removeEventListener('touchend', soltar);
+  }
+  document.addEventListener('mousemove', mover);
+  document.addEventListener('mouseup', soltar);
+  document.addEventListener('touchmove', mover, {passive:true});
+  document.addEventListener('touchend', soltar);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  MathJax.typesetPromise([document.getElementById('sec-0')]);
+});
+</script>
+</body>
+</html>
