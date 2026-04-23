@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Álgebra Interactiva - Monomios, Polinomios y Productos Notables</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js"></script>
+    <style>
+        * {
+            user-select: none;
+            box-sizing: border-box;
+        }
+        input, textarea, .respuesta-input {
+            user-select: text;
+        }
+        body {
+            background: #f0f2f5;
+            margin: 0;
+            padding: 16px;
+            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: #2c3e66;
+            gap: 2px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: #1e2a47;
+            border: none;
+            color: #eee;
+            padding: 14px 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .tab-btn.active {
+            background: #3a5a8f;
+            color: white;
+            border-bottom: 3px solid #ffb347;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 18px 24px;
+            background: white;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .id-field {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 1rem;
+            user-select: text;
+        }
+        .card-pregunta {
+            background: #f9fafc;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e0e4e8;
+        }
+        .enunciado {
+            background: #eef2ff;
+            padding: 16px;
+            border-radius: 20px;
+            margin: 10px 0;
+            font-weight: 500;
+            text-align: center;
+            overflow-x: auto;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .respuesta-area {
+            margin: 20px 0;
+        }
+        .respuesta-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-family: monospace;
+            background: #fff;
+            border: 2px solid #bdd4ff;
+            border-radius: 28px;
+            text-align: left;
+        }
+        .live-preview {
+            background: #f1f5f9;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            min-height: 60px;
+            border: 1px dashed #3a5a8f;
+        }
+        .botones-math {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-math {
+            background: #2c3e66;
+            border: none;
+            color: white;
+            padding: 12px 18px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            min-width: 60px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: 0.05s linear;
+        }
+        .btn-math:active {
+            transform: scale(0.94);
+            background: #1e2a47;
+        }
+        .btn-clear {
+            background: #b91c1c;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 12px;
+        }
+        button {
+            background: #2c3e66;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .msg-guardado {
+            color: green;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .progreso {
+            background: #ddd;
+            border-radius: 20px;
+            height: 8px;
+            margin: 15px 0;
+            width: 100%;
+        }
+        .progreso-bar {
+            background: #2c3e66;
+            width: 0%;
+            height: 8px;
+            border-radius: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .correcto { background: #d4edda; color: #155724; }
+        .incorrecto { background: #f8d7da; color: #721c24; }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #f1f3f7;
+            font-size: 0.7rem;
+        }
+        .warning-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #ff9800;
+            color: #000;
+            padding: 12px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        .calificacion-global {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            background: #2c3e66;
+            color: white;
+            padding: 20px;
+            border-radius: 28px;
+            margin-bottom: 20px;
+        }
+        .btn-pdf {
+            background: #d9534f;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .num-ejercicio {
+            font-size: 0.8rem;
+            color: #2c3e66;
+            text-align: right;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 550px) {
+            .tab-btn { font-size: 0.7rem; padding: 10px 4px; }
+            .btn-math { padding: 10px 14px; min-width: 55px; font-size: 1.1rem; }
+            .calificacion-global { font-size: 1.5rem; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-inicio">📋 Inicio</button>
+        <button class="tab-btn" data-tab="tab-tema1">📘 Monomio×Polinomio</button>
+        <button class="tab-btn" data-tab="tab-tema2">📙 Polinomio×Polinomio</button>
+        <button class="tab-btn" data-tab="tab-tema3">📗 Binomio al cuadrado</button>
+        <button class="tab-btn" data-tab="tab-resultados">📊 Resultados</button>
+    </div>
+
+    <div id="tab-inicio" class="tab-content active">
+        <h2>Identificación del alumno</h2>
+        <label>Nombre completo:</label>
+        <input type="text" id="nombreAlumno" class="id-field" placeholder="Ej: Ana García Méndez">
+        <label>Grupo / Materia:</label>
+        <input type="text" id="materia" class="id-field" value="ÁLGEBRA" readonly>
+        <label>Profesor:</label>
+        <input type="text" id="profesor" class="id-field" value="Prof. Adrián Cruz H" readonly>
+        <p style="margin-top: 20px; background: #eef2ff; padding: 12px; border-radius: 20px;">
+            🔍 <strong>Instrucciones:</strong> Resuelve cada problema usando los botones táctiles. Usa <code>^</code> para potencias (ej: x^2).<br>
+            ✅ Guarda cada respuesta antes de pasar a la siguiente. El reporte final solo estará disponible cuando hayas guardado los 15 problemas.<br>
+            ⚠️ No se permite copiar/pegar. Si minimizas o cambias de pestaña, la actividad se reiniciará automáticamente al regresar.
+        </p>
+        <button id="reinicioManualBtn" style="background:#b22234;">🔄 Reiniciar con nuevos problemas</button>
+        <button id="guardarPerfil">Guardar datos</button>
+    </div>
+
+    <div id="tab-tema1" class="tab-content">
+        <h3>📐 Tema 1: Multiplicación monomio × polinomio</h3>
+        <div class="progreso"><div class="progreso-bar" id="progT1"></div></div>
+        <div id="preguntaContainerT1"></div>
+        <div class="nav-buttons">
+            <button id="prevT1">◀ Anterior</button>
+            <button id="nextT1">Siguiente ▶</button>
+        </div>
+    </div>
+
+    <div id="tab-tema2" class="tab-content">
+        <h3>📏 Tema 2: Multiplicación polinomio × polinomio</h3>
+        <div class="progreso"><div class="progreso-bar" id="progT2"></div></div>
+        <div id="preguntaContainerT2"></div>
+        <div class="nav-buttons">
+            <button id="prevT2">◀ Anterior</button>
+            <button id="nextT2">Siguiente ▶</button>
+        </div>
+    </div>
+
+    <div id="tab-tema3" class="tab-content">
+        <h3>⚡ Tema 3: Productos notables - Binomio al cuadrado</h3>
+        <div class="progreso"><div class="progreso-bar" id="progT3"></div></div>
+        <div id="preguntaContainerT3"></div>
+        <div class="nav-buttons">
+            <button id="prevT3">◀ Anterior</button>
+            <button id="nextT3">Siguiente ▶</button>
+        </div>
+    </div>
+
+    <div id="tab-resultados" class="tab-content">
+        <h2>📋 Reporte de resultados</h2>
+        <div id="resultadosHeader"></div>
+        <div id="resultadosPanel"></div>
+        <button id="guardarPDFBtn" class="btn-pdf">📄 Guardar como PDF</button>
+    </div>
+    <footer>Álgebra Intermedia - Respuestas exactas (sin espacios, usar ^ para potencias)</footer>
+</div>
+
+<script>
+    // ANTI COPY / PASTE
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+    document.addEventListener('copy', (e) => e.preventDefault());
+    document.addEventListener('cut', (e) => e.preventDefault());
+    document.addEventListener('paste', (e) => {
+        e.preventDefault();
+        alert("No está permitido pegar texto en esta actividad.");
+    });
+    function blockPasteOnInputs() {
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('paste', (e) => {
+                e.preventDefault();
+                alert("Pegado no permitido");
+            });
+            el.addEventListener('copy', (e) => e.preventDefault());
+            el.addEventListener('cut', (e) => e.preventDefault());
+        });
+    }
+
+    // ========== NUEVA FUNCIÓN PARA RENDERIZAR TEXTO MIXTO (ESPAÑOL + MATEMÁTICAS) ==========
+    function renderizarTextoMixto(texto, elemento) {
+        if (!elemento) return;
+        // Dividir el texto por patrones $...$ (capturando el contenido matemático)
+        const regex = /\$([^$]+)\$/g;
+        const partes = [];
+        let lastIndex = 0;
+        let match;
+        while ((match = regex.exec(texto)) !== null) {
+            // Texto normal antes de la expresión
+            if (match.index > lastIndex) {
+                partes.push({ tipo: 'texto', contenido: texto.substring(lastIndex, match.index) });
+            }
+            // Expresión matemática (sin los $)
+            partes.push({ tipo: 'math', contenido: match[1] });
+            lastIndex = match.index + match[0].length;
+        }
+        // Texto después de la última expresión
+        if (lastIndex < texto.length) {
+            partes.push({ tipo: 'texto', contenido: texto.substring(lastIndex) });
+        }
+        // Si no hay ningún $, todo el texto es normal
+        if (partes.length === 0) {
+            partes.push({ tipo: 'texto', contenido: texto });
+        }
+        // Construir HTML
+        let html = '';
+        for (let p of partes) {
+            if (p.tipo === 'texto') {
+                // Escapar caracteres HTML y preservar espacios (convertimos espacios a &nbsp;? No, mejor usar white-space normal)
+                let textoEscapado = p.contenido.replace(/[&<>]/g, function(m) {
+                    if (m === '&') return '&amp;';
+                    if (m === '<') return '&lt;';
+                    if (m === '>') return '&gt;';
+                    return m;
+                });
+                // Reemplazar espacios por &nbsp;? No es necesario, con CSS se conservan
+                html += textoEscapado;
+            } else {
+                // Renderizar matemáticas con KaTeX
+                try {
+                    html += katex.renderToString(p.contenido, { throwOnError: false, displayMode: false });
+                } catch(e) {
+                    html += `<span class="error-math">${p.contenido}</span>`;
+                }
+            }
+        }
+        elemento.innerHTML = html;
+    }
+
+    // Para las respuestas (que son solo expresiones matemáticas) se mantiene una versión simplificada
+    function renderizarExpresionMath(expr, elemento) {
+        if (!elemento) return;
+        let raw = expr.trim();
+        if (raw === "") { elemento.innerHTML = ""; return; }
+        try {
+            let html = katex.renderToString(raw, { throwOnError: false, displayMode: false });
+            elemento.innerHTML = html;
+        } catch(e) { elemento.innerText = raw; }
+    }
+
+    // ======================= BANCOS DE PROBLEMAS =======================
+    function generarVariantesMonomioPolinomio() {
+        let nivel1 = [
+            { texto: "Calcula: $3x \\cdot (2x^2 + 4)$", respuesta: "6x^3+12x" },
+            { texto: "Calcula: $4x^2 \\cdot (x^2 - 3x)$", respuesta: "4x^4-12x^3" },
+            { texto: "Calcula: $-2x \\cdot (5x^2 + 3)$", respuesta: "-10x^3-6x" },
+            { texto: "Calcula: $5a \\cdot (a^2 - 2a + 1)$", respuesta: "5a^3-10a^2+5a" },
+            { texto: "Calcula: $3b^2 \\cdot (2b^3 + 4b)$", respuesta: "6b^5+12b^3" }
+        ];
+        let nivel2 = [
+            { texto: "Calcula: $-2a^2 \\cdot (a^3 - 3a + 1)$", respuesta: "-2a^5+6a^3-2a^2" },
+            { texto: "Calcula: $5x^3 \\cdot (2x^2 - 4x + 3)$", respuesta: "10x^5-20x^4+15x^3" },
+            { texto: "Calcula: $-3mn \\cdot (2m^2n - 5mn^2)$", respuesta: "-6m^3n^2+15m^2n^3" },
+            { texto: "Calcula: $4p^2q \\cdot (p^3 - 2pq + q^2)$", respuesta: "4p^5q-8p^3q^2+4p^2q^3" },
+            { texto: "Calcula: $-6xy^2 \\cdot (3x^2y - y^3 + 2)$", respuesta: "-18x^3y^3+6xy^5-12xy^2" }
+        ];
+        let nivel3 = [
+            { texto: "Calcula: $4xy \\cdot (x^2y - 3xy^2 + 2y^3)$", respuesta: "4x^3y^2-12x^2y^3+8xy^4" },
+            { texto: "Calcula: $-2a^2b^3 \\cdot (3a^3b - 5ab^2 + 2b^4)$", respuesta: "-6a^5b^4+10a^3b^5-4a^2b^7" },
+            { texto: "Calcula: $5m^3n^2 \\cdot (-2m^2n^3 + 4mn - 3n^2)$", respuesta: "-10m^5n^5+20m^4n^3-15m^3n^4" },
+            { texto: "Calcula: $7pq^2 \\cdot (p^2q^3 - 2p^3q + 5q)$", respuesta: "7p^3q^5-14p^4q^3+35pq^3" },
+            { texto: "Calcula: $-3x^2y^4 \\cdot (4x^3y - xy^2 + 2y^3)$", respuesta: "-12x^5y^5+3x^3y^6-6x^2y^7" }
+        ];
+        let probNoCtxBajo = [
+            { texto: "El producto de un monomio $M$ por el polinomio $3x^2 - 2x + 1$ es igual a $6x^4 - 4x^3 + 2x^2$. Determina $M$.", respuesta: "2x^2" },
+            { texto: "Un monomio $N$ multiplicado por $(5x^3 - x)$ da como resultado $15x^4 - 3x^2$. Halla $N$.", respuesta: "3x" },
+            { texto: "Si $P \\cdot (2a^2 + 3a) = 4a^4 + 6a^3$, encuentra $P$.", respuesta: "2a^2" },
+            { texto: "Un monomio $Q$ al multiplicarse por $(4b^2 - 2b)$ produce $12b^4 - 6b^3$, ¿cuál es $Q$?", respuesta: "3b^2" },
+            { texto: "El producto de $R$ por $(x^3 - 5x^2)$ es $2x^5 - 10x^4$, halla $R$.", respuesta: "2x^2" }
+        ];
+        let contextualizadoMedio = [
+            { texto: "En un mercado de Coyoacán, el precio de una artesanía es $4x^2$ pesos. Un comprador adquiere $(3x + 5)$ piezas. Plantea el costo total como polinomio.", respuesta: "12x^3+20x^2" },
+            { texto: "En un jardín de Tlalpan, el largo de un terreno mide $(5x^2+2x)$ m y el ancho $3x$ m. Obtén el área.", respuesta: "15x^3+6x^2" },
+            { texto: "Una escuela en Iztapalapa construye un mural rectangular de base $(2x^3+4x)$ y altura $(3x^2)$. Expresa el área del mural.", respuesta: "6x^5+12x^3" },
+            { texto: "En Xochimilco, un terreno cuesta $5x^2$ por metro cuadrado. Si se compran $(2x^2+3x)$ metros cuadrados, ¿cuánto se paga? (polinomio)", respuesta: "10x^4+15x^3" },
+            { texto: "En Benito Juárez, un cine tiene ingresos de $3x$ pesos por boleto. Si asisten $(4x^2-2x+1)$ personas, expresa la recaudación total.", respuesta: "12x^3-6x^2+3x" }
+        ];
+        return { nivel1, nivel2, nivel3, probNoCtxBajo, contextualizadoMedio };
+    }
+
+    function generarVariantesPolinomioPolinomio() {
+        let nivel1 = [
+            { texto: "Calcula: $(x+2)(x+3)$", respuesta: "x^2+5x+6" },
+            { texto: "Calcula: $(a+5)(a-2)$", respuesta: "a^2+3a-10" },
+            { texto: "Calcula: $(2x+1)(x+4)$", respuesta: "2x^2+9x+4" },
+            { texto: "Calcula: $(3b-2)(b+1)$", respuesta: "3b^2+b-2" },
+            { texto: "Calcula: $(x-6)(x-2)$", respuesta: "x^2-8x+12" }
+        ];
+        let nivel2 = [
+            { texto: "Calcula: $(2x-5)(3x+4)$", respuesta: "6x^2-7x-20" },
+            { texto: "Calcula: $(x^2+2x-1)(x-3)$", respuesta: "x^3-x^2-7x+3" },
+            { texto: "Calcula: $(4a^2+3a)(2a-5)$", respuesta: "8a^3-14a^2-15a" },
+            { texto: "Calcula: $(5m-2n)(3m+4n)$", respuesta: "15m^2+14mn-8n^2" },
+            { texto: "Calcula: $(2x^2-3x+1)(x+2)$", respuesta: "2x^3+x^2-5x+2" }
+        ];
+        let nivel3 = [
+            { texto: "Calcula: $(3a^2b - 2ab^2)(2a^2 + b^2)$", respuesta: "6a^4b+3a^2b^3-4a^3b^2-2ab^4" },
+            { texto: "Calcula: $(x^2y + 2xy^2)(3x - 4y)$", respuesta: "3x^3y+2x^2y^2-8xy^3" },
+            { texto: "Calcula: $(2p^3 - 3pq^2)(p^2q + 4q^2)$", respuesta: "2p^5q+8p^3q^2-3p^3q^3-12pq^4" },
+            { texto: "Calcula: $(4x^2y - 5xy^2)(-2x + 3y)$", respuesta: "-8x^3y+22x^2y^2-15xy^3" },
+            { texto: "Calcula: $(2a^3b^2 - a^2b)(3ab^2 + 5b)$", respuesta: "6a^4b^4+7a^3b^3-5a^2b^2" }
+        ];
+        let probNoCtxBajo = [
+            { texto: "El área de un rectángulo es base por altura. Si la base mide $(3x+2)$ y la altura $(x-5)$, halla el polinomio del área.", respuesta: "3x^2-13x-10" },
+            { texto: "Un rectángulo tiene largo $(4x-3)$ y ancho $(x+2)$. Expresa el área.", respuesta: "4x^2+5x-6" },
+            { texto: "Un rectángulo tiene largo $(2x+5)$ y ancho $(x-4)$. Halla su área.", respuesta: "2x^2-3x-20" },
+            { texto: "Multiplica $(x^2+2x-3)(x-4)$ y escribe el resultado.", respuesta: "x^3-2x^2-11x+12" },
+            { texto: "Calcula $(3x^2 - 2x + 1)(2x + 3)$ y simplifica.", respuesta: "6x^3+5x^2-4x+3" }
+        ];
+        let contextualizadoMedio = [
+            { texto: "En una secundaria del sur, se construye un jardín rectangular de largo $(2x+5)$ m y ancho $(x+3)$ m. Expresa el área.", respuesta: "2x^2+11x+15" },
+            { texto: "Un fabricante de cajas en Iztapalapa produce cajas con dimensiones: largo $(x+2)$ cm, ancho $(x-1)$ cm y altura $(x+4)$ cm. Plantea el volumen (polinomio).", respuesta: "x^3+5x^2+2x-8" },
+            { texto: "En Coyoacán, un terreno rectangular mide de largo $(3x-2)$ y de ancho $(2x+7)$. Expresa el área.", respuesta: "6x^2+17x-14" },
+            { texto: "En Tlalpan, un salón tiene forma rectangular: base $(x^2+2)$ y altura $(x+3)$. Expresa el área.", respuesta: "x^3+3x^2+2x+6" },
+            { texto: "En Xochimilco, un corredor turístico tiene forma rectangular de largo $(4x-1)$ y ancho $(x+5)$. Calcula el área.", respuesta: "4x^2+19x-5" }
+        ];
+        return { nivel1, nivel2, nivel3, probNoCtxBajo, contextualizadoMedio };
+    }
+
+    function generarVariantesBinomioCuadrado() {
+        let nivel1 = [
+            { texto: "Desarrolla: $(x+3)^2$", respuesta: "x^2+6x+9" },
+            { texto: "Desarrolla: $(a-4)^2$", respuesta: "a^2-8a+16" },
+            { texto: "Desarrolla: $(2x+1)^2$", respuesta: "4x^2+4x+1" },
+            { texto: "Desarrolla: $(3y-2)^2$", respuesta: "9y^2-12y+4" },
+            { texto: "Desarrolla: $(x+5)^2$", respuesta: "x^2+10x+25" }
+        ];
+        let nivel2 = [
+            { texto: "Desarrolla: $(2x-5)^2$", respuesta: "4x^2-20x+25" },
+            { texto: "Desarrolla: $(3x^2+4y)^2$", respuesta: "9x^4+24x^2y+16y^2" },
+            { texto: "Desarrolla: $(5a-3b)^2$", respuesta: "25a^2-30ab+9b^2" },
+            { texto: "Desarrolla: $(4m^2+1)^2$", respuesta: "16m^4+8m^2+1" },
+            { texto: "Desarrolla: $(2x^3-3)^2$", respuesta: "4x^6-12x^3+9" }
+        ];
+        let nivel3 = [
+            { texto: "Desarrolla: $(3x^2y - 2xy^2)^2$", respuesta: "9x^4y^2-12x^3y^3+4x^2y^4" },
+            { texto: "Desarrolla: $(5a^3b - 2ab^2)^2$", respuesta: "25a^6b^2-20a^4b^3+4a^2b^4" },
+            { texto: "Desarrolla: $(-4x^2y^3 + 7)^2$", respuesta: "16x^4y^6-56x^2y^3+49" },
+            { texto: "Desarrolla: $(2p^2q^3 + 5pq)^2$", respuesta: "4p^4q^6+20p^3q^4+25p^2q^2" },
+            { texto: "Desarrolla: $(6x^3y^2 - 4xy)^2$", respuesta: "36x^6y^4-48x^4y^3+16x^2y^2" }
+        ];
+        let probNoCtxBajo = [
+            { texto: "Desarrolla $(3x^2 - 2x)^2$ y simplifica.", respuesta: "9x^4-12x^3+4x^2" },
+            { texto: "Si $(mx + n)^2 = 4x^2 - 12x + 9$, encuentra los valores enteros de $m$ y $n$. Luego desarrolla $(2x^3y^2 - 5xy^3)^2$. (Escribe solo el resultado del segundo binomio)", respuesta: "4x^6y^4-20x^4y^5+25x^2y^6" },
+            { texto: "Desarrolla $(4a^2+5b)^2$", respuesta: "16a^4+40a^2b+25b^2" },
+            { texto: "Desarrolla $(2x - 3y^2)^2$", respuesta: "4x^2-12xy^2+9y^4" },
+            { texto: "Calcula $(5pq^2 - 2p^2q)^2$", respuesta: "25p^2q^4-20p^3q^3+4p^4q^2" }
+        ];
+        let contextualizadoMedio = [
+            { texto: "Una plaza cuadrada en Benito Juárez tiene lado $(3x+2)$ m. Expresa su área como trinomio cuadrado perfecto.", respuesta: "9x^2+12x+4" },
+            { texto: "En un parque de Iztapalapa, una fuente cuadrada tiene lado $(x-4)$ m. Alrededor se agrega césped hasta alcanzar un lado total de $(x+2)$ m. Plantea el área del césped (área total - área fuente).", respuesta: "12x-12" },
+            { texto: "En Xochimilco, un andador cuadrado mide de lado $(2x+3)$ m. Halla el área.", respuesta: "4x^2+12x+9" },
+            { texto: "En Coyoacán, un espejo cuadrado tiene lado $(4x-1)$ cm. Determina su área.", respuesta: "16x^2-8x+1" },
+            { texto: "En Tlalpan, un vitral cuadrado mide $(x+6)$ dm de lado. Expresa el área en dm².", respuesta: "x^2+12x+36" }
+        ];
+        return { nivel1, nivel2, nivel3, probNoCtxBajo, contextualizadoMedio };
+    }
+
+    // Estado global
+    let preguntasPorTema = { tema1: [], tema2: [], tema3: [] };
+    let respuestasAlumno = { tema1: [], tema2: [], tema3: [] };
+    let indicePreguntaActual = { tema1: 0, tema2: 0, tema3: 0 };
+    let reinicioAutomaticoEnProgreso = false;
+
+    function inicializarBancos() {
+        const t1 = generarVariantesMonomioPolinomio();
+        const t2 = generarVariantesPolinomioPolinomio();
+        const t3 = generarVariantesBinomioCuadrado();
+        function elegirVariante(grupo) { return grupo[Math.floor(Math.random() * grupo.length)]; }
+        preguntasPorTema.tema1 = [
+            elegirVariante(t1.nivel1), elegirVariante(t1.nivel2), elegirVariante(t1.nivel3),
+            elegirVariante(t1.probNoCtxBajo), elegirVariante(t1.contextualizadoMedio)
+        ];
+        preguntasPorTema.tema2 = [
+            elegirVariante(t2.nivel1), elegirVariante(t2.nivel2), elegirVariante(t2.nivel3),
+            elegirVariante(t2.probNoCtxBajo), elegirVariante(t2.contextualizadoMedio)
+        ];
+        preguntasPorTema.tema3 = [
+            elegirVariante(t3.nivel1), elegirVariante(t3.nivel2), elegirVariante(t3.nivel3),
+            elegirVariante(t3.probNoCtxBajo), elegirVariante(t3.contextualizadoMedio)
+        ];
+        for (let i=0;i<5;i++) {
+            respuestasAlumno.tema1[i] = "";
+            respuestasAlumno.tema2[i] = "";
+            respuestasAlumno.tema3[i] = "";
+        }
+    }
+
+    function actualizarLivePreview(inputId, previewId) {
+        let inputVal = document.getElementById(inputId)?.value || "";
+        let previewDiv = document.getElementById(previewId);
+        if (previewDiv) {
+            renderizarExpresionMath(inputVal, previewDiv);
+        }
+    }
+
+    function renderizarPregunta(temaId, containerId) {
+        let preguntas = preguntasPorTema[temaId];
+        let idx = indicePreguntaActual[temaId];
+        let pregunta = preguntas[idx];
+        let respuestaGuardada = respuestasAlumno[temaId][idx] || "";
+        let uniqueId = `resp_${temaId}_${idx}`;
+        let previewId = `preview_${temaId}_${idx}`;
+        let numEjercicio = idx + 1;
+        let html = `
+            <div class="card-pregunta">
+                <div class="num-ejercicio">Ejercicio ${numEjercicio} / 5</div>
+                <div class="enunciado" id="enunciado_${temaId}_${idx}"></div>
+                <div class="respuesta-area">
+                    <input type="text" id="${uniqueId}" class="respuesta-input" value="${respuestaGuardada.replace(/"/g, '&quot;')}" placeholder="Ej: 3x^2+5x-2">
+                    <div class="live-preview" id="${previewId}"></div>
+                    <div class="botones-math">
+                        <button class="btn-math" data-char="+">+</button>
+                        <button class="btn-math" data-char="-">-</button>
+                        <button class="btn-math" data-char="*">*</button>
+                        <button class="btn-math" data-char="/">/</button>
+                        <button class="btn-math" data-char="^">^</button>
+                        <button class="btn-math" data-char=".">.</button>
+                        <button class="btn-math" data-char="=">=</button>
+                        <button class="btn-math" data-char="←">←</button>
+                        <button class="btn-math btn-clear" data-char="clear">Limpiar</button>
+                    </div>
+                    <button class="guardarBtn" data-tema="${temaId}" data-idx="${idx}" style="background:#2c5e2e; width:100%; margin-top:10px;">💾 Guardar respuesta</button>
+                    <div id="msg_${uniqueId}" class="msg-guardado"></div>
+                </div>
+            </div>
+        `;
+        document.getElementById(containerId).innerHTML = html;
+        let enunciadoDiv = document.getElementById(`enunciado_${temaId}_${idx}`);
+        if (enunciadoDiv) renderizarTextoMixto(pregunta.texto, enunciadoDiv);
+        let inputField = document.getElementById(uniqueId);
+        if (inputField) {
+            inputField.addEventListener('input', () => actualizarLivePreview(uniqueId, previewId));
+            actualizarLivePreview(uniqueId, previewId);
+            inputField.addEventListener('paste', (e) => { e.preventDefault(); alert("Pegado no permitido"); });
+        }
+        let botones = document.querySelectorAll(`#${containerId} .btn-math`);
+        botones.forEach(btn => {
+            btn.addEventListener('click', () => {
+                let char = btn.getAttribute('data-char');
+                if (char === 'clear') { if (inputField) inputField.value = ''; }
+                else if (char === '←') { if (inputField) inputField.value = inputField.value.slice(0, -1); }
+                else { if (inputField) inputField.value += char; }
+                if (inputField) { inputField.dispatchEvent(new Event('input')); inputField.focus(); }
+            });
+        });
+        let guardarBtn = document.querySelector(`#${containerId} .guardarBtn`);
+        if (guardarBtn) {
+            guardarBtn.addEventListener('click', () => {
+                let val = inputField ? inputField.value.trim() : "";
+                respuestasAlumno[temaId][idx] = val;
+                let msgDiv = document.getElementById(`msg_${uniqueId}`);
+                if (msgDiv) { msgDiv.textContent = "✅ Respuesta guardada"; setTimeout(() => msgDiv.textContent = "", 1500); }
+                actualizarProgreso(temaId);
+            });
+        }
+        actualizarProgreso(temaId);
+    }
+
+    function actualizarProgreso(temaId) {
+        let total = 5;
+        let respondidas = respuestasAlumno[temaId].filter(r => r.trim() !== "").length;
+        let porcentaje = (respondidas/total)*100;
+        let barId = (temaId === 'tema1'? 'progT1' : (temaId==='tema2'? 'progT2':'progT3'));
+        let bar = document.getElementById(barId);
+        if (bar) bar.style.width = `${porcentaje}%`;
+    }
+
+    function todasRespuestasCompletas() {
+        for (let t of ['tema1','tema2','tema3'])
+            for (let i=0;i<5;i++)
+                if (!respuestasAlumno[t][i] || respuestasAlumno[t][i].trim() === "") return false;
+        return true;
+    }
+
+    function mostrarResultados() {
+        let completas = todasRespuestasCompletas();
+        let nombre = document.getElementById('nombreAlumno').value || "Anónimo";
+        let headerDiv = document.getElementById('resultadosHeader');
+        let panel = document.getElementById('resultadosPanel');
+        if (!completas) {
+            headerDiv.innerHTML = "";
+            panel.innerHTML = `<div style="background:#fff3cd; padding:20px; border-radius:20px; text-align:center;">
+                ⚠️ Aún no has guardado respuesta en todos los problemas. <br>
+                Completa los 15 ejercicios (5 por cada tema) y guarda cada respuesta para ver tu calificación.
+            </div>`;
+            return;
+        }
+        let aciertos = 0, total = 0;
+        let detalles = [];
+        for (let t=1; t<=3; t++) {
+            let temaKey = `tema${t}`;
+            let preg = preguntasPorTema[temaKey];
+            let resp = respuestasAlumno[temaKey];
+            for (let i=0;i<5;i++) {
+                total++;
+                let userResp = resp[i] || "";
+                let correcta = preg[i].respuesta;
+                let normalizadaUser = userResp.replace(/\s/g, '').toLowerCase();
+                let normalizadaCorrecta = correcta.replace(/\s/g, '').toLowerCase();
+                let ok = (normalizadaUser === normalizadaCorrecta);
+                if (ok) aciertos++;
+                let temaNombre = (t===1?"Monomio×Polinomio":(t===2?"Polinomio×Polinomio":"Binomio cuadrado"));
+                detalles.push({ temaNombre, pregunta: preg[i].texto, userResp, correcta, ok });
+            }
+        }
+        let calificacion = Math.round(aciertos/total*100);
+        headerDiv.innerHTML = `
+            <div class="calificacion-global">
+                📊 Calificación: ${aciertos}/${total} (${calificacion}%)
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <strong>Alumno:</strong> ${nombre}
+            </div>
+        `;
+        let html = `<table><thead><tr><th>#</th><th>Tema</th><th>Pregunta</th><th>Tu respuesta</th><th>Correcta?</th></tr></thead><tbody>`;
+        let idx = 1;
+        for (let d of detalles) {
+            let userSpanId = `user_${idx}`;
+            let expectedSpanId = `exp_${idx}`;
+            // Para la pregunta, usamos renderizado mixto, así que creamos un contenedor
+            html += `<tr class="${d.ok?'correcto':'incorrecto'}">
+                           <td>${idx}</td>
+                           <td>${d.temaNombre}</td>
+                           <td><div id="preg_${idx}" class="pregunta-mixta"></div></td>
+                           <td><span id="${userSpanId}">${escapeHtml(d.userResp) || "—"}</span></td>
+                           <td>${d.ok ? "✓" : `✗ (Esperado: <span id="${expectedSpanId}">${escapeHtml(d.correcta)}</span>)`}</td>
+                       </tr>`;
+            idx++;
+        }
+        html += `</tbody></table>`;
+        panel.innerHTML = html;
+        // Renderizar preguntas mixtas
+        for (let i=1; i<=total; i++) {
+            let pregDiv = document.getElementById(`preg_${i}`);
+            if (pregDiv) renderizarTextoMixto(detalles[i-1].pregunta, pregDiv);
+            let userSpan = document.getElementById(`user_${i}`);
+            if (userSpan && userSpan.innerText.trim() !== "") renderizarExpresionMath(userSpan.innerText, userSpan);
+            let expSpan = document.getElementById(`exp_${i}`);
+            if (expSpan && expSpan.innerText.trim() !== "") renderizarExpresionMath(expSpan.innerText, expSpan);
+        }
+    }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    function navegar(temaId, direccion, containerId) {
+        let nuevoIdx = indicePreguntaActual[temaId] + direccion;
+        if (nuevoIdx >=0 && nuevoIdx < 5) {
+            indicePreguntaActual[temaId] = nuevoIdx;
+            renderizarPregunta(temaId, containerId);
+        }
+    }
+
+    function reiniciarConNuevosProblemas() {
+        inicializarBancos();
+        for (let t of ['tema1','tema2','tema3']) indicePreguntaActual[t] = 0;
+        renderizarPregunta('tema1', 'preguntaContainerT1');
+        renderizarPregunta('tema2', 'preguntaContainerT2');
+        renderizarPregunta('tema3', 'preguntaContainerT3');
+        document.getElementById('resultadosHeader').innerHTML = "";
+        document.getElementById('resultadosPanel').innerHTML = "";
+        let toast = document.querySelector('.warning-toast');
+        if (toast) toast.remove();
+        reinicioAutomaticoEnProgreso = false;
+        alert("Se han generado nuevos problemas. Tus respuestas anteriores se borraron.");
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !todasRespuestasCompletas() && !reinicioAutomaticoEnProgreso) {
+            reinicioAutomaticoEnProgreso = true;
+            let toast = document.createElement('div');
+            toast.className = 'warning-toast';
+            toast.textContent = '⚠️ La actividad se reiniciará automáticamente por cambio de pestaña o minimización.';
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                reiniciarConNuevosProblemas();
+                if (toast.parentNode) toast.remove();
+            }, 1000);
+        }
+    });
+
+    function cargarTabs() {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                contents.forEach(c => c.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+                tabs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (tabId === 'tab-tema1') renderizarPregunta('tema1', 'preguntaContainerT1');
+                if (tabId === 'tab-tema2') renderizarPregunta('tema2', 'preguntaContainerT2');
+                if (tabId === 'tab-tema3') renderizarPregunta('tema3', 'preguntaContainerT3');
+                if (tabId === 'tab-resultados') mostrarResultados();
+            });
+        });
+        document.getElementById('prevT1').onclick = () => navegar('tema1', -1, 'preguntaContainerT1');
+        document.getElementById('nextT1').onclick = () => navegar('tema1', 1, 'preguntaContainerT1');
+        document.getElementById('prevT2').onclick = () => navegar('tema2', -1, 'preguntaContainerT2');
+        document.getElementById('nextT2').onclick = () => navegar('tema2', 1, 'preguntaContainerT2');
+        document.getElementById('prevT3').onclick = () => navegar('tema3', -1, 'preguntaContainerT3');
+        document.getElementById('nextT3').onclick = () => navegar('tema3', 1, 'preguntaContainerT3');
+        document.getElementById('guardarPerfil').onclick = () => alert("Datos guardados");
+        document.getElementById('reinicioManualBtn').onclick = () => reiniciarConNuevosProblemas();
+        document.getElementById('guardarPDFBtn').onclick = () => window.print();
+    }
+
+    inicializarBancos();
+    cargarTabs();
+    window.addEventListener('load', () => {
+        renderizarPregunta('tema1', 'preguntaContainerT1');
+        renderizarPregunta('tema2', 'preguntaContainerT2');
+        renderizarPregunta('tema3', 'preguntaContainerT3');
+        blockPasteOnInputs();
+    });
+</script>
+</body>
+</html>
