@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Álgebra: Operaciones con Polinomios</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+margin:0;padding:0;
+background:#0d1117;
+color:#e0e0e0;
+min-height:100vh;
+overscroll-behavior-y:none;
+}
+.container{
+max-width:800px;
+margin:0 auto;
+padding:16px;
+padding-bottom:100px;
+}
+.hidden{display:none!important}
+
+.header{
+text-align:center;
+padding:20px 0;
+background:#161b22;
+border-radius:16px;
+margin-bottom:16px;
+border:1px solid #2d333b;
+box-shadow:0 2px 12px rgba(0,0,0,0.4);
+}
+.header h1{
+margin:0;
+font-size:1.4rem;
+color:#58a6ff;
+letter-spacing:1px;
+text-shadow:0 0 10px rgba(88,166,255,0.2);
+}
+.header .prof{
+color:#8b949e;
+font-size:0.95rem;
+margin-top:6px;
+}
+.math-svg{
+width:80px;
+height:80px;
+margin:0 auto 12px;
+}
+
+.card{
+background:#161b22;
+border-radius:16px;
+padding:20px;
+margin-bottom:16px;
+border:1px solid #2d333b;
+box-shadow:0 2px 12px rgba(0,0,0,0.4);
+}
+.card-title{
+font-size:1.1rem;
+font-weight:600;
+color:#58a6ff;
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+.badge{
+background:#1a5276;
+color:white;
+padding:3px 10px;
+border-radius:20px;
+font-size:0.75rem;
+font-weight:600;
+box-shadow:0 0 8px rgba(26,82,118,0.4);
+}
+
+input[type="text"],.math-input{
+width:100%;
+padding:14px;
+border:2px solid #2d333b;
+border-radius:12px;
+font-size:1rem;
+font-family:'Courier New',monospace;
+background:#0d1117;
+color:#e0e0e0;
+transition:border-color 0.2s,box-shadow 0.2s;
+margin-bottom:8px;
+}
+input[type="text"]:focus,.math-input:focus{
+outline:none;
+border-color:#58a6ff;
+box-shadow:0 0 0 3px rgba(88,166,255,0.15);
+}
+input[type="text"]::placeholder{
+color:#6e7681;
+}
+.live-preview{
+background:#0d1117;
+border-radius:12px;
+padding:16px;
+min-height:50px;
+text-align:center;
+font-size:1.2rem;
+margin-bottom:12px;
+border:1px dashed #484f58;
+color:#e0e0e0;
+overflow-x:auto;
+}
+.math-pad{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+margin-bottom:12px;
+}
+.math-btn{
+padding:12px 4px;
+border:none;
+border-radius:10px;
+background:#1a5276;
+color:white;
+font-size:1.1rem;
+font-weight:600;
+cursor:pointer;
+transition:transform 0.1s,background 0.2s,box-shadow 0.2s;
+touch-action:manipulation;
+box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+.math-btn:active{
+transform:scale(0.95);
+background:#154360;
+box-shadow:0 0 12px rgba(26,82,118,0.5);
+}
+.math-btn.wide{grid-column:span 2}
+.math-btn.danger{
+background:#da3633;
+}
+.math-btn.danger:active{
+background:#b62318;
+box-shadow:0 0 12px rgba(218,54,51,0.4);
+}
+
+.options-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+.option-item{
+padding:14px;
+border:2px solid #2d333b;
+border-radius:12px;
+cursor:pointer;
+transition:all 0.2s;
+display:flex;
+align-items:flex-start;
+gap:10px;
+background:#161b22;
+color:#e0e0e0;
+}
+.option-item:active{transform:scale(0.98)}
+.option-item.selected{
+border-color:#58a6ff;
+background:rgba(88,166,255,0.08);
+box-shadow:0 0 0 1px rgba(88,166,255,0.2);
+}
+.option-item .opt-letter{
+background:#1a5276;
+color:white;
+width:28px;
+height:28px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:0.85rem;
+flex-shrink:0;
+box-shadow:0 0 6px rgba(26,82,118,0.4);
+}
+.option-item.selected .opt-letter{
+background:#58a6ff;
+box-shadow:0 0 8px rgba(88,166,255,0.4);
+}
+
+.btn{
+padding:14px 24px;
+border:none;
+border-radius:12px;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:all 0.2s;
+width:100%;
+margin-bottom:10px;
+touch-action:manipulation;
+box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+.btn:active{transform:scale(0.98)}
+.btn-primary{
+background:#1a5276;
+color:white;
+}
+.btn-primary:active{
+background:#154360;
+box-shadow:0 0 12px rgba(26,82,118,0.5);
+}
+.btn-success{
+background:#238636;
+color:white;
+}
+.btn-success:active{
+background:#196c2e;
+box-shadow:0 0 12px rgba(35,134,54,0.4);
+}
+.btn-secondary{
+background:#484f58;
+color:white;
+}
+.btn-secondary:active{
+background:#3d444d;
+}
+.btn-nav{
+width:auto;
+padding:12px 20px;
+flex:1;
+}
+.nav-buttons{
+display:flex;
+gap:10px;
+margin-top:16px;
+}
+
+.progress-bar{
+height:6px;
+background:#2d333b;
+border-radius:3px;
+margin-bottom:16px;
+overflow:hidden;
+}
+.progress-fill{
+height:100%;
+background:#58a6ff;
+border-radius:3px;
+transition:width 0.3s;
+box-shadow:0 0 8px rgba(88,166,255,0.3);
+}
+.progress-text{
+text-align:center;
+font-size:0.85rem;
+color:#8b949e;
+margin-bottom:8px;
+}
+
+.warning-box{
+background:rgba(210,153,34,0.1);
+border:2px solid #d29922;
+border-radius:12px;
+padding:16px;
+margin-bottom:16px;
+font-size:0.9rem;
+color:#e3b341;
+}
+.warning-box strong{
+color:#f0883e;
+}
+
+.results-table{
+width:100%;
+border-collapse:collapse;
+font-size:0.85rem;
+margin-top:16px;
+color:#e0e0e0;
+}
+.results-table th{
+background:#1a5276;
+color:white;
+padding:10px 6px;
+text-align:center;
+}
+.results-table td{
+padding:10px 6px;
+border-bottom:1px solid #2d333b;
+text-align:center;
+}
+.results-table tr:nth-child(even){
+background:#0d1117;
+}
+.correct{
+color:#3fb950;
+font-weight:700;
+}
+.incorrect{
+color:#f85149;
+font-weight:700;
+}
+.partial{
+color:#d29922;
+font-weight:700;
+}
+
+.score-circle{
+width:120px;
+height:120px;
+border-radius:50%;
+background:linear-gradient(135deg,#1a5276,#0d419d);
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+margin:0 auto 16px;
+box-shadow:0 4px 20px rgba(26,82,118,0.4),0 0 30px rgba(88,166,255,0.1);
+}
+.score-number{
+font-size:2.2rem;
+font-weight:700;
+}
+.score-label{
+font-size:0.8rem;
+opacity:0.9;
+}
+
+.explain-box{
+background:rgba(46,160,67,0.08);
+border-left:4px solid #3fb950;
+padding:14px;
+border-radius:0 12px 12px 0;
+margin:12px 0;
+font-size:0.92rem;
+color:#e0e0e0;
+}
+.explain-box strong{
+color:#3fb950;
+}
+
+.section-label{
+font-size:0.8rem;
+text-transform:uppercase;
+letter-spacing:1px;
+color:#8b949e;
+margin:20px 0 8px;
+font-weight:700;
+}
+
+.saved-indicator{
+text-align:center;
+color:#3fb950;
+font-size:0.9rem;
+margin-top:8px;
+font-weight:600;
+opacity:0;
+transition:opacity 0.3s;
+}
+.saved-indicator.show{
+opacity:1;
+}
+
+.validation-info{
+background:rgba(88,166,255,0.08);
+border-radius:8px;
+padding:10px 14px;
+margin-top:8px;
+font-size:0.85rem;
+color:#58a6ff;
+display:none;
+}
+.validation-info.show{
+display:block;
+}
+
+@media(max-width:480px){
+.container{padding:10px;padding-bottom:90px}
+.header h1{font-size:1.15rem}
+.math-pad{grid-template-columns:repeat(5,1fr);gap:6px}
+.math-btn{padding:10px 2px;font-size:1rem}
+.card{padding:16px}
+.results-table{font-size:0.75rem}
+.results-table th,.results-table td{padding:6px 4px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="screen-start">
+<div class="header">
+<svg class="math-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="none" stroke="#58a6ff" stroke-width="3"/><text x="50" y="45" text-anchor="middle" font-size="28" font-weight="bold" fill="#58a6ff">∑</text><text x="50" y="68" text-anchor="middle" font-size="12" fill="#8b949e">ALGEBRA</text></svg>
+<h1>ÁLGEBRA</h1><div style="font-size:1.1rem;color:#e0e0e0;margin-top:4px">Operaciones con Polinomios</div><div class="prof">Prof. Adrián CruzH</div>
+</div>
+<div class="warning-box"><strong>⚠️ Importante:</strong> Esta actividad tiene medidas de seguridad. No cambies de pestaña ni minimices la aplicación, o se reiniciará tu progreso. No copies ni pegues respuestas.</div>
+<div class="card"><div class="card-title">👤 Ingresa tu nombre</div><input type="text" id="student-name" placeholder="Escribe tu nombre completo" autocomplete="off"><button class="btn btn-primary" onclick="startActivity()">Guardar y Comenzar</button></div>
+<div class="card">
+<div class="card-title">📚 ¿Por qué usamos letras?</div>
+<div class="explain-box"><strong>Imagina que programas una app como Uber o Rappi.</strong><br><br>Si el programador pusiera: "Cobrar $50 por viaje", la empresa quebraría cuando suba la gasolina o haya tráfico. En lugar de eso, usan <strong>variables</strong>:<br><br><strong>Costo = 20 + 12d + 4t</strong><br>• d = distancia en km (varía)<br>• t = tiempo en tráfico (varía)<br><br><strong>El álgebra sirve para dejar las instrucciones listas.</strong> No resuelves un problema para una sola vez; creas una "máquina" (la fórmula) que resuelve el problema miles de veces, sin importar qué valores tomen las letras hoy o mañana.</div>
+<div class="explain-box" style="border-left-color:#f85149;background:rgba(248,81,73,0.08)"><strong style="color:#f85149">Otro ejemplo:</strong> Un arquitecto diseña una sala con medidas (3x + 2) por (2x + 5). No sabe si x será 2, 3 o 4 metros porque depende del terreno que compre el cliente. Si deja la fórmula con letras, cuando el cliente elija terreno, solo sustituye x y obtiene el área exacta. <strong>La fórmula es una máquina que resuelve para cualquier valor.</strong></div>
+</div>
+</div>
+<div id="screen-problems" class="hidden">
+<div class="progress-text" id="progress-text">Pregunta 1 de 15</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:6.66%"></div></div>
+<div id="problems-container"></div>
+<div class="nav-buttons">
+<button class="btn btn-secondary btn-nav" id="btn-prev" onclick="prevQuestion()">← Anterior</button>
+<button class="btn btn-primary btn-nav" id="btn-next" onclick="nextQuestion()">Siguiente →</button>
+</div>
+</div>
+<div id="screen-results" class="hidden">
+<div class="header"><h1>Resultados</h1><div class="prof" id="result-name"></div></div>
+<div class="score-circle"><div class="score-number" id="score-number">0</div><div class="score-label">de 150</div></div>
+<div class="card"><button class="btn btn-success" onclick="savePDF()">📄 Guardar en PDF</button></div>
+<div id="results-table-container"></div>
+</div>
+</div>
+<script>
+const PROBLEMS_DATA=[{"id": 1, "category": "Transporte", "type": "suma", "justification": "Se usan letras porque la distancia y el tiempo de tráfico cambian en cada viaje. La fórmula debe funcionar para cualquier viaje, no solo para uno específico.", "comp_q": "¿Por qué la app de transporte usa letras como d y t en lugar de números fijos?", "comp_options": ["Porque los números fijos serían más fáciles de recordar", "Porque la distancia y el tiempo varían según cada viaje y la fórmula debe servir siempre", "Porque las letras se ven más profesionales en la app", "Porque los programadores no saben cuánto costará el viaje de antemano", "Porque es una regla de las matemáticas que todas las apps deben seguir"], "comp_answer": 1, "variants": [{"context": "Una app de transporte cobra tarifa base de $20, $12 por cada kilómetro recorrido (d) y $4 por cada minuto de espera en tráfico (t). Si haces 2 viajes idénticos el mismo día, escribe el polinomio que representa el costo total de los 2 viajes.", "expected_expr": "40 + 24d + 8t", "eval_at": {"d": 5, "t": 10}, "eval_expected": 240}, {"context": "Una app de transporte cobra tarifa base de $25, $8 por cada kilómetro recorrido (d) y $5 por cada minuto de espera en tráfico (t). Si haces 2 viajes idénticos el mismo día, escribe el polinomio que representa el costo total de los 2 viajes.", "expected_expr": "50 + 16d + 10t", "eval_at": {"d": 8, "t": 6}, "eval_expected": 238}, {"context": "Una app de transporte cobra tarifa base de $30, $10 por cada kilómetro recorrido (d) y $3 por cada minuto de espera en tráfico (t). Si haces 3 viajes idénticos el mismo día, escribe el polinomio que representa el costo total de los 3 viajes.", "expected_expr": "90 + 30d + 9t", "eval_at": {"d": 4, "t": 12}, "eval_expected": 318}, {"context": "Una app de transporte cobra tarifa base de $15, $14 por cada kilómetro recorrido (d) y $6 por cada minuto de espera en tráfico (t). Si haces 2 viajes idénticos el mismo día, escribe el polinomio que representa el costo total de los 2 viajes.", "expected_expr": "30 + 28d + 12t", "eval_at": {"d": 7, "t": 8}, "eval_expected": 322}, {"context": "Una app de transporte cobra tarifa base de $18, $9 por cada kilómetro recorrido (d) y $4 por cada minuto de espera en tráfico (t). Si haces 3 viajes idénticos el mismo día, escribe el polinomio que representa el costo total de los 3 viajes.", "expected_expr": "54 + 27d + 12t", "eval_at": {"d": 6, "t": 5}, "eval_expected": 276}, {"context": "Una app de transporte cobra tarifa base de $22, $11 por cada kilómetro recorrido (d) y $5 por cada minuto de espera en tráfico (t). Si haces 2 viajes idénticos el mismo día, escribe el polinomio que representa el costo total de los 2 viajes.", "expected_expr": "44 + 22d + 10t", "eval_at": {"d": 9, "t": 7}, "eval_expected": 312}]}, {"id": 2, "category": "Construcción", "type": "resta", "justification": "Se usan letras porque las dimensiones del terreno dependen del lote disponible, que puede variar según la zona. La fórmula sirve para cualquier terreno similar.", "comp_q": "¿Por qué se usan letras como x para las medidas del terreno en lugar de números exactos?", "comp_options": ["Porque el arquitecto todavía no tiene la cinta métrica", "Porque las medidas pueden variar según el lote y la fórmula debe servir para todos los casos similares", "Porque los números exactos harían el dibujo muy grande", "Porque x siempre representa 10 metros en construcción", "Porque las letras son más baratas de escribir que los números"], "comp_answer": 1, "variants": [{"context": "Un terreno rectangular mide (5x + 3) metros de largo y (3x + 2) metros de ancho. Dentro se construirá una alberca rectangular de (2x + 1) metros por (x + 2) metros. Escribe el polinomio del área del terreno que quedará sin alberca.", "expected_expr": "13x^2 + 14x + 4", "eval_at": {"x": 3}, "eval_expected": 163}, {"context": "Un terreno rectangular mide (4x + 5) metros de largo y (3x + 2) metros de ancho. Dentro se construirá una alberca rectangular de (x + 3) metros por (2x + 1) metros. Escribe el polinomio del área del terreno que quedará sin alberca.", "expected_expr": "10x^2 + 13x + 7", "eval_at": {"x": 2}, "eval_expected": 73}, {"context": "Un terreno rectangular mide (6x + 2) metros de largo y (2x + 3) metros de ancho. Dentro se construirá una alberca rectangular de (3x + 1) metros por (x + 2) metros. Escribe el polinomio del área del terreno que quedará sin alberca.", "expected_expr": "9x^2 + 13x + 4", "eval_at": {"x": 4}, "eval_expected": 200}, {"context": "Un terreno rectangular mide (5x + 4) metros de largo y (4x + 1) metros de ancho. Dentro se construirá una alberca rectangular de (2x + 3) metros por (x + 1) metros. Escribe el polinomio del área del terreno que quedará sin alberca.", "expected_expr": "18x^2 + 9x + -5", "eval_at": {"x": 2}, "eval_expected": 85}, {"context": "Un terreno rectangular mide (3x + 5) metros de largo y (4x + 3) metros de ancho. Dentro se construirá una alberca rectangular de (x + 2) metros por (2x + 1) metros. Escribe el polinomio del área del terreno que quedará sin alberca.", "expected_expr": "10x^2 + 16x + 13", "eval_at": {"x": 3}, "eval_expected": 151}, {"context": "Un terreno rectangular mide (7x + 2) metros de largo y (3x + 4) metros de ancho. Dentro se construirá una alberca rectangular de (3x + 2) metros por (x + 3) metros. Escribe el polinomio del área del terreno que quedará sin alberca.", "expected_expr": "12x^2 + 17x + 2", "eval_at": {"x": 2}, "eval_expected": 84}]}, {"id": 3, "category": "Construcción", "type": "multiplicacion", "justification": "Se usan letras porque las dimensiones de la bodega aún no están definidas o pueden cambiar según el diseño final. La fórmula queda lista para cuando se midan las paredes definitivas.", "comp_q": "¿Qué ventaja tiene dejar la fórmula con letras en lugar de calcular con medidas exactas de una vez?", "comp_options": ["Que se ve más complicado y impresiona al cliente", "Que la fórmula sirve para cualquier tamaño de bodega, hoy o mañana", "Que no hay que usar calculadora", "Que las letras son más baratas que la pintura", "Que el albañil no necesita saber medir"], "comp_answer": 1, "variants": [{"context": "Una bodega tiene paredes con altura total de (2x + 3) metros y longitud total a pintar de (5x + 4) metros (suma de todas las paredes). La pintura cuesta $50 por m². Escribe el polinomio que representa el costo total de pintar las paredes.", "expected_expr": "500x^2 + 1150x + 600", "eval_at": {"x": 4}, "eval_expected": 13200}, {"context": "Una bodega tiene paredes con altura total de (3x + 2) metros y longitud total a pintar de (4x + 5) metros (suma de todas las paredes). La pintura cuesta $40 por m². Escribe el polinomio que representa el costo total de pintar las paredes.", "expected_expr": "480x^2 + 760x + 400", "eval_at": {"x": 3}, "eval_expected": 7000}, {"context": "Una bodega tiene paredes con altura total de (x + 4) metros y longitud total a pintar de (6x + 3) metros (suma de todas las paredes). La pintura cuesta $60 por m². Escribe el polinomio que representa el costo total de pintar las paredes.", "expected_expr": "360x^2 + 1530x + 720", "eval_at": {"x": 5}, "eval_expected": 17370}, {"context": "Una bodega tiene paredes con altura total de (3x + 1) metros y longitud total a pintar de (3x + 5) metros (suma de todas las paredes). La pintura cuesta $30 por m². Escribe el polinomio que representa el costo total de pintar las paredes.", "expected_expr": "270x^2 + 540x + 150", "eval_at": {"x": 2}, "eval_expected": 2310}, {"context": "Una bodega tiene paredes con altura total de (2x + 5) metros y longitud total a pintar de (4x + 2) metros (suma de todas las paredes). La pintura cuesta $45 por m². Escribe el polinomio que representa el costo total de pintar las paredes.", "expected_expr": "360x^2 + 1080x + 450", "eval_at": {"x": 3}, "eval_expected": 6930}, {"context": "Una bodega tiene paredes con altura total de (x + 3) metros y longitud total a pintar de (5x + 2) metros (suma de todas las paredes). La pintura cuesta $55 por m². Escribe el polinomio que representa el costo total de pintar las paredes.", "expected_expr": "275x^2 + 935x + 330", "eval_at": {"x": 4}, "eval_expected": 8470}]}, {"id": 4, "category": "Jardinería", "type": "binomio_cuadrado", "justification": "Se usan letras porque el tamaño del jardín puede ajustarse según el espacio disponible en cada casa. Con la fórmula general, cualquier familia puede saber cuánto césped necesita.", "comp_q": "Si el jardín fuera de una casa diferente, ¿por qué es útil tener la fórmula con letras?", "comp_options": ["Porque cada casa tiene el mismo tamaño de jardín", "Porque al cambiar el valor de x, la fórmula calcula automáticamente el área sin rehacer todo", "Porque el césped solo se vende en metros con letras", "Porque las letras hacen que el jardín crezca más rápido", "Porque es obligatorio en el reglamento de la colonia"], "comp_answer": 1, "variants": [{"context": "Un jardín cuadrado mide (3x + 2) metros de lado. Se quiere sembrar césped en todo el jardín. Escribe el polinomio que representa el área total del jardín.", "expected_expr": "9x^2 + 12x + 4", "eval_at": {"x": 3}, "eval_expected": 121}, {"context": "Un jardín cuadrado mide (2x + 5) metros de lado. Se quiere sembrar césped en todo el jardín. Escribe el polinomio que representa el área total del jardín.", "expected_expr": "4x^2 + 20x + 25", "eval_at": {"x": 2}, "eval_expected": 81}, {"context": "Un jardín cuadrado mide (4x + 1) metros de lado. Se quiere sembrar césped en todo el jardín. Escribe el polinomio que representa el área total del jardín.", "expected_expr": "16x^2 + 8x + 1", "eval_at": {"x": 4}, "eval_expected": 289}, {"context": "Un jardín cuadrado mide (x + 6) metros de lado. Se quiere sembrar césped en todo el jardín. Escribe el polinomio que representa el área total del jardín.", "expected_expr": "1x^2 + 12x + 36", "eval_at": {"x": 5}, "eval_expected": 121}, {"context": "Un jardín cuadrado mide (5x + 2) metros de lado. Se quiere sembrar césped en todo el jardín. Escribe el polinomio que representa el área total del jardín.", "expected_expr": "25x^2 + 20x + 4", "eval_at": {"x": 2}, "eval_expected": 144}, {"context": "Un jardín cuadrado mide (3x + 4) metros de lado. Se quiere sembrar césped en todo el jardín. Escribe el polinomio que representa el área total del jardín.", "expected_expr": "9x^2 + 24x + 16", "eval_at": {"x": 3}, "eval_expected": 169}]}, {"id": 5, "category": "Eventos", "type": "suma_resta", "justification": "Se usan letras porque el número de invitados (p) aún no se define. La fórmula queda lista para calcular el costo sin importar si vienen 50 o 200 personas.", "comp_q": "¿Por qué el organizador de fiestas prefiere una fórmula con p en lugar de calcular con un número fijo de invitados?", "comp_options": ["Porque siempre invita a exactamente 50 personas", "Porque el número de invitados puede cambiar y la fórmula se adapta automáticamente", "Porque las letras ocupan menos espacio en el contrato", "Porque los números confunden a los meseros", "Porque la fórmula solo funciona los fines de semana"], "comp_answer": 1, "variants": [{"context": "Para una fiesta de graduación, el costo del salón es $(200 + 15p) donde p es el número de personas, y el costo de la comida es $(300 + 10p). Si se obtiene un descuento de $50 por promoción, escribe el polinomio del costo total.", "expected_expr": "450 + 25p", "eval_at": {"p": 50}, "eval_expected": 1700}, {"context": "Para una fiesta de graduación, el costo del salón es $(150 + 20p) donde p es el número de personas, y el costo de la comida es $(250 + 12p). Si se obtiene un descuento de $30 por promoción, escribe el polinomio del costo total.", "expected_expr": "370 + 32p", "eval_at": {"p": 40}, "eval_expected": 1650}, {"context": "Para una fiesta de graduación, el costo del salón es $(300 + 10p) donde p es el número de personas, y el costo de la comida es $(200 + 15p). Si se obtiene un descuento de $40 por promoción, escribe el polinomio del costo total.", "expected_expr": "460 + 25p", "eval_at": {"p": 60}, "eval_expected": 1960}, {"context": "Para una fiesta de graduación, el costo del salón es $(180 + 18p) donde p es el número de personas, y el costo de la comida es $(280 + 8p). Si se obtiene un descuento de $25 por promoción, escribe el polinomio del costo total.", "expected_expr": "435 + 26p", "eval_at": {"p": 45}, "eval_expected": 1605}, {"context": "Para una fiesta de graduación, el costo del salón es $(250 + 12p) donde p es el número de personas, y el costo de la comida es $(350 + 14p). Si se obtiene un descuento de $60 por promoción, escribe el polinomio del costo total.", "expected_expr": "540 + 26p", "eval_at": {"p": 55}, "eval_expected": 1970}, {"context": "Para una fiesta de graduación, el costo del salón es $(220 + 16p) donde p es el número de personas, y el costo de la comida es $(180 + 11p). Si se obtiene un descuento de $35 por promoción, escribe el polinomio del costo total.", "expected_expr": "365 + 27p", "eval_at": {"p": 48}, "eval_expected": 1661}]}, {"id": 6, "category": "Empaque", "type": "multiplicacion", "justification": "Se usan letras porque las dimensiones de la caja dependen del producto que se enviará. La fórmula general permite calcular el peso para cualquier producto sin diseñar una caja nueva cada vez.", "comp_q": "¿Por qué una empresa de envíos necesita fórmulas con letras para las cajas?", "comp_options": ["Porque todas las cajas miden exactamente lo mismo", "Porque cada producto necesita cajas de diferentes tamaños y la fórmula calcula el peso para cualquiera", "Porque el cartón con letras es más resistente", "Porque los repartidores no saben multiplicar", "Porque las letras pesan menos que los números"], "comp_answer": 1, "variants": [{"context": "Una caja de cartón tiene (x + 3) cm de largo, (x + 2) cm de ancho y (2x + 1) cm de alto. Se llenará con un material que pesa 5 gramos por cm³. Escribe el polinomio del peso total del contenido.", "expected_expr": "10x^3 + 55x^2 + 85x + 30", "eval_at": {"x": 2}, "eval_expected": 500}, {"context": "Una caja de cartón tiene (2x + 1) cm de largo, (x + 4) cm de ancho y (x + 2) cm de alto. Se llenará con un material que pesa 3 gramos por cm³. Escribe el polinomio del peso total del contenido.", "expected_expr": "6x^3 + 33x^2 + 54x + 24", "eval_at": {"x": 2}, "eval_expected": 312}, {"context": "Una caja de cartón tiene (x + 5) cm de largo, (2x + 1) cm de ancho y (x + 3) cm de alto. Se llenará con un material que pesa 4 gramos por cm³. Escribe el polinomio del peso total del contenido.", "expected_expr": "8x^3 + 56x^2 + 124x + 60", "eval_at": {"x": 2}, "eval_expected": 596}, {"context": "Una caja de cartón tiene (3x + 2) cm de largo, (x + 1) cm de ancho y (x + 4) cm de alto. Se llenará con un material que pesa 2 gramos por cm³. Escribe el polinomio del peso total del contenido.", "expected_expr": "6x^3 + 28x^2 + 38x + 16", "eval_at": {"x": 2}, "eval_expected": 252}, {"context": "Una caja de cartón tiene (x + 2) cm de largo, (x + 3) cm de ancho y (3x + 2) cm de alto. Se llenará con un material que pesa 4 gramos por cm³. Escribe el polinomio del peso total del contenido.", "expected_expr": "12x^3 + 52x^2 + 68x + 48", "eval_at": {"x": 2}, "eval_expected": 488}, {"context": "Una caja de cartón tiene (2x + 3) cm de largo, (x + 2) cm de ancho y (x + 1) cm de alto. Se llenará con un material que pesa 5 gramos por cm³. Escribe el polinomio del peso total del contenido.", "expected_expr": "10x^3 + 45x^2 + 65x + 30", "eval_at": {"x": 2}, "eval_expected": 420}]}, {"id": 7, "category": "Arte", "type": "resta_multiplicacion", "justification": "Se usan letras porque el tamaño del cuadro puede variar según la obra del artista. La fórmula permite calcular el área visible para cualquier dimensión de lienzo.", "comp_q": "¿Por qué el enmarcador usa una fórmula con letras en lugar de medir cada cuadro de forma diferente?", "comp_options": ["Porque todos los cuadros son del mismo tamaño", "Porque la fórmula sirve para cualquier cuadro, solo cambiando el valor de x", "Porque la madera del marco solo entiende letras", "Porque medir con números daña los lienzos", "Porque las letras hacen que la pintura valga más"], "comp_answer": 1, "variants": [{"context": "Un cuadro rectangular mide (3x + 8) cm por (2x + 6) cm. Se le colocará un marco de madera que ocupa 2 cm en cada lado por dentro. Escribe el polinomio del área visible de la pintura (sin el marco).", "expected_expr": "6x^2 + 10x + 16", "eval_at": {"x": 4}, "eval_expected": 152}, {"context": "Un cuadro rectangular mide (4x + 10) cm por (3x + 8) cm. Se le colocará un marco de madera que ocupa 3 cm en cada lado por dentro. Escribe el polinomio del área visible de la pintura (sin el marco).", "expected_expr": "12x^2 + 14x + 8", "eval_at": {"x": 3}, "eval_expected": 158}, {"context": "Un cuadro rectangular mide (2x + 12) cm por (x + 10) cm. Se le colocará un marco de madera que ocupa 4 cm en cada lado por dentro. Escribe el polinomio del área visible de la pintura (sin el marco).", "expected_expr": "2x^2 + 6x + 8", "eval_at": {"x": 5}, "eval_expected": 88}, {"context": "Un cuadro rectangular mide (5x + 6) cm por (3x + 4) cm. Se le colocará un marco de madera que ocupa 1 cm en cada lado por dentro. Escribe el polinomio del área visible de la pintura (sin el marco).", "expected_expr": "15x^2 + 16x + 4", "eval_at": {"x": 2}, "eval_expected": 96}, {"context": "Un cuadro rectangular mide (3x + 10) cm por (2x + 8) cm. Se le colocará un marco de madera que ocupa 3 cm en cada lado por dentro. Escribe el polinomio del área visible de la pintura (sin el marco).", "expected_expr": "6x^2 + 10x + 8", "eval_at": {"x": 4}, "eval_expected": 144}, {"context": "Un cuadro rectangular mide (4x + 8) cm por (2x + 6) cm. Se le colocará un marco de madera que ocupa 2 cm en cada lado por dentro. Escribe el polinomio del área visible de la pintura (sin el marco).", "expected_expr": "8x^2 + 12x + 8", "eval_at": {"x": 3}, "eval_expected": 116}]}, {"id": 8, "category": "Construcción", "type": "binomio_resta", "justification": "Se usan letras porque el tamaño de la alberca puede variar según el presupuesto del cliente. La fórmula permite calcular cuánto concreto se necesita para cualquier tamaño de piscina.", "comp_q": "¿Por qué la constructora deja la fórmula con letras en lugar de calcular solo para una alberca específica?", "comp_options": ["Porque solo construyen una alberca al año", "Porque la fórmula les permite cotizar albercas de cualquier tamaño sin volver a hacer cálculos desde cero", "Porque el concreto se vende por letras, no por metros", "Porque los albañiles prefieren las letras", "Porque las letras hacen que el agua esté más fría"], "comp_answer": 1, "variants": [{"context": "Una alberca cuadrada mide (2x + 3) metros de lado. Alrededor hay un borde de concreto de 2 metros de ancho. Escribe el polinomio del área del borde de concreto (solo el borde, no la alberca).", "expected_expr": "16x + 28", "eval_at": {"x": 5}, "eval_expected": 108}, {"context": "Una alberca cuadrada mide (3x + 2) metros de lado. Alrededor hay un borde de concreto de 1 metros de ancho. Escribe el polinomio del área del borde de concreto (solo el borde, no la alberca).", "expected_expr": "12x + 5", "eval_at": {"x": 4}, "eval_expected": 53}, {"context": "Una alberca cuadrada mide (x + 5) metros de lado. Alrededor hay un borde de concreto de 3 metros de ancho. Escribe el polinomio del área del borde de concreto (solo el borde, no la alberca).", "expected_expr": "12x + 51", "eval_at": {"x": 6}, "eval_expected": 123}, {"context": "Una alberca cuadrada mide (2x + 1) metros de lado. Alrededor hay un borde de concreto de 4 metros de ancho. Escribe el polinomio del área del borde de concreto (solo el borde, no la alberca).", "expected_expr": "32x + 48", "eval_at": {"x": 3}, "eval_expected": 144}, {"context": "Una alberca cuadrada mide (3x + 4) metros de lado. Alrededor hay un borde de concreto de 2 metros de ancho. Escribe el polinomio del área del borde de concreto (solo el borde, no la alberca).", "expected_expr": "24x + 44", "eval_at": {"x": 5}, "eval_expected": 164}, {"context": "Una alberca cuadrada mide (x + 3) metros de lado. Alrededor hay un borde de concreto de 5 metros de ancho. Escribe el polinomio del área del borde de concreto (solo el borde, no la alberca).", "expected_expr": "20x + 85", "eval_at": {"x": 4}, "eval_expected": 165}]}, {"id": 9, "category": "Física", "type": "multiplicacion", "justification": "Se usan letras porque la fuerza y la distancia dependen de la carga que se levante cada día. La fórmula queda programada para calcular el trabajo de cualquier carga.", "comp_q": "¿Por qué en física se usan letras para fuerza y distancia en lugar de valores fijos?", "comp_options": ["Porque la grúa siempre levanta exactamente lo mismo", "Porque cada carga tiene diferente peso y distancia, y la fórmula sirve para todas", "Porque los Newtons solo se escriben con letras", "Porque los números confunden al operador de la grúa", "Porque las letras hacen que la grúa levante más peso"], "comp_answer": 1, "variants": [{"context": "En física, el trabajo se calcula como fuerza por distancia. Si una grúa aplica una fuerza de (2x + 5) Newtons y mueve la carga una distancia de (3x + 4) metros, escribe el polinomio del trabajo realizado.", "expected_expr": "6x^2 + 23x + 20", "eval_at": {"x": 3}, "eval_expected": 143}, {"context": "En física, el trabajo se calcula como fuerza por distancia. Si una grúa aplica una fuerza de (x + 6) Newtons y mueve la carga una distancia de (4x + 2) metros, escribe el polinomio del trabajo realizado.", "expected_expr": "4x^2 + 26x + 12", "eval_at": {"x": 4}, "eval_expected": 180}, {"context": "En física, el trabajo se calcula como fuerza por distancia. Si una grúa aplica una fuerza de (3x + 2) Newtons y mueve la carga una distancia de (2x + 5) metros, escribe el polinomio del trabajo realizado.", "expected_expr": "6x^2 + 19x + 10", "eval_at": {"x": 2}, "eval_expected": 72}, {"context": "En física, el trabajo se calcula como fuerza por distancia. Si una grúa aplica una fuerza de (4x + 1) Newtons y mueve la carga una distancia de (x + 3) metros, escribe el polinomio del trabajo realizado.", "expected_expr": "4x^2 + 13x + 3", "eval_at": {"x": 5}, "eval_expected": 168}, {"context": "En física, el trabajo se calcula como fuerza por distancia. Si una grúa aplica una fuerza de (x + 4) Newtons y mueve la carga una distancia de (5x + 2) metros, escribe el polinomio del trabajo realizado.", "expected_expr": "5x^2 + 22x + 8", "eval_at": {"x": 3}, "eval_expected": 119}, {"context": "En física, el trabajo se calcula como fuerza por distancia. Si una grúa aplica una fuerza de (2x + 3) Newtons y mueve la carga una distancia de (3x + 2) metros, escribe el polinomio del trabajo realizado.", "expected_expr": "6x^2 + 13x + 6", "eval_at": {"x": 4}, "eval_expected": 154}]}, {"id": 10, "category": "Escolar", "type": "suma_resta", "justification": "Se usa x porque tu calificación en cada rubro aún no se conoce. La fórmula queda lista para calcular tu promedio final sin importar qué calificaciones saques.", "comp_q": "¿Por qué el profesor deja la fórmula con x en lugar de calcular con tus calificaciones actuales?", "comp_options": ["Porque el profesor no tiene tus calificaciones todavía", "Porque x representa cualquier calificación posible y la fórmula calcula el final para todas", "Porque las letras dan más puntos extras", "Porque el sistema escolar exige usar x", "Porque los números harían la fórmula muy larga"], "comp_answer": 1, "variants": [{"context": "Tu calificación final se calcula así: examen (50% de x), tareas (30% de x), participación (20% de x), menos 5 puntos por retardos. Escribe el polinomio de tu calificación final.", "expected_expr": "1x - 5", "eval_at": {"x": 85}, "eval_expected": 80}, {"context": "Tu calificación final se calcula así: examen (40% de x), tareas (40% de x), participación (20% de x), menos 3 puntos por retardos. Escribe el polinomio de tu calificación final.", "expected_expr": "1x - 3", "eval_at": {"x": 90}, "eval_expected": 87}, {"context": "Tu calificación final se calcula así: examen (60% de x), tareas (25% de x), participación (15% de x), menos 8 puntos por retardos. Escribe el polinomio de tu calificación final.", "expected_expr": "1x - 8", "eval_at": {"x": 78}, "eval_expected": 70}, {"context": "Tu calificación final se calcula así: examen (45% de x), tareas (35% de x), participación (20% de x), menos 2 puntos por retardos. Escribe el polinomio de tu calificación final.", "expected_expr": "1x - 2", "eval_at": {"x": 88}, "eval_expected": 86}, {"context": "Tu calificación final se calcula así: examen (55% de x), tareas (30% de x), participación (15% de x), menos 6 puntos por retardos. Escribe el polinomio de tu calificación final.", "expected_expr": "1x - 6", "eval_at": {"x": 82}, "eval_expected": 76}, {"context": "Tu calificación final se calcula así: examen (50% de x), tareas (25% de x), participación (25% de x), menos 4 puntos por retardos. Escribe el polinomio de tu calificación final.", "expected_expr": "1x - 4", "eval_at": {"x": 92}, "eval_expected": 88}]}, {"id": 11, "category": "Economía", "type": "multiplicacion", "justification": "Se usa t porque la temperatura varía cada día y afecta tanto el precio (más hielo) como la cantidad vendida. La fórmula calcula los ingresos para cualquier día del año.", "comp_q": "¿Por qué el vendedor usa t (temperatura) en su fórmula de ingresos?", "comp_options": ["Porque la temperatura nunca cambia", "Porque la temperatura afecta las ventas y la fórmula calcula ingresos para cualquier día", "Porque t es la inicial de 'tacos'", "Porque los clientes pagan con letras cuando hace calor", "Porque la fórmula solo sirve en invierno"], "comp_answer": 1, "variants": [{"context": "Un vendedor de paletas fija el precio en $(10 + 0.5t) donde t es la temperatura en °C, y vende (50 + 3t) paletas. Escribe el polinomio de sus ingresos totales.", "expected_expr": "1.5t^2 + 55t + 500", "eval_at": {"t": 30}, "eval_expected": 3500.0}, {"context": "Un vendedor de paletas fija el precio en $(12 + 0.4t) donde t es la temperatura en °C, y vende (40 + 2t) paletas. Escribe el polinomio de sus ingresos totales.", "expected_expr": "0.8t^2 + 56.8t + 480", "eval_at": {"t": 25}, "eval_expected": 2400.0}, {"context": "Un vendedor de paletas fija el precio en $(8 + 0.6t) donde t es la temperatura en °C, y vende (60 + 4t) paletas. Escribe el polinomio de sus ingresos totales.", "expected_expr": "2.4t^2 + 72.8t + 480", "eval_at": {"t": 28}, "eval_expected": 4400.0}, {"context": "Un vendedor de paletas fija el precio en $(15 + 0.3t) donde t es la temperatura en °C, y vende (30 + 5t) paletas. Escribe el polinomio de sus ingresos totales.", "expected_expr": "1.5t^2 + 84t + 450", "eval_at": {"t": 32}, "eval_expected": 4674.0}, {"context": "Un vendedor de paletas fija el precio en $(11 + 0.5t) donde t es la temperatura en °C, y vende (45 + 3t) paletas. Escribe el polinomio de sus ingresos totales.", "expected_expr": "1.5t^2 + 55.5t + 495", "eval_at": {"t": 26}, "eval_expected": 2952.0}, {"context": "Un vendedor de paletas fija el precio en $(9 + 0.7t) donde t es la temperatura en °C, y vende (55 + 2t) paletas. Escribe el polinomio de sus ingresos totales.", "expected_expr": "1.4t^2 + 57.1t + 495", "eval_at": {"t": 29}, "eval_expected": 3328.3}]}, {"id": 12, "category": "Arquitectura", "type": "binomio_cuadrado", "justification": "Se usan letras porque el tamaño de la habitación puede variar según el departamento. La fórmula permite cotizar el piso para cualquier habitación cuadrada.", "comp_q": "¿Por qué la inmobiliaria usa una fórmula con x para calcular el costo del piso?", "comp_options": ["Porque todas las habitaciones miden exactamente lo mismo", "Porque cada departamento tiene habitaciones de diferentes tamaños y la fórmula cotiza cualquiera", "Porque las baldosas solo vienen en tamaños con letras", "Porque los arquitectos no saben medir con números", "Porque x hace que el piso se vea más bonito"], "comp_answer": 1, "variants": [{"context": "Una habitación cuadrada mide (2x + 3) metros de lado. Se cubrirá con baldosas que cuestan $100 por m². Escribe el polinomio del costo total de las baldosas.", "expected_expr": "400x^2 + 1200x + 900", "eval_at": {"x": 4}, "eval_expected": 12100}, {"context": "Una habitación cuadrada mide (3x + 2) metros de lado. Se cubrirá con baldosas que cuestan $80 por m². Escribe el polinomio del costo total de las baldosas.", "expected_expr": "720x^2 + 960x + 320", "eval_at": {"x": 3}, "eval_expected": 9680}, {"context": "Una habitación cuadrada mide (x + 5) metros de lado. Se cubrirá con baldosas que cuestan $120 por m². Escribe el polinomio del costo total de las baldosas.", "expected_expr": "120x^2 + 1200x + 3000", "eval_at": {"x": 5}, "eval_expected": 12000}, {"context": "Una habitación cuadrada mide (2x + 1) metros de lado. Se cubrirá con baldosas que cuestan $150 por m². Escribe el polinomio del costo total de las baldosas.", "expected_expr": "600x^2 + 600x + 150", "eval_at": {"x": 6}, "eval_expected": 25350}, {"context": "Una habitación cuadrada mide (3x + 4) metros de lado. Se cubrirá con baldosas que cuestan $60 por m². Escribe el polinomio del costo total de las baldosas.", "expected_expr": "540x^2 + 1440x + 960", "eval_at": {"x": 2}, "eval_expected": 6000}, {"context": "Una habitación cuadrada mide (x + 4) metros de lado. Se cubrirá con baldosas que cuestan $90 por m². Escribe el polinomio del costo total de las baldosas.", "expected_expr": "90x^2 + 720x + 1440", "eval_at": {"x": 4}, "eval_expected": 5760}]}, {"id": 13, "category": "Hogar", "type": "resta", "justification": "Se usan letras porque las dimensiones de la sala y la alfombra pueden variar según el gusto del cliente. La fórmula sirve para cualquier combinación de tamaños.", "comp_q": "¿Por qué la diseñadora de interiores deja la fórmula con letras en lugar de medir solo tu sala?", "comp_options": ["Porque solo diseña una sala en toda su vida", "Porque la fórmula le permite calcular el piso visible para cualquier sala y alfombra", "Porque la alfombra solo existe en tamaños con letras", "Porque los metros cuadrados no se pueden restar con números", "Porque las letras hacen que la alfombra sea más suave"], "comp_answer": 1, "variants": [{"context": "Una sala rectangular mide (4x + 5) metros por (3x + 4) metros. Se colocará una alfombra central de (2x + 3) metros por (x + 2) metros. Escribe el polinomio del área del piso visible (sin alfombra).", "expected_expr": "10x^2 + 17x + 14", "eval_at": {"x": 3}, "eval_expected": 155}, {"context": "Una sala rectangular mide (5x + 3) metros por (2x + 5) metros. Se colocará una alfombra central de (3x + 1) metros por (x + 3) metros. Escribe el polinomio del área del piso visible (sin alfombra).", "expected_expr": "7x^2 + 16x + 6", "eval_at": {"x": 4}, "eval_expected": 182}, {"context": "Una sala rectangular mide (3x + 6) metros por (4x + 2) metros. Se colocará una alfombra central de (x + 4) metros por (2x + 1) metros. Escribe el polinomio del área del piso visible (sin alfombra).", "expected_expr": "10x^2 + 19x + 8", "eval_at": {"x": 2}, "eval_expected": 86}, {"context": "Una sala rectangular mide (6x + 2) metros por (3x + 5) metros. Se colocará una alfombra central de (2x + 4) metros por (x + 2) metros. Escribe el polinomio del área del piso visible (sin alfombra).", "expected_expr": "16x^2 + 16x + 2", "eval_at": {"x": 3}, "eval_expected": 194}, {"context": "Una sala rectangular mide (4x + 4) metros por (3x + 3) metros. Se colocará una alfombra central de (2x + 2) metros por (x + 1) metros. Escribe el polinomio del área del piso visible (sin alfombra).", "expected_expr": "10x^2 + 14x + 10", "eval_at": {"x": 5}, "eval_expected": 330}, {"context": "Una sala rectangular mide (5x + 2) metros por (4x + 3) metros. Se colocará una alfombra central de (3x + 2) metros por (x + 2) metros. Escribe el polinomio del área del piso visible (sin alfombra).", "expected_expr": "11x^2 + 9x + 2", "eval_at": {"x": 2}, "eval_expected": 64}]}, {"id": 14, "category": "Arte", "type": "suma_multiplicacion", "justification": "Se usa x porque la calidad/pureza de la pintura puede variar según el proveedor. La fórmula calcula el costo para cualquier proveedor sin importar el precio exacto de hoy.", "comp_q": "¿Por qué el pintor usa x en el precio de las pinturas?", "comp_options": ["Porque el precio de la pintura nunca cambia", "Porque el precio varía según el proveedor y la fórmula sirve para cualquier precio", "Porque x representa el color rojo", "Porque los litros solo se miden con letras", "Porque la mezcla solo funciona con fórmulas algebraicas"], "comp_answer": 1, "variants": [{"context": "Un pintor mezcla 3 litros de pintura roja que cuestan $(50 + 2x) cada litro, con 2 litros de pintura azul que cuestan $(40 + 3x) cada litro. Escribe el polinomio del costo total de la mezcla.", "expected_expr": "12x + 230", "eval_at": {"x": 10}, "eval_expected": 350}, {"context": "Un pintor mezcla 4 litros de pintura roja que cuestan $(30 + 5x) cada litro, con 3 litros de pintura azul que cuestan $(25 + 4x) cada litro. Escribe el polinomio del costo total de la mezcla.", "expected_expr": "32x + 195", "eval_at": {"x": 8}, "eval_expected": 451}, {"context": "Un pintor mezcla 2 litros de pintura roja que cuestan $(60 + 3x) cada litro, con 5 litros de pintura azul que cuestan $(35 + 2x) cada litro. Escribe el polinomio del costo total de la mezcla.", "expected_expr": "16x + 295", "eval_at": {"x": 12}, "eval_expected": 487}, {"context": "Un pintor mezcla 5 litros de pintura roja que cuestan $(45 + 4x) cada litro, con 2 litros de pintura azul que cuestan $(55 + 1x) cada litro. Escribe el polinomio del costo total de la mezcla.", "expected_expr": "22x + 335", "eval_at": {"x": 15}, "eval_expected": 665}, {"context": "Un pintor mezcla 3 litros de pintura roja que cuestan $(40 + 6x) cada litro, con 4 litros de pintura azul que cuestan $(30 + 5x) cada litro. Escribe el polinomio del costo total de la mezcla.", "expected_expr": "38x + 240", "eval_at": {"x": 5}, "eval_expected": 430}, {"context": "Un pintor mezcla 2 litros de pintura roja que cuestan $(70 + 1x) cada litro, con 3 litros de pintura azul que cuestan $(50 + 4x) cada litro. Escribe el polinomio del costo total de la mezcla.", "expected_expr": "14x + 290", "eval_at": {"x": 20}, "eval_expected": 570}]}, {"id": 15, "category": "Física", "type": "binomio_cuadrado", "justification": "Se usa x porque la velocidad puede cambiar según el objeto que se lance. La fórmula queda lista para calcular la energía de cualquier objeto en movimiento.", "comp_q": "¿Por qué en física se dejan las fórmulas con letras en lugar de calcular solo para un objeto específico?", "comp_options": ["Porque solo existe un objeto en el universo", "Porque la fórmula calcula la energía de cualquier objeto sin importar su velocidad", "Porque los joules solo se escriben con letras", "Porque los físicos no saben los números exactos", "Porque las letras hacen que el objeto vaya más rápido"], "comp_answer": 1, "variants": [{"context": "La energía cinética de un objeto se calcula como Ec = ½mv². Si la velocidad es v = (2x + 3) m/s y la masa es 2 kg, escribe el polinomio de la energía cinética.", "expected_expr": "4x^2 + 12x + 9", "eval_at": {"x": 4}, "eval_expected": 121}, {"context": "La energía cinética de un objeto se calcula como Ec = ½mv². Si la velocidad es v = (x + 4) m/s y la masa es 4 kg, escribe el polinomio de la energía cinética.", "expected_expr": "2x^2 + 16x + 32", "eval_at": {"x": 3}, "eval_expected": 98}, {"context": "La energía cinética de un objeto se calcula como Ec = ½mv². Si la velocidad es v = (3x + 2) m/s y la masa es 3 kg, escribe el polinomio de la energía cinética.", "expected_expr": "13.5x^2 + 18x + 6", "eval_at": {"x": 2}, "eval_expected": 96.0}, {"context": "La energía cinética de un objeto se calcula como Ec = ½mv². Si la velocidad es v = (2x + 1) m/s y la masa es 4 kg, escribe el polinomio de la energía cinética.", "expected_expr": "8x^2 + 8x + 2", "eval_at": {"x": 5}, "eval_expected": 242}, {"context": "La energía cinética de un objeto se calcula como Ec = ½mv². Si la velocidad es v = (x + 5) m/s y la masa es 2 kg, escribe el polinomio de la energía cinética.", "expected_expr": "1x^2 + 10x + 25", "eval_at": {"x": 6}, "eval_expected": 121}, {"context": "La energía cinética de un objeto se calcula como Ec = ½mv². Si la velocidad es v = (3x + 1) m/s y la masa es 2 kg, escribe el polinomio de la energía cinética.", "expected_expr": "9x^2 + 6x + 1", "eval_at": {"x": 3}, "eval_expected": 100}]}];
+let currentProblem=0,studentName="",assignedProblems=[],answers={};
+let tabSwitchCount=0,activityStarted=false;
+
+document.addEventListener('visibilitychange',function(){if(activityStarted&&document.hidden){tabSwitchCount++;if(tabSwitchCount>=1){alert('⚠️ Advertencia: Detectamos que cambiaste de pestaña o minimizaste. Por seguridad, la actividad se reiniciará.');location.reload();}}});
+document.addEventListener('copy',function(e){if(activityStarted){e.preventDefault();alert('Copiar no está permitido durante la actividad.');}});
+document.addEventListener('paste',function(e){if(activityStarted){e.preventDefault();alert('Pegar no está permitido. Escribe tu respuesta.');}});
+document.addEventListener('cut',function(e){if(activityStarted){e.preventDefault();}});
+document.addEventListener('contextmenu',function(e){if(activityStarted){e.preventDefault();}});
+
+function startActivity(){
+const nameInput=document.getElementById('student-name').value.trim();
+if(!nameInput){alert('Por favor ingresa tu nombre para continuar.');return;}
+studentName=nameInput;activityStarted=true;
+assignedProblems=[];
+for(let i=0;i<PROBLEMS_DATA.length;i++){
+const level=PROBLEMS_DATA[i];
+const randomIndex=Math.floor(Math.random()*level.variants.length);
+assignedProblems.push({...level,variant:level.variants[randomIndex],originalId:level.id});
+}
+for(let i=0;i<15;i++){answers[i]={expr:"",eval:"",comp:-1,saved:false};}
+renderProblems();
+document.getElementById('screen-start').classList.add('hidden');
+document.getElementById('screen-problems').classList.remove('hidden');
+showProblem(0);
+}
+
+function renderProblems(){
+const container=document.getElementById('problems-container');
+container.innerHTML='';
+for(let i=0;i<assignedProblems.length;i++){
+const p=assignedProblems[i];
+const v=p.variant;
+let evalVarsText=[];
+for(let[varName,varVal]of Object.entries(v.eval_at)){evalVarsText.push(varName+" = "+varVal);}
+const html=`<div class="problem-card hidden" id="problem-${i}"><div class="card"><div class="card-title"><span class="badge">Nivel ${p.originalId}</span><span>${p.category}</span></div><div class="explain-box"><strong>¿Por qué letras?</strong> ${p.justification}</div><p style="line-height:1.6;margin:12px 0">${v.context}</p><div class="section-label">Etapa 1: Escribe la expresión algebraica</div><div class="live-preview" id="preview-expr-${i}">Escribe tu expresión...</div><input type="text" class="math-input" id="input-expr-${i}" placeholder="Ej: 3x^2 + 2x + 5" autocomplete="off" oninput="updatePreview(${i},'expr')"><div class="math-pad"><button class="math-btn" onclick="insertSymbol(${i},'expr','^')">^</button><button class="math-btn" onclick="insertSymbol(${i},'expr','+')">+</button><button class="math-btn" onclick="insertSymbol(${i},'expr','-')">−</button><button class="math-btn" onclick="insertSymbol(${i},'expr','*')">×</button><button class="math-btn" onclick="insertSymbol(${i},'expr','/')">÷</button><button class="math-btn" onclick="insertSymbol(${i},'expr','=')">=</button><button class="math-btn" onclick="insertSymbol(${i},'expr','.')">.</button><button class="math-btn" onclick="insertSymbol(${i},'expr','(')">(</button><button class="math-btn" onclick="insertSymbol(${i},'expr',')')">)</button><button class="math-btn" onclick="insertSymbol(${i},'expr','x')">x</button><button class="math-btn wide" onclick="insertSymbol(${i},'expr','frac')">a/b</button><button class="math-btn danger" onclick="clearInput(${i},'expr')">Limpiar</button><button class="math-btn danger" onclick="backspace(${i},'expr')">⌫</button></div><div class="section-label">Etapa 2: Evalúa para ${evalVarsText.join(', ')}</div><div class="live-preview" id="preview-eval-${i}">Escribe el resultado...</div><input type="text" class="math-input" id="input-eval-${i}" placeholder="Escribe el valor numérico" autocomplete="off" oninput="updatePreview(${i},'eval')"><div class="math-pad"><button class="math-btn" onclick="insertSymbol(${i},'eval','7')">7</button><button class="math-btn" onclick="insertSymbol(${i},'eval','8')">8</button><button class="math-btn" onclick="insertSymbol(${i},'eval','9')">9</button><button class="math-btn" onclick="insertSymbol(${i},'eval','/')">÷</button><button class="math-btn" onclick="insertSymbol(${i},'eval','(')">(</button><button class="math-btn" onclick="insertSymbol(${i},'eval','4')">4</button><button class="math-btn" onclick="insertSymbol(${i},'eval','5')">5</button><button class="math-btn" onclick="insertSymbol(${i},'eval','6')">6</button><button class="math-btn" onclick="insertSymbol(${i},'eval','*')">×</button><button class="math-btn" onclick="insertSymbol(${i},'eval',')')">)</button><button class="math-btn" onclick="insertSymbol(${i},'eval','1')">1</button><button class="math-btn" onclick="insertSymbol(${i},'eval','2')">2</button><button class="math-btn" onclick="insertSymbol(${i},'eval','3')">3</button><button class="math-btn" onclick="insertSymbol(${i},'eval','-')">−</button><button class="math-btn" onclick="insertSymbol(${i},'eval','+')">+</button><button class="math-btn" onclick="insertSymbol(${i},'eval','0')">0</button><button class="math-btn" onclick="insertSymbol(${i},'eval','.')">.</button><button class="math-btn wide danger" onclick="clearInput(${i},'eval')">Limpiar</button><button class="math-btn danger" onclick="backspace(${i},'eval')">⌫</button></div><div class="section-label">Etapa 3: Comprensión</div><p style="margin-bottom:10px"><strong>${p.comp_q}</strong></p><div class="options-list" id="options-${i}">${p.comp_options.map((opt,idx)=>`<div class="option-item" id="opt-${i}-${idx}" onclick="selectOption(${i},${idx})"><div class="opt-letter">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`).join('')}</div><button class="btn btn-success" style="margin-top:16px" onclick="saveAnswer(${i})">💾 Guardar Respuesta</button><div class="saved-indicator" id="saved-${i}">✓ Respuesta guardada</div></div></div>`;
+container.innerHTML+=html;
+}
+setTimeout(()=>{if(typeof renderMathInElement!=='undefined'){renderMathInElement(container,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}},100);
+}
+
+function showProblem(index){
+document.querySelectorAll('.problem-card').forEach(el=>el.classList.add('hidden'));
+const el=document.getElementById('problem-'+index);
+if(el)el.classList.remove('hidden');
+currentProblem=index;
+document.getElementById('progress-text').textContent='Pregunta '+(index+1)+' de 15';
+document.getElementById('progress-fill').style.width=((index+1)/15*100)+'%';
+document.getElementById('btn-prev').disabled=(index===0);
+document.getElementById('btn-prev').style.opacity=(index===0)?'0.5':'1';
+if(index===14){document.getElementById('btn-next').textContent='Ver Resultados 📊';}
+else{document.getElementById('btn-next').textContent='Siguiente →';}
+window.scrollTo(0,0);
+}
+
+function nextQuestion(){if(currentProblem<14){showProblem(currentProblem+1);}else{showResults();}}
+function prevQuestion(){if(currentProblem>0){showProblem(currentProblem-1);}}
+
+function insertSymbol(problemIdx,field,symbol){
+const input=document.getElementById('input-'+field+'-'+problemIdx);
+if(!input)return;
+const start=input.selectionStart;
+const end=input.selectionEnd;
+const value=input.value;
+let insert=symbol;
+if(symbol==='frac'){
+insert='()/()';
+setTimeout(()=>{input.selectionStart=start+1;input.selectionEnd=start+1;input.focus();},10);
+}
+input.value=value.substring(0,start)+insert+value.substring(end);
+input.selectionStart=input.selectionEnd=start+insert.length;
+input.focus();
+updatePreview(problemIdx,field);
+}
+
+function clearInput(problemIdx,field){
+const input=document.getElementById('input-'+field+'-'+problemIdx);
+if(input){input.value='';updatePreview(problemIdx,field);input.focus();}
+}
+
+function backspace(problemIdx,field){
+const input=document.getElementById('input-'+field+'-'+problemIdx);
+if(!input)return;
+const start=input.selectionStart;
+const end=input.selectionEnd;
+const value=input.value;
+if(start===end&&start>0){input.value=value.substring(0,start-1)+value.substring(end);input.selectionStart=input.selectionEnd=start-1;}
+else if(start!==end){input.value=value.substring(0,start)+value.substring(end);input.selectionStart=input.selectionEnd=start;}
+input.focus();
+updatePreview(problemIdx,field);
+}
+
+function updatePreview(problemIdx,field){
+const input=document.getElementById('input-'+field+'-'+problemIdx);
+const preview=document.getElementById('preview-'+field+'-'+problemIdx);
+if(!input||!preview)return;
+let val=input.value.trim();
+if(!val){preview.innerHTML=field==='expr'?'Escribe tu expresión...':'Escribe el resultado...';return;}
+let latex=val;
+latex=latex.replace(/\*/g,'\\cdot ');
+latex=latex.replace(/\//g,'\\frac{ }{}');
+latex=latex.replace(/\^/g,'^');
+latex=latex.replace(/(\w+)\/(\w+)/g,'\\frac{$1}{$2}');
+try{
+preview.innerHTML='';
+katex.render(latex,preview,{throwOnError:false,displayMode:true});
+}catch(e){preview.textContent=val;}
+}
+
+function selectOption(problemIdx,optionIdx){
+const options=document.querySelectorAll('#options-'+problemIdx+' .option-item');
+options.forEach((opt,idx)=>{if(idx===optionIdx){opt.classList.add('selected');}else{opt.classList.remove('selected');}});
+answers[problemIdx].comp=optionIdx;
+}
+
+function saveAnswer(problemIdx){
+const exprInput=document.getElementById('input-expr-'+problemIdx);
+const evalInput=document.getElementById('input-eval-'+problemIdx);
+answers[problemIdx].expr=exprInput?exprInput.value.trim():'';
+answers[problemIdx].eval=evalInput?evalInput.value.trim():'';
+answers[problemIdx].saved=true;
+const indicator=document.getElementById('saved-'+problemIdx);
+if(indicator){indicator.classList.add('show');setTimeout(()=>indicator.classList.remove('show'),2000);}
+}
+
+function toMathJS(expr){
+let e=expr.toLowerCase().replace(/\s+/g,'');
+e=e.replace(/·/g,'*');
+e=e.replace(/×/g,'*');
+e=e.replace(/÷/g,'/');
+e=e.replace(/−/g,'-');
+e=e.replace(/(\d)([a-z])/g,'$1*$2');
+e=e.replace(/([a-z])(\d)/g,'$1*$2');
+e=e.replace(/([a-z])\(/g,'$1*(');
+e=e.replace(/\)([a-z])/g,')*$1');
+e=e.replace(/\)\(/g,')*(');
+return e;
+}
+
+function normalizeForCompare(expr){
+return expr.toLowerCase().replace(/\s+/g,'').replace(/·/g,'*').replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+}
+
+function validateExpr(userExpr,expectedExpr,evalVars){
+if(!userExpr||!userExpr.trim())return false;
+try{
+const userMath=toMathJS(userExpr);
+const expectedMath=toMathJS(expectedExpr);
+
+let symbolicMatch=false;
+try{
+const userSimplified=math.simplify(userMath).toString();
+const expectedSimplified=math.simplify(expectedMath).toString();
+const userNorm=normalizeForCompare(userSimplified);
+const expNorm=normalizeForCompare(expectedSimplified);
+if(userNorm===expNorm)symbolicMatch=true;
+}catch(e){symbolicMatch=false;}
+
+if(symbolicMatch)return true;
+
+try{
+const userExpanded=math.simplify(math.expand(userMath)).toString();
+const expectedExpanded=math.simplify(math.expand(expectedMath)).toString();
+const userNorm2=normalizeForCompare(userExpanded);
+const expNorm2=normalizeForCompare(expectedExpanded);
+if(userNorm2===expNorm2)return true;
+}catch(e){}
+
+try{
+const userParsed=math.parse(userMath);
+const expectedParsed=math.parse(expectedMath);
+const testPoints=[];
+if(evalVars.x!==undefined){
+testPoints.push({x:1});testPoints.push({x:2});testPoints.push({x:3});testPoints.push({x:5});testPoints.push({x:10});
+}else if(evalVars.p!==undefined){
+testPoints.push({p:10});testPoints.push({p:20});testPoints.push({p:50});testPoints.push({p:100});
+}else if(evalVars.d!==undefined&&evalVars.t!==undefined){
+testPoints.push({d:1,t:1});testPoints.push({d:5,t:10});testPoints.push({d:10,t:5});
+}else if(evalVars.t!==undefined){
+testPoints.push({t:10});testPoints.push({t:20});testPoints.push({t:30});
+}
+let allMatch=true;
+for(let point of testPoints){
+let userVal,expectedVal;
+try{userVal=userParsed.evaluate(point);expectedVal=expectedParsed.evaluate(point);}
+catch(e){allMatch=false;break;}
+if(Math.abs(userVal-expectedVal)>0.001){allMatch=false;break;}
+}
+if(allMatch)return true;
+}catch(e){}
+
+return false;
+}catch(e){return false;}
+}
+
+function validateEval(userEval,expectedVal){
+if(!userEval||!userEval.trim())return false;
+try{
+let val=userEval.replace(/\s+/g,'').replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+const result=math.evaluate(val);
+return Math.abs(result-expectedVal)<0.1;
+}catch(e){return false;}
+}
+
+function showResults(){
+const allSaved=Object.values(answers).every(a=>a.saved);
+if(!allSaved){
+let pending=0;
+Object.values(answers).forEach((a,i)=>{if(!a.saved)pending++;});
+alert('Debes guardar todas las respuestas antes de ver los resultados. Faltan '+pending+' pregunta(s).');
+return;
+}
+document.getElementById('screen-problems').classList.add('hidden');
+document.getElementById('screen-results').classList.remove('hidden');
+document.getElementById('result-name').textContent=studentName;
+
+let totalScore=0;
+let tableHTML='<div class="card"><table class="results-table"><thead><tr><th>Nivel</th><th>Categoría</th><th>Tu expresión</th><th>Correcta</th><th>Tu evaluación</th><th>Correcta</th><th>Comprensión</th><th>Estado</th></tr></thead><tbody>';
+
+for(let i=0;i<assignedProblems.length;i++){
+const p=assignedProblems[i];
+const v=p.variant;
+const ans=answers[i];
+
+const exprCorrect=validateExpr(ans.expr,v.expected_expr,v.eval_at);
+const evalCorrect=validateEval(ans.eval,v.eval_expected);
+const compCorrect=ans.comp===p.comp_answer;
+
+const score=(exprCorrect?4:0)+(evalCorrect?4:0)+(compCorrect?2:0);
+totalScore+=score;
+
+let statusClass,statusText;
+if(score===10){statusClass='correct';statusText='✓ Correcto';}
+else if(score>=5){statusClass='partial';statusText='◐ Parcial';}
+else{statusClass='incorrect';statusText='✗ Incorrecto';}
+
+tableHTML+=`<tr><td>${p.originalId}</td><td>${p.category}</td><td>${ans.expr||'-'}</td><td>${v.expected_expr}</td><td>${ans.eval||'-'}</td><td>${v.eval_expected}</td><td>${compCorrect?'✓':'✗'} (${String.fromCharCode(65+ans.comp)})</td><td class="${statusClass}">${statusText} (${score}/10)</td></tr>`;
+}
+
+tableHTML+='</tbody></table></div>';
+document.getElementById('results-table-container').innerHTML=tableHTML;
+document.getElementById('score-number').textContent=totalScore;
+window.scrollTo(0,0);
+}
+
+function savePDF(){
+const element=document.getElementById('screen-results');
+const opt={
+margin:10,
+filename:'Resultados_Algebra_'+studentName.replace(/\s+/g,'_')+'.pdf',
+image:{type:'jpeg',quality:0.98},
+html2canvas:{scale:2,useCORS:true,background:'#0d1117'},
+jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+};
+html2pdf().set(opt).from(element).save().catch(err=>{
+alert('Error al generar PDF. Intenta de nuevo.');
+console.error(err);
+});
+}
+</script>
+</body>
+</html>
