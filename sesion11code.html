@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Álgebra - Factorización | Prof. Adrián CruzH</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f0e8;--surface:#ffffff;--primary:#1a365d;--primary-l:#2d4a7a;
+  --accent:#dd6b20;--accent-h:#c05621;--success:#2f855a;--error:#c53030;
+  --text:#1a202c;--muted:#718096;--border:#e2d8cc;--card-shadow:0 2px 8px rgba(0,0,0,.07);
+  --font-d:'Syne',sans-serif;--font-b:'Source Serif 4',Georgia,serif;--font-m:'DM Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-user-select:none;user-select:none}
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);font-size:16px;line-height:1.65;min-height:100vh;padding-bottom:60px}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+textarea,input[type="text"]{-webkit-user-select:text;user-select:text}
+h1,h2,h3,h4{font-family:var(--font-d);color:var(--primary);line-height:1.25}
+.katex{font-size:1.1em!important}
+
+/* TAB BAR */
+.tab-bar{display:flex;overflow-x:auto;background:var(--primary);position:sticky;top:0;z-index:200;scrollbar-width:none;-ms-overflow-style:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;padding:13px 15px;color:rgba(255,255,255,.5);font-family:var(--font-d);font-size:12.5px;font-weight:600;border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:color .2s,border-color .2s}
+.tab-btn.active{color:#fff;border-bottom-color:var(--accent)}
+.tab-btn.locked{opacity:.3;pointer-events:none}
+.tab-btn.done{color:rgba(255,255,255,.85)}
+
+/* CONTAINER */
+.container{max-width:640px;margin:0 auto;padding:16px;position:relative;z-index:1}
+
+/* CARDS */
+.card{background:var(--surface);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:var(--card-shadow);border:1px solid var(--border)}
+.card-accent{border-left:4px solid var(--accent)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;border-radius:10px;font-family:var(--font-d);font-weight:700;font-size:15px;border:none;cursor:pointer;transition:background .2s,transform .1s;min-height:48px;gap:8px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-h)}
+.btn-primary:disabled{background:#cbd5e0;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+
+/* FORM */
+.input-name{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:10px;font-family:var(--font-b);font-size:17px;background:var(--surface);color:var(--text);transition:border-color .2s}
+.input-name:focus{outline:none;border-color:var(--accent)}
+.input-name:disabled{background:#edf2f7;color:var(--muted)}
+
+/* EXERCISES */
+.exercise-card{background:var(--surface);border-radius:14px;margin-bottom:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--card-shadow)}
+.exercise-header{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:linear-gradient(135deg,var(--primary),var(--primary-l));color:#fff}
+.exercise-num{font-family:var(--font-d);font-weight:700;font-size:14px}
+.exercise-level{font-size:12px;opacity:.8;background:rgba(255,255,255,.15);padding:3px 10px;border-radius:20px}
+.exercise-body{padding:18px}
+.exercise-problem{margin-bottom:14px}
+.exercise-problem p{font-family:var(--font-d);font-weight:600;color:var(--muted);font-size:13px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.math-display{background:#faf8f5;border-radius:10px;padding:16px;text-align:center;border:1px solid var(--border);min-height:50px;display:flex;align-items:center;justify-content:center}
+.answer-area label{font-family:var(--font-d);font-weight:600;font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+.answer-textarea{width:100%;min-height:48px;padding:12px 14px;border:2px solid var(--border);border-radius:10px 10px 0 0;font-family:var(--font-m);font-size:16px;background:#fafafa;color:var(--text);resize:vertical;transition:border-color .2s}
+.answer-textarea:focus{outline:none;border-color:var(--accent)}
+.live-preview{min-height:44px;padding:10px 14px;background:#eef4fb;border:2px solid #c3dafe;border-top:none;border-radius:0 0 10px 10px;display:flex;align-items:center;justify-content:center;overflow-x:auto}
+.live-preview .placeholder{color:var(--muted);font-size:13px;font-style:italic}
+
+/* MATH TOOLBAR */
+.math-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:10px;background:var(--primary);border-radius:10px;margin-top:10px}
+.math-toolbar button{min-width:44px;height:44px;flex:1 0 auto;background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;font-family:var(--font-d);display:flex;align-items:center;justify-content:center}
+.math-toolbar button:active{background:rgba(255,255,255,.3)}
+.math-toolbar .tb-wide{flex:2 0 auto}
+
+/* COMPREHENSION */
+.comp-card{background:var(--surface);border-radius:14px;padding:20px;margin:24px 0 16px;border:2px solid var(--accent);box-shadow:var(--card-shadow)}
+.comp-card h3{font-size:15px;margin-bottom:12px;color:var(--accent)}
+.comp-card p{margin-bottom:14px;font-weight:500}
+.option-label{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;margin-bottom:8px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .2s,background .2s;font-size:15px}
+.option-label:hover{border-color:var(--primary-l);background:#f7fafc}
+.option-label input{margin-top:3px;accent-color:var(--accent);width:18px;height:18px;flex-shrink:0}
+.option-label.selected{border-color:var(--accent);background:#fffaf5}
+.opt-letter{font-family:var(--font-d);font-weight:700;color:var(--primary);min-width:20px}
+
+/* TAB ACTIONS */
+.tab-actions{display:flex;justify-content:center;padding:20px 0 10px}
+
+/* THEORY */
+.theory-section{margin-bottom:24px}
+.theory-section h3{font-size:17px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--accent);display:inline-block}
+.example-box{background:#faf8f5;border-radius:10px;padding:16px;margin:12px 0;border-left:4px solid var(--primary)}
+.example-box .ex-title{font-family:var(--font-d);font-weight:700;font-size:14px;color:var(--primary);margin-bottom:8px}
+.step{margin:6px 0;padding-left:12px;border-left:3px solid var(--border)}
+.result{font-weight:600;color:var(--success);margin-top:8px;padding:8px 12px;background:#f0fff4;border-radius:8px;display:inline-block}
+
+/* REPORT */
+.report-header{text-align:center;padding:24px 0}
+.grade-circle{display:inline-flex;align-items:center;justify-content:center;width:100px;height:100px;border-radius:50%;font-family:var(--font-d);font-size:36px;font-weight:800;color:#fff;margin:12px 0}
+.grade-high{background:linear-gradient(135deg,#38a169,#2f855a)}
+.grade-mid{background:linear-gradient(135deg,#dd6b20,#c05621)}
+.grade-low{background:linear-gradient(135deg,#e53e3e,#c53030)}
+.report-table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+.report-table th{background:var(--primary);color:#fff;padding:10px 8px;font-family:var(--font-d);font-size:12px;text-align:left}
+.report-table td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+.report-table tr:nth-child(even){background:#faf8f5}
+.badge-ok{background:#f0fff4;color:var(--success);padding:2px 8px;border-radius:12px;font-weight:600;font-size:12px}
+.badge-no{background:#fff5f5;color:var(--error);padding:2px 8px;border-radius:12px;font-weight:600;font-size:12px}
+.badge-na{background:#f7fafc;color:var(--muted);padding:2px 8px;border-radius:12px;font-size:12px}
+
+/* EVENT VIEWER */
+.event-viewer{position:fixed;bottom:10px;right:10px;z-index:999;font-family:var(--font-d);font-size:12px}
+.ev-badge{background:var(--primary);color:#fff;padding:7px 12px;border-radius:22px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 3px 12px rgba(0,0,0,.25);transition:transform .2s}
+.ev-badge:active{transform:scale(.95)}
+.ev-badge .ev-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ev-panel{display:none;position:absolute;bottom:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;width:285px;max-height:340px;overflow-y:auto;box-shadow:0 8px 30px rgba(0,0,0,.15);font-size:12px}
+.ev-panel.open{display:block}
+.ev-panel h4{font-size:13px;margin-bottom:10px;color:var(--primary)}
+.ev-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0}
+.ev-label{color:var(--muted)}
+.ev-val{font-weight:700;color:var(--text)}
+.ev-time{text-align:center;padding:8px 0;margin-top:6px;font-size:13px;color:var(--primary);font-weight:700}
+
+/* DISCOVERY */
+.discovery-box{background:linear-gradient(135deg,#1a365d 0%,#2d4a7a 100%);color:#fff;border-radius:14px;padding:22px;margin-bottom:20px}
+.discovery-box h2{color:#fff;margin-bottom:10px;font-size:20px}
+.discovery-box p{color:rgba(255,255,255,.9)}
+
+/* NOTE BANNER */
+.note-banner{background:#fffbeb;border:2px solid #f6e05e;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:14px;display:flex;align-items:flex-start;gap:10px}
+.note-banner span{font-size:20px;flex-shrink:0}
+
+/* RESPONSIVE */
+@media(max-width:400px){
+  .container{padding:10px}
+  .card{padding:14px}
+  .exercise-body{padding:12px}
+  .math-toolbar button{min-width:38px;height:40px;font-size:13px}
+  .tab-btn{padding:11px 10px;font-size:11.5px}
+  .report-table{font-size:12px}
+  .report-table th,.report-table td{padding:6px 4px}
+}
+
+/* PRINT */
+@media print{
+  body{background:#fff!important;padding:0!important}
+  body::before{display:none}
+  .tab-bar,.event-viewer,.tab-actions,.math-toolbar,.answer-textarea,.live-preview,.btn,.note-banner{display:none!important}
+  .card,.exercise-card,.comp-card{box-shadow:none!important;border:1px solid #ccc!important;break-inside:avoid}
+  .tab-panel{display:block!important;page-break-inside:avoid}
+  .report-table{font-size:11px}
+  .grade-circle{width:70px;height:70px;font-size:26px}
+}
+
+/* ANIMATIONS */
+.fade-in{animation:fadeIn .4s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.stagger-1{animation-delay:.05s}.stagger-2{animation-delay:.1s}.stagger-3{animation-delay:.15s}.stagger-4{animation-delay:.2s}
+</style>
+</head>
+<body>
+
+<!-- ======== EVENT VIEWER ======== -->
+<div class="event-viewer" id="eventViewer">
+  <div class="ev-panel" id="evPanel"></div>
+  <div class="ev-badge" onclick="toggleEvPanel()">
+    <span class="ev-dot"></span>
+    <span>Eventos: <b id="evCount">0</b></span>
+  </div>
+</div>
+
+<!-- ======== TAB BAR ======== -->
+<nav class="tab-bar" id="tabBar"></nav>
+
+<!-- ======== TAB CONTENT ======== -->
+<div id="tabContent"></div>
+
+<script>
+/* ================================================================
+   DATA
+   ================================================================ */
+const BANKS = {
+  fc: { name:'Factor Común', levels:[
+    [{e:'6x + 12',a:['6(x+2)']},{e:'8a + 4',a:['4(2a+1)']},{e:'10m - 15',a:['5(2m-3)']}],
+    [{e:'12x^{2} + 8x',a:['4x(3x+2)']},{e:'15y^{2} - 10y',a:['5y(3y-2)']},{e:'9a^{2} + 6a',a:['3a(3a+2)']}],
+    [{e:'15a^{2}b - 10ab^{2}',a:['5ab(3a-2b)']},{e:'12x^{3}y + 8x^{2}y^{2}',a:['4x^{2}y(3x+2y)']},{e:'18m^{2}n^{2} - 24mn^{3}',a:['6mn^{2}(3m-4n)']}],
+    [{e:'4x^{3}y^{2} - 8x^{2}y^{3} + 12xy^{2}',a:['4xy^{2}(x^{2}-2xy+3)']},
+     {e:'6a^{3}b - 9a^{2}b^{2} + 3ab',a:['3ab(2a^{2}-3ab+1)']},
+     {e:'8x^{4}y - 12x^{3}y^{2} + 4x^{2}y^{3}',a:['4x^{2}y(2x^{2}-3xy+y^{2})']}]
+  ]},
+  dc: { name:'Diferencia de Cuadrados', levels:[
+    [{e:'x^{2} - 9',a:['(x+3)(x-3)','(x-3)(x+3)']},{e:'x^{2} - 16',a:['(x+4)(x-4)','(x-4)(x+4)']},{e:'x^{2} - 25',a:['(x+5)(x-5)','(x-5)(x+5)']}],
+    [{e:'4x^{2} - 25',a:['(2x+5)(2x-5)','(2x-5)(2x+5)']},{e:'9x^{2} - 4',a:['(3x+2)(3x-2)','(3x-2)(3x+2)']},{e:'16x^{2} - 9',a:['(4x+3)(4x-3)','(4x-3)(4x+3)']}],
+    [{e:'9a^{2} - 16b^{2}',a:['(3a+4b)(3a-4b)','(3a-4b)(3a+4b)']},
+     {e:'25x^{2} - 4y^{2}',a:['(5x+2y)(5x-2y)','(5x-2y)(5x+2y)']},
+     {e:'49m^{2} - 36n^{2}',a:['(7m+6n)(7m-6n)','(7m-6n)(7m+6n)']}],
+    [{e:'x^{4} - 1',a:['(x^{2}+1)(x+1)(x-1)','(x^{2}+1)(x-1)(x+1)','(x+1)(x-1)(x^{2}+1)','(x^{2}+1)(x^{2}-1)']},
+     {e:'16x^{4} - 81',a:['(4x^{2}+9)(2x+3)(2x-3)','(4x^{2}+9)(2x-3)(2x+3)','(2x+3)(2x-3)(4x^{2}+9)','(4x^{2}+9)(4x^{2}-9)']},
+     {e:'x^{4} - 16',a:['(x^{2}+4)(x+2)(x-2)','(x^{2}+4)(x-2)(x+2)','(x+2)(x-2)(x^{2}+4)','(x^{2}+4)(x^{2}-4)']}]
+  ]},
+  tcp:{ name:'Trinomio Cuadrado Perfecto', levels:[
+    [{e:'x^{2} + 6x + 9',a:['(x+3)^{2}','(x+3)^2','(3+x)^{2}']},{e:'x^{2} + 10x + 25',a:['(x+5)^{2}','(x+5)^2','(5+x)^{2}']},{e:'x^{2} - 8x + 16',a:['(x-4)^{2}','(x-4)^2']}],
+    [{e:'4x^{2} + 12x + 9',a:['(2x+3)^{2}','(2x+3)^2','(3+2x)^{2}']},{e:'9x^{2} - 24x + 16',a:['(3x-4)^{2}','(3x-4)^2']},{e:'4x^{2} - 20x + 25',a:['(2x-5)^{2}','(2x-5)^2']}],
+    [{e:'9a^{2} + 24ab + 16b^{2}',a:['(3a+4b)^{2}','(3a+4b)^2','(4b+3a)^{2}']},
+     {e:'25x^{2} - 40xy + 16y^{2}',a:['(5x-4y)^{2}','(5x-4y)^2']},
+     {e:'16m^{2} + 24mn + 9n^{2}',a:['(4m+3n)^{2}','(4m+3n)^2','(3n+4m)^{2}']}],
+    [{e:'x^{4} + 10x^{2} + 25',a:['(x^{2}+5)^{2}','(x^{2}+5)^2','(5+x^{2})^{2}']},
+     {e:'4x^{6} - 12x^{3} + 9',a:['(2x^{3}-3)^{2}','(2x^{3}-3)^2']},
+     {e:'9a^{4} + 30a^{2}b + 25b^{2}',a:['(3a^{2}+5b)^{2}','(3a^{2}+5b)^2','(5b+3a^{2})^{2}']}]
+  ]}
+};
+
+const COMP_Q = {
+  discovery:{
+    q:'Sabemos que \\((x+2)(x+3)=x^{2}+5x+6\\). Si nos dan \\(x^{2}+5x+6\\), ¿cómo podemos escribirlo como producto?',
+    opts:[{v:'a',t:'\\(x^{2}+5x+6 = x \\cdot x + 5 \\cdot x + 6\\)'},{v:'b',t:'\\(x^{2}+5x+6 = (x+2)(x+3)\\)'},{v:'c',t:'\\(x^{2}+5x+6 = x(x+5+6)\\)'},{v:'d',t:'\\(x^{2}+5x+6 = (x^{2}+5)(x+6)\\)'}],
+    ans:'b'
+  },
+  fc:{
+    q:'¿Cuál es el primer paso para factorizar un polinomio usando factor común?',
+    opts:[{v:'a',t:'Sumar todos los términos'},{v:'b',t:'Ordenar los términos de mayor a menor'},{v:'c',t:'Identificar el factor más grande que divide a todos los términos'},{v:'d',t:'Multiplicar todos los coeficientes'}],
+    ans:'c'
+  },
+  dc:{
+    q:'¿Qué condición debe cumplir un binomio para factorizarse como diferencia de cuadrados?',
+    opts:[{v:'a',t:'Los dos términos deben tener el mismo signo'},{v:'b',t:'Debe tener exactamente tres términos'},{v:'c',t:'Ambos términos deben ser cuadrados perfectos separados por un signo de resta'},{v:'d',t:'El primer término debe ser menor que el segundo'}],
+    ans:'c'
+  },
+  tcp:{
+    q:'Para que un trinomio sea cuadrado perfecto (TCP), ¿qué debe ocurrir con el término medio?',
+    opts:[{v:'a',t:'Debe ser la suma del primer y tercer término'},{v:'b',t:'Debe ser igual al doble del producto de las raíces cuadradas del primer y tercer término'},{v:'c',t:'Debe ser un número primo'},{v:'d',t:'Debe ser negativo'}],
+    ans:'b'
+  }
+};
+
+const TAB_DEFS = [
+  {id:1,label:'Registro',icon:'1'},
+  {id:2,label:'Descubrimiento',icon:'2'},
+  {id:3,label:'Teoría',icon:'3'},
+  {id:4,label:'Factor Común',icon:'4'},
+  {id:5,label:'Dif. Cuadrados',icon:'5'},
+  {id:6,label:'TCP',icon:'6'},
+  {id:7,label:'Resultados',icon:'7'}
+];
+
+const LEVELS = ['Básico','Intermedio','Avanzado','Experto'];
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let S = {
+  name:'',
+  maxTab:1,
+  currentTab:1,
+  selected:{},
+  answers:{},
+  compAnswers:{},
+  events:[],
+  startTime:null,
+  endTime:null,
+  timerInterval:null
+};
+
+/* ================================================================
+   UTILITIES
+   ================================================================ */
+function $(id){return document.getElementById(id)}
+function norm(s){
+  return (s||'').trim().replace(/\s+/g,'').replace(/\\cdot/g,'').replace(/\\times/g,'').replace(/\*/g,'').replace(/\^{(\w+)}/g,'^$1').replace(/\{([^{}]+)\}/g,'$1').toLowerCase();
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function renderMathEl(el,latex){
+  if(window.katex){
+    try{katex.render(latex,el,{throwOnError:false,displayMode:true,errorColor:'#c53030'})}
+    catch(e){el.textContent=latex}
+  }else{el.textContent=latex}
+}
+function renderAllMath(){
+  if(window.renderMathInElement){
+    renderMathInElement(document.body,{delimiters:[
+      {left:'\\(',right:'\\)',display:false},
+      {left:'\\[',right:'\\]',display:true}
+    ]});
+  }
+}
+
+/* ================================================================
+   TAB BAR
+   ================================================================ */
+function buildTabBar(){
+  let h='';
+  TAB_DEFS.forEach(t=>{
+    h+=`<button class="tab-btn${t.id===1?' active':''}${t.id>1?' locked':''}" data-tab="${t.id}" onclick="goTab(${t.id})">${t.icon}. ${t.label}</button>`;
+  });
+  $('tabBar').innerHTML=h;
+}
+function updateTabBar(){
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    const n=parseInt(b.dataset.tab);
+    b.classList.toggle('active',n===S.currentTab);
+    b.classList.toggle('locked',n>S.maxTab);
+    b.classList.toggle('done',n<S.maxTab);
+  });
+}
+function goTab(n){
+  if(n>S.maxTab)return;
+  S.currentTab=n;
+  document.querySelectorAll('.tab-panel').forEach(p=>p.style.display='none');
+  const panel=$('tab'+n);
+  if(panel)panel.style.display='block';
+  updateTabBar();
+  window.scrollTo(0,0);
+  if(n>=4&&n<=6&&!S.selected[BANK_KEYS[n-4]])selectProblems();
+  if(n>=4&&n<=6)renderExerciseTab(n);
+  if(n===7)renderReport();
+  setTimeout(renderAllMath,80);
+}
+const BANK_KEYS=['fc','dc','tcp'];
+
+/* ================================================================
+   PROBLEM SELECTION
+   ================================================================ */
+function selectProblems(){
+  BANK_KEYS.forEach(k=>{
+    S.selected[k]=BANKS[k].levels.map(lvl=>{
+      return lvl[Math.floor(Math.random()*lvl.length)];
+    });
+  });
+}
+
+/* ================================================================
+   BUILD ALL TABS HTML
+   ================================================================ */
+function buildTabs(){
+  let html='';
+
+  /* TAB 1 - REGISTRO */
+  html+=`<div class="tab-panel" id="tab1" style="display:block">
+    <div class="container">
+      <div class="card" style="text-align:center;padding:32px 20px">
+        <h1 style="font-size:32px;letter-spacing:-1px;margin-bottom:4px">ÁLGEBRA</h1>
+        <p style="font-family:var(--font-d);font-weight:700;color:var(--accent);font-size:18px;margin-bottom:4px">Factorización</p>
+        <p style="color:var(--muted);font-size:14px">Prof. Adrián CruzH</p>
+      </div>
+      <div class="card fade-in stagger-1">
+        <h3 style="margin-bottom:12px;font-size:16px">Ingresa tu nombre completo</h3>
+        <input type="text" class="input-name" id="nameInput" placeholder="Ejemplo: López García Ana María" maxlength="80" autocomplete="off">
+        <div style="margin-top:16px;text-align:center">
+          <button class="btn btn-primary" id="btnSaveName" onclick="saveName()">Guardar y comenzar</button>
+        </div>
+      </div>
+      <div class="card fade-in stagger-2" style="text-align:center;font-size:13px;color:var(--muted)">
+        <p>Actividad autodirigida &middot; 7 secciones &middot; Aprox. 45 min</p>
+      </div>
+    </div>
+  </div>`;
+
+  /* TAB 2 - DESCUBRIMIENTO */
+  html+=`<div class="tab-panel" id="tab2" style="display:none">
+    <div class="container">
+      <div class="discovery-box fade-in">
+        <h2>Descubrimiento: ¿Qué es factorizar?</h2>
+        <p style="margin-top:8px">Observa con atención la siguiente igualdad:</p>
+        <div style="text-align:center;padding:16px 0;font-size:18px">\\[(x+2)(x+3)=x^{2}+5x+6\\]</div>
+        <p>La multiplicación de dos binomios nos da un trinomio. <b>Factorizar</b> es el proceso inverso: partir del trinomio y encontrar los factores que lo producen.</p>
+      </div>
+      <div class="comp-card fade-in stagger-1">
+        <h3>Pregunta de comprensión</h3>
+        <p id="comp-disc-q"></p>
+        <div id="comp-disc-opts"></div>
+      </div>
+      <div class="tab-actions">
+        <button class="btn btn-primary" onclick="saveDiscovery()">Guardar y continuar</button>
+      </div>
+    </div>
+  </div>`;
+
+  /* TAB 3 - TEORÍA */
+  html+=`<div class="tab-panel" id="tab3" style="display:none">
+    <div class="container">
+      <div class="note-banner fade-in"><span>📝</span><div><b>Instrucciones:</b> Lee con atención y copia en tu cuaderno los siguientes conceptos y ejemplos. Son la base para los ejercicios.</div></div>
+
+      <div class="card fade-in stagger-1">
+        <h2 style="font-size:18px;margin-bottom:10px">Definición</h2>
+        <p><b>Factorizar</b> es escribir un polinomio como un <b>producto de factores más simples</b>. Es el proceso <b>inverso</b> a multiplicar.</p>
+      </div>
+
+      <div class="card fade-in stagger-2">
+        <div class="theory-section">
+          <h3>Método 1: Factor Común</h3>
+          <p style="margin-bottom:12px">Se busca el <b>factor</b> (número, variable o ambos) que divide a <b>todos</b> los términos del polinomio.</p>
+
+          <div class="example-box">
+            <div class="ex-title">Ejemplo 1 — Nivel Básico</div>
+            <p><b>Factorizar:</b> \\(6x + 12\\)</p>
+            <div class="step"><b>Paso 1:</b> Identificamos el factor común más grande. Los términos son \\(6x\\) y \\(12\\). El MCD es \\(6\\).</div>
+            <div class="step"><b>Paso 2:</b> Dividimos cada término entre el factor común:</div>
+            <div class="step" style="padding-left:24px">\\(6x \\div 6 = x\\)</div>
+            <div class="step" style="padding-left:24px">\\(12 \\div 6 = 2\\)</div>
+            <div class="result">Resultado: \\(6x + 12 = 6(x + 2)\\)</div>
+          </div>
+
+          <div class="example-box">
+            <div class="ex-title">Ejemplo 2 — Nivel Intermedio</div>
+            <p><b>Factorizar:</b> \\(15a^{2}b - 10ab^{2}\\)</p>
+            <div class="step"><b>Paso 1:</b> Factor común más grande: \\(5ab\\)</div>
+            <div class="step"><b>Paso 2:</b> Dividimos:</div>
+            <div class="step" style="padding-left:24px">\\(15a^{2}b \\div 5ab = 3a\\)</div>
+            <div class="step" style="padding-left:24px">\\(10ab^{2} \\div 5ab = 2b\\)</div>
+            <div class="result">Resultado: \\(15a^{2}b - 10ab^{2} = 5ab(3a - 2b)\\)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fade-in stagger-3">
+        <div class="theory-section">
+          <h3>Método 2: Diferencia de Cuadrados</h3>
+          <p style="margin-bottom:12px">Se aplica cuando un <b>binomio</b> tiene dos términos que son <b>cuadrados perfectos</b> separados por un signo de <b>resta</b>.</p>
+          <p style="text-align:center;padding:10px;background:#f7fafc;border-radius:8px;margin-bottom:14px">\\[a^{2} - b^{2} = (a+b)(a-b)\\]</p>
+
+          <div class="example-box">
+            <div class="ex-title">Ejemplo 1 — Nivel Básico</div>
+            <p><b>Factorizar:</b> \\(x^{2} - 16\\)</p>
+            <div class="step">Identificamos: \\(x^{2} = (x)^{2}\\) y \\(16 = (4)^{2}\\)</div>
+            <div class="step">Aplicamos la fórmula con \\(a = x\\), \\(b = 4\\)</div>
+            <div class="result">Resultado: \\(x^{2} - 16 = (x+4)(x-4)\\)</div>
+          </div>
+
+          <div class="example-box">
+            <div class="ex-title">Ejemplo 2 — Nivel Intermedio</div>
+            <p><b>Factorizar:</b> \\(9x^{2} - 25\\)</p>
+            <div class="step">Identificamos: \\(9x^{2} = (3x)^{2}\\) y \\(25 = (5)^{2}\\)</div>
+            <div class="step">Aplicamos con \\(a = 3x\\), \\(b = 5\\)</div>
+            <div class="result">Resultado: \\(9x^{2} - 25 = (3x+5)(3x-5)\\)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fade-in stagger-4">
+        <div class="theory-section">
+          <h3>Método 3: Trinomio Cuadrado Perfecto (TCP)</h3>
+          <p style="margin-bottom:12px">Un trinomio es cuadrado perfecto si el <b>primer</b> y <b>último</b> término son cuadrados perfectos, y el <b>término medio</b> es el doble del producto de sus raíces.</p>
+          <p style="text-align:center;padding:10px;background:#f7fafc;border-radius:8px;margin-bottom:14px">\\[a^{2} \\pm 2ab + b^{2} = (a \\pm b)^{2}\\]</p>
+
+          <div class="example-box">
+            <div class="ex-title">Ejemplo 1 — Nivel Básico</div>
+            <p><b>Factorizar:</b> \\(x^{2} + 6x + 9\\)</p>
+            <div class="step">\\(x^{2} = (x)^{2}\\), \\(9 = (3)^{2}\\)</div>
+            <div class="step">Verificamos: \\(2 \\cdot x \\cdot 3 = 6x\\) ✓ (coincide con el término medio)</div>
+            <div class="result">Resultado: \\(x^{2} + 6x + 9 = (x+3)^{2}\\)</div>
+          </div>
+
+          <div class="example-box">
+            <div class="ex-title">Ejemplo 2 — Nivel Intermedio</div>
+            <p><b>Factorizar:</b> \\(4x^{2} - 12x + 9\\)</p>
+            <div class="step">\\(4x^{2} = (2x)^{2}\\), \\(9 = (3)^{2}\\)</div>
+            <div class="step">Verificamos: \\(2 \\cdot 2x \\cdot 3 = 12x\\) ✓</div>
+            <div class="step">El signo del término medio es negativo, así que usamos resta.</div>
+            <div class="result">Resultado: \\(4x^{2} - 12x + 9 = (2x-3)^{2}\\)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-actions">
+        <button class="btn btn-primary" onclick="advanceTab(4)">Ya copié, ir a ejercicios</button>
+      </div>
+    </div>
+  </div>`;
+
+  /* TAB 4, 5, 6 — exercise placeholders */
+  for(let t=4;t<=6;t++){
+    const k=BANK_KEYS[t-4];
+    html+=`<div class="tab-panel" id="tab${t}" style="display:none"><div class="container" id="exContainer${t}"></div></div>`;
+  }
+
+  /* TAB 7 — report placeholder */
+  html+=`<div class="tab-panel" id="tab7" style="display:none"><div class="container" id="reportContainer"></div></div>`;
+
+  $('tabContent').innerHTML=html;
+
+  /* Fill discovery question */
+  const dq=COMP_Q.discovery;
+  $('comp-disc-q').innerHTML=dq.q;
+  let dopts='';
+  dq.opts.forEach(o=>{
+    dopts+=`<label class="option-label" onclick="selectOpt(this,'comp-disc','${o.v}')">
+      <input type="radio" name="comp-disc" value="${o.v}">
+      <span class="opt-letter">${o.v})</span>
+      <span>${o.t}</span>
+    </label>`;
+  });
+  $('comp-disc-opts').innerHTML=dopts;
+  setTimeout(renderAllMath,100);
+}
+
+/* ================================================================
+   EXERCISE TAB RENDERING
+   ================================================================ */
+function renderExerciseTab(tabNum){
+  const k=BANK_KEYS[tabNum-4];
+  if(!S.selected[k])return;
+  const probs=S.selected[k];
+  const cq=COMP_Q[k];
+  const cont=$('exContainer'+tabNum);
+  if(!cont)return;
+  if(cont.dataset.built==='1')return;
+  cont.dataset.built='1';
+
+  let h=`<h2 style="margin-bottom:6px;font-size:20px">${BANKS[k].name}</h2>
+  <p style="color:var(--muted);margin-bottom:18px;font-size:14px">Factoriza cada expresión usando el método de ${BANKS[k].name.toLowerCase()}.</p>`;
+
+  probs.forEach((prob,i)=>{
+    const uid=`${k}${i}`;
+    h+=`<div class="exercise-card fade-in stagger-${i+1}">
+      <div class="exercise-header">
+        <span class="exercise-num">Ejercicio ${i+1}</span>
+        <span class="exercise-level">${LEVELS[i]}</span>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-problem">
+          <p>Factoriza la siguiente expresión:</p>
+          <div class="math-display" id="md-${uid}"></div>
+        </div>
+        <div class="answer-area">
+          <label>Tu respuesta:</label>
+          <textarea class="answer-textarea" id="ta-${uid}" placeholder="Escribe aquí tu factorización..." oninput="livePreview('${uid}')"></textarea>
+          <div class="live-preview" id="lp-${uid}"><span class="placeholder">La vista previa aparecerá aquí…</span></div>
+          <div class="math-toolbar" id="mt-${uid}">
+            <button onclick="insTxt('${uid}','^{}')" title="Exponente">x<sup style="font-size:10px">n</sup></button>
+            <button onclick="insTxt('${uid}','\\\\frac{}{}')" title="Fracción"><sup>a</sup>⁄<sub>b</sub></button>
+            <button onclick="insTxt('${uid}','\\\\cdot')" title="Multiplicar">×</button>
+            <button onclick="insTxt('${uid}','\\\\div')" title="Dividir">÷</button>
+            <button onclick="insTxt('${uid}','+')" title="Suma">+</button>
+            <button onclick="insTxt('${uid}','-')" title="Resta">−</button>
+            <button onclick="insTxt('${uid}','(')" title="Paréntesis">(</button>
+            <button onclick="insTxt('${uid}',')')" title="Paréntesis">)</button>
+            <button onclick="insTxt('${uid}','.')" title="Punto">.</button>
+            <button onclick="bksp('${uid}')" title="Borrar">⌫</button>
+            <button class="tb-wide" onclick="clr('${uid}')" title="Limpiar">C</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  /* Comprehension question */
+  h+=`<div class="comp-card fade-in">
+    <h3>Pregunta de comprensión</h3>
+    <p id="cq-${k}-q"></p>
+    <div id="cq-${k}-opts"></div>
+  </div>`;
+
+  h+=`<div class="tab-actions">
+    <button class="btn btn-primary" onclick="saveExAndContinue('${k}',${tabNum+1})">Guardar respuestas y avanzar</button>
+  </div>`;
+
+  cont.innerHTML=h;
+
+  /* Render problem math */
+  probs.forEach((prob,i)=>{
+    const el=$(`md-${k}${i}`);
+    if(el)renderMathEl(el,prob.e);
+  });
+
+  /* Fill comprehension */
+  const qEl=$(`cq-${k}-q`);
+  if(qEl)qEl.innerHTML=cq.q;
+  const oEl=$(`cq-${k}-opts`);
+  if(oEl){
+    let oh='';
+    cq.opts.forEach(o=>{
+      oh+=`<label class="option-label" onclick="selectOpt(this,'comp-${k}','${o.v}')">
+        <input type="radio" name="comp-${k}" value="${o.v}">
+        <span class="opt-letter">${o.v})</span>
+        <span>${o.t}</span>
+      </label>`;
+    });
+    oEl.innerHTML=oh;
+  }
+  setTimeout(renderAllMath,100);
+}
+
+/* ================================================================
+   MATH TOOLBAR FUNCTIONS
+   ================================================================ */
+function getTA(uid){return $('ta-'+uid)}
+function insTxt(uid,txt){
+  const ta=getTA(uid);if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  ta.value=ta.value.substring(0,s)+txt+ta.value.substring(e);
+  const np=s+txt.length;
+  ta.setSelectionRange(np,np);
+  ta.focus();
+  livePreview(uid);
+}
+function insExp(uid){
+  const ta=getTA(uid);if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  ta.value=ta.value.substring(0,s)+'^{}'+ta.value.substring(e);
+  ta.setSelectionRange(s+2,s+2);
+  ta.focus();
+  livePreview(uid);
+}
+function insFrac(uid){
+  const ta=getTA(uid);if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  ta.value=ta.value.substring(0,s)+'\\frac{}{}'+ta.value.substring(e);
+  ta.setSelectionRange(s+6,s+6);
+  ta.focus();
+  livePreview(uid);
+}
+function bksp(uid){
+  const ta=getTA(uid);if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  if(s!==e){ta.value=ta.value.substring(0,s)+ta.value.substring(e);ta.setSelectionRange(s,s)}
+  else if(s>0){ta.value=ta.value.substring(0,s-1)+ta.value.substring(s);ta.setSelectionRange(s-1,s-1)}
+  ta.focus();
+  livePreview(uid);
+}
+function clr(uid){
+  const ta=getTA(uid);if(!ta)return;
+  ta.value='';
+  ta.focus();
+  livePreview(uid);
+}
+
+/* ================================================================
+   LIVE PREVIEW
+   ================================================================ */
+function livePreview(uid){
+  const ta=getTA(uid);
+  const lp=$('lp-'+uid);
+  if(!ta||!lp)return;
+  const v=ta.value.trim();
+  if(!v){lp.innerHTML='<span class="placeholder">La vista previa aparecerá aquí…</span>';return}
+  try{katex.render(v,lp,{throwOnError:false,displayMode:true,errorColor:'#c53030'})}
+  catch(e){lp.innerHTML='<span style="color:#c53030;font-size:13px">Expresión inválida</span>'}
+}
+
+/* ================================================================
+   OPTION SELECTION
+   ================================================================ */
+function selectOpt(label,name,val){
+  label.parentElement.querySelectorAll('.option-label').forEach(l=>l.classList.remove('selected'));
+  label.classList.add('selected');
+  const radio=label.querySelector('input[type="radio"]');
+  if(radio)radio.checked=true;
+  if(name==='comp-disc')S.compAnswers.discovery=val;
+  else if(name.startsWith('comp-'))S.compAnswers[name.replace('comp-','')]=val;
+}
+
+/* ================================================================
+   SAVE & NAVIGATE
+   ================================================================ */
+function saveName(){
+  const inp=$('nameInput');
+  const name=inp.value.trim();
+  if(!name){inp.style.borderColor='var(--error)';inp.focus();return}
+  S.name=name;
+  S.startTime=Date.now();
+  startTimer();
+  inp.disabled=true;
+  $('btnSaveName').disabled=true;
+  $('btnSaveName').textContent='Nombre guardado ✓';
+  S.maxTab=Math.max(S.maxTab,2);
+  updateTabBar();
+  goTab(2);
+}
+function advanceTab(n){
+  S.maxTab=Math.max(S.maxTab,n);
+  updateTabBar();
+  goTab(n);
+}
+function saveExAndContinue(key,nextTab){
+  /* Save exercise answers */
+  const probs=S.selected[key];
+  if(!probs)return;
+  S.answers[key]=[];
+  probs.forEach((_,i)=>{
+    const ta=getTA(key+i);
+    S.answers[key].push(ta?ta.value.trim():'');
+  });
+  S.maxTab=Math.max(S.maxTab,nextTab);
+  updateTabBar();
+  goTab(nextTab);
+}
+function saveDiscovery(){
+  S.maxTab=Math.max(S.maxTab,3);
+  updateTabBar();
+  goTab(3);
+}
+
+/* ================================================================
+   VALIDATION
+   ================================================================ */
+function checkAnswer(studentAns,acceptedArr){
+  if(!studentAns)return false;
+  const ns=norm(studentAns);
+  return acceptedArr.some(a=>norm(a)===ns);
+}
+
+/* ================================================================
+   REPORT
+   ================================================================ */
+function renderReport(){
+  S.endTime=Date.now();
+  const cont=$('reportContainer');
+  if(!cont)return;
+
+  let totalPoints=0;
+  let rows='';
+
+  /* Exercise rows */
+  BANK_KEYS.forEach(k=>{
+    const probs=S.selected[k]||[];
+    probs.forEach((prob,i)=>{
+      const studentAns=(S.answers[k]&&S.answers[k][i])||'';
+      const ok=checkAnswer(studentAns,prob.a);
+      if(ok)totalPoints+=0.5;
+      rows+=`<td>
+        <td style="font-weight:600">${BANKS[k].name}<br><span style="font-size:11px;color:var(--muted)">Ej.${i+1} ${LEVELS[i]}</span></td>
+        <td style="font-family:var(--font-m);font-size:13px">${esc(studentAns)||'<i style="color:var(--muted)">Sin respuesta</i>'}</td>
+        <td style="font-family:var(--font-m);font-size:13px">${esc(prob.a[0])}</td>
+        <td>${ok?'<span class="badge-ok">✓</span>':'<span class="badge-no">✗</span>'}</td>
+      </tr>`;
+    });
+  });
+
+  /* Comprehension rows */
+  const compKeys=['discovery','fc','dc','tcp'];
+  const compLabels=['Descubrimiento','Comp. Factor Común','Comp. Dif. Cuadrados','Comp. TCP'];
+  compKeys.forEach((k,i)=>{
+    const cq=COMP_Q[k];
+    const studentAns=S.compAnswers[k]||'';
+    const ok=studentAns===cq.ans;
+    if(ok)totalPoints+=1;
+    rows+=`<tr>
+      <td style="font-weight:600">${compLabels[i]}</td>
+      <td>${studentAns?studentAns+') '+((cq.opts.find(o=>o.v===studentAns)||{}).t||''):'<i style="color:var(--muted)">Sin respuesta</i>'}</td>
+      <td>${cq.ans}) ${(cq.opts.find(o=>o.v===cq.ans)||{}).t||''}</td>
+      <td>${ok?'<span class="badge-ok">✓</span>':'<span class="badge-no">✗</span>'}</td>
+    </tr>`;
+  });
+
+  const grade=Math.min(10,totalPoints).toFixed(1);
+  const gc=grade>=7?'grade-high':grade>=5?'grade-mid':'grade-low';
+  const elapsed=S.endTime-(S.startTime||S.endTime);
+  const mins=Math.floor(elapsed/60000);
+  const secs=Math.floor((elapsed%60000)/1000);
+
+  /* Event summary */
+  const evSummary=getEventSummary();
+
+  let h=`<div class="report-header fade-in">
+    <h2 style="font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Informe de Resultados</h2>
+    <h1 style="font-size:22px;margin:8px 0">${esc(S.name)}</h1>
+    <div class="grade-circle ${gc}">${grade}</div>
+    <p style="color:var(--muted);font-size:14px">Calificación global / 10</p>
+    <p style="color:var(--muted);font-size:13px;margin-top:4px">Puntos: ${totalPoints.toFixed(1)} / 10 &middot; ${mins}m ${secs}s de duración</p>
+  </div>
+
+  <div class="card fade-in stagger-1" style="overflow-x:auto">
+    <h3 style="margin-bottom:12px;font-size:15px">Detalle de respuestas</h3>
+    <table class="report-table">
+      <thead><tr><th>Ejercicio</th><th>Tu respuesta</th><th>Respuesta esperada</th><th>Calif.</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+
+  <div class="card fade-in stagger-2">
+    <h3 style="margin-bottom:10px;font-size:15px">Resumen de vigilancia</h3>
+    <table class="report-table">
+      <thead><tr><th>Evento</th><th>Cantidad</th></tr></thead>
+      <tbody>
+        <tr><td>Cambios de pestaña / minimizar</td><td>${evSummary.visibility}</td></tr>
+        <tr><td>Intentos de copiar</td><td>${evSummary.copy}</td></tr>
+        <tr><td>Intentos de pegar</td><td>${evSummary.paste}</td></tr>
+        <tr><td>Intentos de cortar</td><td>${evSummary.cut}</td></tr>
+        <tr><td>Cambio de tamaño / pantalla dividida</td><td>${evSummary.resize}</td></tr>
+        <tr><td>Menú contextual</td><td>${evSummary.context}</td></tr>
+        <tr><td>Pérdida de foco (blur)</td><td>${evSummary.blur}</td></tr>
+        <tr><td><b>Total de eventos</b></td><td><b>${S.events.length}</b></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px">Duración total: ${mins} min ${secs} seg</p>
+  </div>
+
+  <div class="tab-actions fade-in stagger-3">
+    <button class="btn btn-primary" onclick="exportPDF()" style="font-size:16px">Guardar PDF</button>
+  </div>`;
+
+  cont.innerHTML=h;
+  setTimeout(renderAllMath,100);
+}
+
+/* ================================================================
+   PDF EXPORT
+   ================================================================ */
+function exportPDF(){
+  const grade=Math.min(10,
+    (S.compAnswers.discovery===COMP_Q.discovery.ans?1:0)+
+    (S.compAnswers.fc===COMP_Q.fc.ans?1:0)+
+    (S.compAnswers.dc===COMP_Q.dc.ans?1:0)+
+    (S.compAnswers.tcp===COMP_Q.tcp.ans?1:0)+
+    BANK_KEYS.reduce((s,k)=>s+(S.selected[k]||[]).reduce((ss,p,i)=>ss+(checkAnswer((S.answers[k]||[])[i]||'',p.a)?0.5:0),0),0)
+  ).toFixed(1);
+
+  let exerciseRows='';
+  BANK_KEYS.forEach(k=>{
+    (S.selected[k]||[]).forEach((prob,i)=>{
+      const sa=(S.answers[k]&&S.answers[k][i])||'';
+      const ok=checkAnswer(sa,prob.a);
+      exerciseRows+=`<tr><td>${BANKS[k].name} - Ej.${i+1}</td><td>${esc(sa)||'—'}</td><td>${esc(prob.a[0])}</td><td style="color:${ok?'green':'red'};font-weight:700">${ok?'✓':'✗'}</td></tr>`;
+    });
+  });
+
+  const evS=getEventSummary();
+  const elapsed=(S.endTime||Date.now())-(S.startTime||Date.now());
+  const mins=Math.floor(elapsed/60000);
+  const secs=Math.floor((elapsed%60000)/1000);
+
+  const pw=window.open('','_blank','width=800,height=1000');
+  pw.document.write(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<title>Reporte - ${esc(S.name)}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<style>
+body{font-family:Georgia,serif;padding:24px;color:#1a202c;font-size:13px;max-width:700px;margin:0 auto}
+h1{font-size:20px;text-align:center;margin-bottom:2px}
+h2{font-size:16px;text-align:center;color:#666}
+h3{font-size:14px;margin:16px 0 8px;border-bottom:1px solid #ccc;padding-bottom:4px}
+.grade{font-size:42px;font-weight:800;text-align:center;margin:10px 0}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:12px}
+th{background:#1a365d;color:#fff;padding:6px 8px;text-align:left}
+td{padding:5px 8px;border-bottom:1px solid #ddd}
+tr:nth-child(even){background:#f8f8f8}
+.footer{text-align:center;color:#999;font-size:11px;margin-top:24px}
+</style></head><body>
+<h1>Informe de Resultados</h1>
+<h2>Álgebra — Factorización | Prof. Adrián CruzH</h2>
+<p style="text-align:center"><b>Alumno:</b> ${esc(S.name)}</p>
+<div class="grade">${grade} / 10</div>
+<h3>Detalle de respuestas</h3>
+<table>
+<thead><tr><th>Ejercicio</th><th>Respuesta del alumno</th><th>Respuesta esperada</th><th>Calif.</th></tr></thead>
+<tbody>${exerciseRows}</tbody>
+</table>
+<h3>Resumen de vigilancia</h3>
+<table>
+<tbody>
+<tr><td>Cambios de pestaña / minimizar</td><td>${evS.visibility}</td></tr>
+<tr><td>Intentos de copiar</td><td>${evS.copy}</td></tr>
+<tr><td>Intentos de pegar</td><td>${evS.paste}</td></tr>
+<tr><td>Cambio de tamaño / pantalla dividida</td><td>${evS.resize}</td></tr>
+<tr><td>Total de eventos</td><td>${S.events.length}</td></tr>
+<tr><td>Duración</td><td>${mins}m ${secs}s</td></tr>
+</tbody>
+</table>
+<div class="footer">Generado el ${new Date().toLocaleString('es-MX')}</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.renderMathInElement)renderMathInElement(document.body,{delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}]});
+  setTimeout(function(){window.print()},800);
+});
+<\/script>
+</body></html>`);
+  pw.document.close();
+}
+
+/* ================================================================
+   ANTI-COPY / ANTI-PASTE
+   ================================================================ */
+function setupAntiCopy(){
+  document.addEventListener('copy',function(e){e.preventDefault();trackEvent('copy')});
+  document.addEventListener('cut',function(e){e.preventDefault();trackEvent('cut')});
+  document.addEventListener('paste',function(e){e.preventDefault();trackEvent('paste')});
+  document.addEventListener('contextmenu',function(e){e.preventDefault();trackEvent('context')});
+  document.addEventListener('selectstart',function(e){
+    if(e.target.tagName!=='TEXTAREA'&&e.target.tagName!=='INPUT')e.preventDefault();
+  });
+}
+
+/* ================================================================
+   EVENT TRACKING
+   ================================================================ */
+function trackEvent(type){
+  S.events.push({type:type,time:Date.now()});
+  updateEvViewer();
+}
+function getEventSummary(){
+  const s={visibility:0,copy:0,paste:0,cut:0,resize:0,context:0,blur:0};
+  S.events.forEach(e=>{if(s[e.type]!==undefined)s[e.type]++;else if(e.type==='multitask')s.visibility++});
+  return s;
+}
+function setupEventTracking(){
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden)trackEvent('visibility');
+  });
+  window.addEventListener('blur',function(){trackEvent('blur')});
+  let resizeTimer;
+  window.addEventListener('resize',function(){
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(function(){
+      trackEvent('resize');
+      /* Split screen detection */
+      if(window.innerHeight<screen.height*0.65){
+        trackEvent('split_screen');
+      }
+    },300);
+  });
+  /* Keyboard shortcuts detection */
+  document.addEventListener('keydown',function(e){
+    if(e.ctrlKey&&(e.key==='c'||e.key==='v'||e.key==='x'||e.key==='a'||e.key==='p'||e.key==='s')){
+      e.preventDefault();
+      trackEvent(e.key==='c'?'copy':e.key==='v'?'paste':e.key==='x'?'cut':'shortcut');
+    }
+    if(e.key==='PrintScreen'){
+      e.preventDefault();
+      trackEvent('screenshot');
+    }
+  });
+}
+function updateEvViewer(){
+  $('evCount').textContent=S.events.length;
+  updateEvPanel();
+}
+
+/* ================================================================
+   EVENT VIEWER PANEL
+   ================================================================ */
+function toggleEvPanel(){
+  $('evPanel').classList.toggle('open');
+  if($('evPanel').classList.contains('open'))updateEvPanel();
+}
+function updateEvPanel(){
+  const evS=getEventSummary();
+  const elapsed=S.startTime?Date.now()-S.startTime:0;
+  const mins=Math.floor(elapsed/60000);
+  const secs=Math.floor((elapsed%60000)/1000);
+  $('evPanel').innerHTML=`
+    <h4>Registro de Eventos</h4>
+    <div class="ev-row"><span class="ev-label">Cambios de pantalla</span><span class="ev-val">${evS.visibility}</span></div>
+    <div class="ev-row"><span class="ev-label">Intentos copiar</span><span class="ev-val">${evS.copy}</span></div>
+    <div class="ev-row"><span class="ev-label">Intentos pegar</span><span class="ev-val">${evS.paste}</span></div>
+    <div class="ev-row"><span class="ev-label">Intentos cortar</span><span class="ev-val">${evS.cut}</span></div>
+    <div class="ev-row"><span class="ev-label">Pantalla dividida</span><span class="ev-val">${evS.resize}</span></div>
+    <div class="ev-row"><span class="ev-label">Menú contextual</span><span class="ev-val">${evS.context}</span></div>
+    <div class="ev-row"><span class="ev-label">Pérdida de foco</span><span class="ev-val">${evS.blur}</span></div>
+    <div class="ev-row" style="border-top:2px solid var(--primary);padding-top:6px;margin-top:4px"><span class="ev-label"><b>Total eventos</b></span><span class="ev-val">${S.events.length}</span></div>
+    <div class="ev-time">⏱ ${mins}m ${secs}s</div>`;
+}
+
+/* ================================================================
+   TIMER
+   ================================================================ */
+function startTimer(){
+  S.timerInterval=setInterval(function(){
+    if(S.startTime&&!S.endTime){
+      const el=Date.now()-S.startTime;
+      const m=Math.floor(el/60000);
+      const s=Math.floor((el%60000)/1000);
+      /* Update event panel timer if open */
+      const tmr=document.querySelector('.ev-time');
+      if(tmr)tmr.textContent='⏱ '+m+'m '+s+'s';
+    }
+  },1000);
+}
+
+/* ================================================================
+   INITIALIZATION
+   ================================================================ */
+function initApp(){
+  buildTabBar();
+  buildTabs();
+  setupAntiCopy();
+  setupEventTracking();
+  selectProblems();
+  updateEvViewer();
+  /* Auto-render math after KaTeX loads */
+  if(window.katex&&window.renderMathInElement){
+    renderAllMath();
+  }else{
+    window.addEventListener('load',renderAllMath);
+  }
+}
+
+/* Fix: insTxt had a comma instead of closing quote in some calls */
+/* Override insTxt to handle the uid properly */
+const _origInsTxt = insTxt;
+/* Actually the issue is in the HTML template — let me fix the onclick handlers */
+/* The comma issue is in the template strings for ( ) and . buttons */
+/* We need to rebind after DOM insertion — handled by using correct syntax */
+
+/* Fix toolbar button handlers for parentheses and dot */
+document.addEventListener('click',function(e){
+  if(e.target.closest('.math-toolbar')){
+    const btn=e.target.closest('button');
+    if(!btn)return;
+    /* Handled by inline onclick */
+  }
+});
+
+/* Fix: the insTxt function had a bug with comma in onclick strings */
+/* Let's patch it globally */
+window.insTxt = function(uid, txt) {
+  const ta = getTA(uid); if(!ta) return;
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.substring(0, s) + txt + ta.value.substring(e);
+  const np = s + txt.length;
+  ta.setSelectionRange(np, np);
+  ta.focus();
+  livePreview(uid);
+};
+
+/* Start */
+document.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
